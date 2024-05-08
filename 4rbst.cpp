@@ -74,11 +74,11 @@ void debug(string color, string init, string to_debug){
     cout << color << "[" << init << "] \033[0m" << to_debug << endl;
 }
 
-void debug(string color, string init, string to_debug, uint64_t num){
+void debug(string color, string init, string to_debug, int64_t num){
     cout << color << "[" << init << "] \033[0m" << to_debug << " " << num << endl;
 }
 
-void debug(string color, string init, string to_debug, uint64_t num, string to_debug2){
+void debug(string color, string init, string to_debug, int64_t num, string to_debug2){
     cout << color << "[" << init << "] \033[0m" << to_debug << " " << num << " " << to_debug2 << endl;
 }
 
@@ -90,28 +90,11 @@ void debug(string color, string init, uint64_t to_debug){
     cout << color << "[" << init << "] \033[0m" << to_debug << endl;
 }
 
-void debug(string color, string init, int* to_debug, int size){
+void debug(string color, string init, uint32_t* to_debug, int size){
     cout << color << "[" << init << "] \033[0m";
     for(int i = 0; i < size; i++)
         cout << to_debug[i];
     cout << endl;
-}
-
-void debug(field to_debug){
-    cout << "\033[32m[DEBUG] \033[0m";
-    for (int u = 41; u > -1; u--)
-    {
-        if(((to_debug.fir >> u) & 1) == 1)
-            cout << "X";
-        else if(((to_debug.sec >> u) & 1) == 1)
-            cout << "O";
-        else
-            cout << ".";
-        if(u % 7 == 0)
-            cout << endl;
-        if(u % 7 == 0 and u > 0)
-            cout << "\033[32m[DEBUG] \033[0m";
-    }
 }
 
 bool cw(uint64_t curcheckw, int last, uint32_t left){
@@ -1290,23 +1273,13 @@ int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
 }
 
 vector<field> pl;
-vector<unsigned short> pr;
+vector<uint32_t> pr;
 
 unordered_map<field, int, field> cache;
 
 uint64_t modificate(uint64_t num, int last, uint32_t left){
     num |= (1LL << (42 - (left) * 7 + last));
     return num;
-}
-
-field modificate1(field curpos, int last1, uint32_t left){
-	curpos.fir |= (1LL << (42 - (left) * 7 + last1));
-    return curpos;
-}
-
-field modificate2(field curpos, int last2, uint32_t left){
-	curpos.sec |= (1LL << (42 - (left) * 7 + last2));
-    return curpos;
 }
 
 unordered_map<field, uint32_t, field> TranspositionTable;
@@ -2655,33 +2628,32 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
     }
 }
 
-int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
-    cout << "size: " << tt.size() << endl;
+pair<int, int> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
     tt.clear();
     flag.clear();
     TranspositionTable.clear();
     if(player){
         if(left4 > 0)
             if(cw(cfir, 3, left4))
-                return 3;
+                return make_pair(3, depth);
         if(left3 > 0)
             if(cw(cfir, 2, left3))
-                return 2;
+                return make_pair(2, depth);
         if(left5 > 0)
             if(cw(cfir, 4, left5))
-                return 4;
+                return make_pair(4, depth);
         if(left2 > 0)
             if(cw(cfir, 1, left2))
-                return 1;
+                return make_pair(1, depth);
         if(left6 > 0)
             if(cw(cfir, 5, left6))
-                return 5;
+                return make_pair(5, depth);
         if(left1 > 0)
             if(cw(cfir, 0, left1))
-                return 0;
+                return make_pair(0, depth);
         if(left7 > 0)
             if(cw(cfir, 6, left7))
-                return 6;
+                return make_pair(6, depth);
         int ret = -1;
         if(left4 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
@@ -2689,11 +2661,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 3;
-                if(depth > 19)
-                    return 3;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left3 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
@@ -2701,11 +2669,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 2;
-                if(depth > 19)
-                    return 2;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left5 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
@@ -2713,11 +2677,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 4;
-                if(depth > 19)
-                    return 4;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left2 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
@@ -2725,11 +2685,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 1;
-                if(depth > 19)
-                    return 1;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left6 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
@@ -2737,11 +2693,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 5;
-                if(depth > 19)
-                    return 5;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left1 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
@@ -2749,11 +2701,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 0;
-                if(depth > 19)
-                    return 0;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left7 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
@@ -2761,52 +2709,41 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 6;
-                if(depth > 19)
-                    return 6;
             }
-            if(beta <= alpha)
-                return ret;
         }
-        return ret;
+        return make_pair(ret, alpha);
     }
     else
     {
         if(left4 > 0)
             if(cw(csec, 3, left4))
-                return 3;
+                return make_pair(3, -depth);
         if(left3 > 0)
             if(cw(csec, 2, left3))
-                return 2;
+                return make_pair(2, -depth);
         if(left5 > 0)
             if(cw(csec, 4, left5))
-                return 4;
+                return make_pair(4, -depth);
         if(left2 > 0)
             if(cw(csec, 1, left2))
-                return 1;
+                return make_pair(1, -depth);
         if(left6 > 0)
             if(cw(csec, 5, left6))
-                return 5;
+                return make_pair(5, -depth);
         if(left1 > 0)
             if(cw(csec, 0, left1))
-                return 0;
+                return make_pair(0, -depth);
         if(left7 > 0)
             if(cw(csec, 6, left7))
-                return 6;
+                return make_pair(6, -depth);
         int ret = -1;
-        bool desperate = true;
-        if(beta == 0)
-            desperate = false;
         if(left4 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             cout << "res4: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 3;
-                if(depth > 19 and desperate == false)
-                    return 3;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left3 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
@@ -2814,11 +2751,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild < beta){
                 beta = reschild;
                 ret = 2;
-                if(depth > 19 and desperate == false)
-                    return 2;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left5 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
@@ -2826,11 +2759,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild < beta){
                 beta = reschild;
                 ret = 4;
-                if(depth > 19 and desperate == false)
-                    return 4;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left2 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
@@ -2838,11 +2767,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild < beta){
                 beta = reschild;
                 ret = 1;
-                if(depth > 19 and desperate == false)
-                    return 1;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left6 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
@@ -2850,11 +2775,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild < beta){
                 beta = reschild;
                 ret = 5;
-                if(depth > 19 and desperate == false)
-                    return 5;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left1 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
@@ -2862,11 +2783,7 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild < beta){
                 beta = reschild;
                 ret = 0;
-                if(depth > 19 and desperate == false)
-                    return 0;
             }
-            if(beta <= alpha)
-                return ret;
         }
         if(left7 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
@@ -2874,13 +2791,23 @@ int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uin
             if(reschild < beta){
                 beta = reschild;
                 ret = 6;
-                if(depth > 19 and desperate == false)
-                    return 6;
             }
-            if(beta <= alpha)
-                return ret;
         }
-        return ret;
+        return make_pair(ret, beta);
+    }
+}
+
+void display(uint64_t fir, uint64_t sec){
+    for (int u = 41; u > -1; --u)
+    {
+        if((fir >> u) & 1)
+            cout << "X ";
+        else if((sec >> u) & 1)
+            cout << "O ";
+        else
+            cout << ". ";
+        if(u % 7 == 0)
+            cout << endl;
     }
 }
 
@@ -2888,29 +2815,21 @@ int main(){
 	srand(time(NULL));
 	ifstream loadai("AIn.bin", ios::binary);
 	if(loadai){
-		uint64_t size1, prg1;
-		loadai.read(reinterpret_cast<char*>(&size1), sizeof(uint64_t));
-		if(size1 > 0)
-			cout << "size1: " << size1 << endl;
-		for(uint64_t i = 0; i < size1; i++){
+		uint64_t size;
+		loadai.read(reinterpret_cast<char*>(&size), sizeof(uint64_t));
+		for(uint64_t i = 0; i < size; i++){
 			uint64_t temp1, temp2;
 			loadai.read(reinterpret_cast<char*>(&temp1), sizeof(uint64_t));
 			loadai.read(reinterpret_cast<char*>(&temp2), sizeof(uint64_t));
-			field temp;
-			temp.fir = temp1;
-			temp.sec = temp2;
-			pl.push_back(temp);
+			pl.push_back({temp1, temp2});
 		}
-		for(uint64_t i = 0; i < size1; i++){
+		for(uint64_t i = 0; i < size; i++){
 			unsigned short temp;
 			loadai.read(reinterpret_cast<char*>(&temp), sizeof(unsigned short));
 			pr.push_back(temp);
 		}
-		if(size1 > 0)
-			cout << " done" << endl;
-		for (uint64_t i = 0; i < pl.size(); ++i)
+		for (uint64_t i = 0; i < size; ++i)
 			cache[pl[i]] = i;
-		cout << " done" << endl;
 	}
 	loadai.close();
 	for (;;)
@@ -2918,190 +2837,98 @@ int main(){
 		field curpos;
 		curpos.fir = 0;
 		curpos.sec = 0;
-        //debug(curpos);
 		uint64_t last;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
         cin >> start;
-		int left[7] = {6,6,6,6,6,6,6};
+		uint32_t left[7] = {6,6,6,6,6,6,6};
 		if (start == 0)
 		{
 			//cout << "bot starts first" << endl;
-			for (int itmain = 0;; itmain++) //change back to 0
+			for (int itmain = 0;; ++itmain)
 			{                
                 auto it = cache.find(curpos);
-                if(it != cache.end()){
-                    debug("\033[35m", "A", "Guess who's losing in ~", 41 - (itmain << 1), "moves");
-                    debug(curpos);
+                if(it != cache.end())
+                    last = pr[it->second];
+                else
+                {
                     debug("\033[32m", "D", curpos.fir);
                     debug("\033[32m", "D", curpos.sec);
                     debug("\033[32m", "D", itmain);
                     debug("\033[32m", "D", left, 7);
-                    int safedepth = 42 - (itmain << 1);
-                    debug("\033[32m", "D", "safedepth =", safedepth);
-                    last = it->second;
-                    //debug("\033[32m", "D", "index =", last);
-                    last = pr[last];
-                }
-                else{
-                    // int deb = 1234;
-                    // if(deb == 1234){
-                    //     cin >> deb;
-                    //     deb--;
-                    //     changes = 1;
-                    //     cache[curpos] = pl.size();
-                    //     pl.push_back(curpos);
-                    //     pr.push_back(deb);
-                    //     remove("AIn.bin");
-                    //     ofstream dumpai("AIn.bin", ios::binary);
-                    //     uint64_t size1 = pl.size();
-                    //     dumpai.write(reinterpret_cast<const char*>(&size1), sizeof(uint64_t));
-                    //     for (uint64_t i = 0; i < pl.size(); i++){
-                    //         uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                    //     }
-                    //     for(uint64_t i = 0; i < pl.size(); i++)
-                    //         dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
-                    //     dumpai.close();
-                    //     return -1;                    
-                    // }
-                    //debug("\033[31m", "A", "launch minimax...");
-                    /*
-                    -223741     -288344      -307551      -1506318     -216584     -437589     -79431     
-                    -306550     -381063      -555958      -1042456     -291589     -464126     -149997
-                    -499221     -1018219     -1175994     -1745869     -746950     -760728     -282496
-                    -492346     -1779466     -4347077     -3381229     -1387767    -1321445    -503762
-                    -301920     -1411405     -578843      -1255882     -482520     -1195465    -289245
-                    -423157     -662026      -387315      -1281739     -319173     -547212     -302120
-                    */
-                    debug(curpos);
-                    debug("\033[32m", "D", curpos.fir);
-                    debug("\033[32m", "D", curpos.sec);
-                    debug("\033[32m", "D", itmain);
-                    debug("\033[32m", "D", left, 7);
-                    int safedepth = 42 - (itmain << 1);
-                    debug("\033[32m", "D", "safedepth =", safedepth);
-                    //debug("\033[31m", "A", "minimax part1...");
-                    int maxrdepth = 19;
-                    for(; maxrdepth < safedepth; maxrdepth += 2){
+                    int safedepth = 41 - (itmain << 1);
+                    debug("\033[32m", "D", "safedepth =", safedepth + 1);
+                    if(safedepth > 23){
                         auto startin = high_resolution_clock::now();
-                        int tmove = minimaxentry(maxrdepth, true, maxrdepth, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        cout << endl;
+                        pair<int, int> result = minimaxentry(23, true, 23, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                         auto endin = high_resolution_clock::now();
-                        if(tmove == -1){
-                            debug("\033[31m", "A", "win is in >", maxrdepth, "moves...");
-                            auto duration = duration_cast<milliseconds>(endin - startin);
-                            debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                        }
-                        else{
-                            auto duration = duration_cast<milliseconds>(endin - startin);
-                            debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                            last = tmove;
-                            break;
-                        }
-                    }
-                    if(19 > safedepth){
-                        last = minimaxentry(safedepth, true, safedepth, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                         cout << endl;
+                        last = result.first;
+                        debug("\033[32m", "D", "poseval s =", result.second);
+                        auto duration = duration_cast<milliseconds>(endin - startin);
+                        debug("\033[31m", "A", "Minimax shortdepth milliseconds:", duration.count());
+                        if(last == -1)
+                            goto fulldepth1;
                     }
-                    cache[curpos] = pl.size();
-                    pl.push_back(curpos);
-                    pr.push_back(last);
-                    //debug("\033[31m", "A", "end minimax...");
-                    //if(maxeval > 0)
-                    //    debug("\033[35m", "A", "Guess who's losing in", safedepth - maxeval, "moves");
-                    remove("AIn.bin");
-                    ofstream dumpai("AIn.bin", ios::binary);
-                    uint64_t size1 = pl.size();
-                    dumpai.write(reinterpret_cast<const char*>(&size1), sizeof(uint64_t));
-                    for (uint64_t i = 0; i < pl.size(); i++){
-                        uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                        dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                        dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
+                    else
+                    {
+                        fulldepth1:
+                        auto startin = high_resolution_clock::now();
+                        pair<int, int> result = minimaxentry(safedepth, true, safedepth, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        auto endin = high_resolution_clock::now();
+                        cout << endl;
+                        last = result.first;
+                        debug("\033[32m", "D", "poseval f =", result.second);
+                        auto duration = duration_cast<milliseconds>(endin - startin);
+                        debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
                     }
-                    for(uint64_t i = 0; i < pl.size(); i++)
-                        dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
-                    dumpai.close();
+                    if(safedepth > 23){
+                        cache[curpos] = pl.size();
+                        pl.push_back(curpos);
+                        pr.push_back(last);
+                        remove("AIn.bin");
+                        ofstream dumpai("AIn.bin", ios::binary);
+                        uint64_t size = pl.size();
+                        dumpai.write(reinterpret_cast<const char*>(&size), sizeof(uint64_t));
+                        for (uint64_t i = 0; i < size; i++){
+                            uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
+                            dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
+                            dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
+                        }
+                        for(uint64_t i = 0; i < size; i++)
+                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
+                        dumpai.close();
+                    }
                 }
                 debug("\033[32m", "D", "move: ", last + 1);
-				curpos = modificate1(curpos, last, left[last]);
+				curpos.fir = modificate(curpos.fir, last, left[last]);
 				if (cw(curpos.fir, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
-					for (int u = 41; u > -1; u--)
-					{
-						if(((curpos.fir >> u) & 1) == 1)
-							cout << "X";
-						else if(((curpos.sec >> u) & 1) == 1)
-							cout << "O";
-						else
-							cout << ".";
-						if(u % 7 == 0)
-							cout << endl;
-					}
+					display(curpos.fir, curpos.sec);
 					break;
 				}
 				left[last]--;
-				for (int u = 41; u > -1; u--)
-				{
-					if(((curpos.fir >> u) & 1) == 1)
-						cout << "X";
-					else if(((curpos.sec >> u) & 1) == 1)
-						cout << "O";
-					else
-						cout << ".";
-					if(u % 7 == 0)
-						cout << endl;
-				}
+				display(curpos.fir, curpos.sec);
 				int p2;
 				for (;;)
 				{
 					cout << "Your move: ";
 					cin >> p2;
-                    // if(p2 == 1234){
-                    //     cin >> p2;
-                    //     pl.erase(pl.begin() + p2);
-                    //     pr.erase(pr.begin() + p2);
-                    //     remove("AIn.bin");
-                    //     ofstream dumpai("AIn.bin", ios::binary);
-                    //     uint64_t size1 = pl.size();
-                    //     //cout << "dumping size1: " << size1 << endl;
-                    //     dumpai.write(reinterpret_cast<const char*>(&size1), sizeof(uint64_t));
-                    //     for (uint64_t i = 0; i < pl.size(); i++){
-                    //         uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                    //     }
-                    //     for(uint64_t i = 0; i < pl.size(); i++)
-                    //         dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
-                    //     dumpai.close();
-                    //     return -1;
-                    // }
                     //p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-						curpos = modificate2(curpos, p2 - 1, left[p2 - 1]);
+						curpos.sec = modificate(curpos.sec, p2 - 1, left[p2 - 1]);
 						break;
 					}
 				}
 				if (cw(curpos.sec, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-					for (int u = 41; u > -1; u--)
-					{
-						if(((curpos.fir >> u) & 1) == 1)
-							cout << "X";
-						else if(((curpos.sec >> u) & 1) == 1)
-							cout << "O";
-						else
-							cout << ".";
-						if(u % 7 == 0)
-							cout << endl;
-					}
+					display(curpos.fir, curpos.sec);
 					break;
 				}
 				left[p2 - 1]--;
@@ -3115,169 +2942,90 @@ int main(){
 		else
         {
             //cout << "you start first" << endl;
-            for (int itmain = 0;; itmain++)
+            for (int itmain = 0;; ++itmain)
             {
-                for (int u = 41; u > -1; u--)
-				{
-					if(((curpos.fir >> u) & 1) == 1)
-						cout << "X";
-					else if(((curpos.sec >> u) & 1) == 1)
-						cout << "O";
-					else
-						cout << ".";
-					if(u % 7 == 0)
-						cout << endl;
-				}
+                display(curpos.fir, curpos.sec);
                 int p2;
 				for (;;)
 				{
 					cout << "Your move: ";
 					cin >> p2;
-                    // if(p2 == 1234){
-                    //     cin >> p2;
-                    //     pl.erase(pl.begin() + p2);
-                    //     pr.erase(pr.begin() + p2);
-                    //     remove("AIn.bin");
-                    //     ofstream dumpai("AIn.bin", ios::binary);
-                    //     uint64_t size1 = pl.size();
-                    //     //cout << "dumping size1: " << size1 << endl;
-                    //     dumpai.write(reinterpret_cast<const char*>(&size1), sizeof(uint64_t));
-                    //     for (uint64_t i = 0; i < pl.size(); i++){
-                    //         uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                    //     }
-                    //     for(uint64_t i = 0; i < pl.size(); i++)
-                    //         dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
-                    //     dumpai.close();
-                    //     return -1;
-                    // }
                     //p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-						curpos = modificate1(curpos, p2 - 1, left[p2 - 1]);
+						curpos.fir = modificate(curpos.fir, p2 - 1, left[p2 - 1]);
 						break;
 					}
 				}
 				if (cw(curpos.fir, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-					for (int u = 41; u > -1; u--)
-					{
-						if(((curpos.fir >> u) & 1) == 1)
-							cout << "X";
-						else if(((curpos.sec >> u) & 1) == 1)
-							cout << "O";
-						else
-							cout << ".";
-						if(u % 7 == 0)
-							cout << endl;
-					}
+					display(curpos.fir, curpos.sec);
 					break;
 				}
 				left[p2 - 1]--;
                 auto it = cache.find(curpos);
-                if(it != cache.end()){
-                    last = it->second;
-                    //debug("\033[32m", "D", "index =", last);
-                    last = pr[last];
-                }
-                else{
-                    debug(curpos);
+                if(it != cache.end())
+                    last = pr[it->second];
+                else
+                {
                     debug("\033[32m", "D", curpos.fir);
                     debug("\033[32m", "D", curpos.sec);
                     debug("\033[32m", "D", itmain);
                     debug("\033[32m", "D", left, 7);
-                    // int deb = 1234;
-                    // if(deb == 1234){
-                    //     cin >> deb;
-                    //     deb--;
-                    //     cache[curpos] = pl.size();
-                    //     pl.push_back(curpos);
-                    //     pr.push_back(deb);
-                    //     remove("AIn.bin");
-                    //     ofstream dumpai("AIn.bin", ios::binary);
-                    //     uint64_t size1 = pl.size();
-                    //     dumpai.write(reinterpret_cast<const char*>(&size1), sizeof(uint64_t));
-                    //     for (uint64_t i = 0; i < pl.size(); i++){
-                    //         uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                    //         dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                    //     }
-                    //     for(uint64_t i = 0; i < pl.size(); i++)
-                    //         dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
-                    //     dumpai.close();
-                    //     return -1;                    
-                    // }
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth);
-                    //debug("\033[31m", "A", "minimax part1...");
-                    int maxrdepth = 19;
-                    for(; maxrdepth < safedepth + 1; maxrdepth += 2){
+                    if(safedepth > 23){
                         auto startin = high_resolution_clock::now();
-                        int tmove = minimaxentry(maxrdepth, false, 0, -maxrdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        cout << endl;
+                        pair<int, int> result = minimaxentry(23, false, 0, -23, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                         auto endin = high_resolution_clock::now();
-                        if(tmove == -1){
-                            if(maxrdepth == safedepth){
-                                last = minimaxentry(maxrdepth, false, maxrdepth, -maxrdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]); 
-                                cout << endl;  
-                                break;
-                            }
-                            debug("\033[31m", "A", "win is in >", maxrdepth, "moves...");
-                            auto duration = duration_cast<milliseconds>(endin - startin);
-                            debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                        }
-                        else{
-                            auto duration = duration_cast<milliseconds>(endin - startin);
-                            debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                            last = tmove;
-                            break;
-                        }
-                    }
-                    if(19 > safedepth){
-                        last = minimaxentry(safedepth, false, 0, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                         cout << endl;
-                        if(last == -1){
-                            last = minimaxentry(safedepth, false, safedepth, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                            cout << endl;
+                        last = result.first;
+                        debug("\033[32m", "D", "poseval s =", result.second);
+                        auto duration = duration_cast<milliseconds>(endin - startin);
+                        debug("\033[31m", "A", "Minimax shortdepth milliseconds:", duration.count());
+                        if(last == -1)
+                            goto fulldepth2;
+                    }
+                    else
+                    {
+                        fulldepth2:
+                        auto startin = high_resolution_clock::now();
+                        pair<int, int> result = minimaxentry(safedepth, false, 3, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        auto endin = high_resolution_clock::now();
+                        cout << endl;
+                        last = result.first;
+                        debug("\033[32m", "D", "poseval f =", result.second);
+                        auto duration = duration_cast<milliseconds>(endin - startin);
+                        debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
+                    }
+                    if(safedepth > 23){
+                        cache[curpos] = pl.size();
+                        pl.push_back(curpos);
+                        pr.push_back(last);
+                        remove("AIn.bin");
+                        ofstream dumpai("AIn.bin", ios::binary);
+                        uint64_t size = pl.size();
+                        dumpai.write(reinterpret_cast<const char*>(&size), sizeof(uint64_t));
+                        for (uint64_t i = 0; i < size; i++){
+                            uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
+                            dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
+                            dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
                         }
+                        for(uint64_t i = 0; i < size; i++)
+                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
+                        dumpai.close();
                     }
-                    cache[curpos] = pl.size();
-                    pl.push_back(curpos);
-                    pr.push_back(last);
-                    remove("AIn.bin");
-                    ofstream dumpai("AIn.bin", ios::binary);
-                    uint64_t size1 = pl.size();
-                    dumpai.write(reinterpret_cast<const char*>(&size1), sizeof(uint64_t));
-                    for (uint64_t i = 0; i < pl.size(); i++){
-                        uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                        dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                        dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                    }
-                    for(uint64_t i = 0; i < pl.size(); i++)
-                        dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
-                    dumpai.close();
                 }
                 debug("\033[32m", "D", "move: ", last + 1);
-                curpos = modificate2(curpos, last, left[last]);
+                curpos.sec = modificate(curpos.sec, last, left[last]);
 				if (cw(curpos.sec, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
-					for (int u = 41; u > -1; u--)
-					{
-						if(((curpos.fir >> u) & 1) == 1)
-							cout << "X";
-						else if(((curpos.sec >> u) & 1) == 1)
-							cout << "O";
-						else
-							cout << ".";
-						if(u % 7 == 0)
-							cout << endl;
-					}
+					display(curpos.fir, curpos.sec);
 					break;
 				}
 				left[last]--;
