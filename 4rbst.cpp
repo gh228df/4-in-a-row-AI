@@ -2840,7 +2840,7 @@ int main(){
 			for (int itmain = 0;; ++itmain)
 			{                
                 auto it = cache.find(curpos);
-                if(it != cache.end() and itmain < 3)
+                if(it != cache.end())
                     last = pr[it->second];
                 else
                 {
