@@ -12,4 +12,4 @@ or
 
 # Features
 
-AI completely solves the game, thus always playing optimally. Due to hashing, ram usage for calculating the first move can be around 26gb. I have precalculated 4 moves for the either of player in AIn.bin file, you can put it alongside the main program to get optimal performance
+AI completely solves the game, thus always playing optimally. Due to hashing, ram usage for calculating the first move can be around 26gb. I have precalculated first 4 moves for both players in AIn.bin file, you can put it alongside the main program to get optimal performance.
