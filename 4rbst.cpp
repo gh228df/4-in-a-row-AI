@@ -8,24 +8,51 @@
 #include <mutex>
 
 /*
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 19 moves...
-[A] Minimax milliseconds: 212
+[A] Minimax milliseconds: 67
+size: 1969
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 21 moves...
-[A] Minimax milliseconds: 208
+[A] Minimax milliseconds: 132
+size: 5520
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 23 moves...
-[A] Minimax milliseconds: 544
+[A] Minimax milliseconds: 262
+size: 16024
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 25 moves...
-[A] Minimax milliseconds: 1486
+[A] Minimax milliseconds: 504
+size: 44881
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 27 moves...
-[A] Minimax milliseconds: 4456
+[A] Minimax milliseconds: 866
+size: 118146
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 29 moves...
-[A] Minimax milliseconds: 11405
+[A] Minimax milliseconds: 1346
+size: 283601
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 31 moves...
-[A] Minimax milliseconds: 25975
+[A] Minimax milliseconds: 2076
+size: 650610
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 33 moves...
-[A] Minimax milliseconds: 57898
+[A] Minimax milliseconds: 4297
+size: 1706416
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
 [A] win is in > 35 moves...
-[A] Minimax milliseconds: 371507
+[A] Minimax milliseconds: 25580
+size: 8281973
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 37 moves...
+[A] Minimax milliseconds: 120112
+size: 42839251
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 39 moves...
+[A] Minimax milliseconds: 341468
+size: 180804455
+
 */
 
 using namespace std;
@@ -621,558 +648,6 @@ bool cw(uint64_t curcheckw, int last, uint32_t left){
                     return true;
             return false;
         }
-    }
-}
-
-bool cw1(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 14LL) == 0)
-                return true;
-        if((curcheckw & 16843008LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 1792LL) == 0)
-                return true;
-        if((curcheckw & 2155905024LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 229376LL) == 0)
-                return true;
-        if((curcheckw & 275955843072LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 29360128LL) == 0)
-                return true;
-        if((curcheckw & 16513LL) == 0)
-                return true;
-        if((curcheckw & 33288LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 3758096384LL) == 0)
-                return true;
-        if((curcheckw & 2113664LL) == 0)
-                return true;
-        if((curcheckw & 4260864LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 481036337152LL) == 0)
-                return true;
-        if((curcheckw & 270548992LL) == 0)
-                return true;
-        if((curcheckw & 545390592LL) == 0)
-                return true;
-        return false;
-    }
-}
-
-bool cw2(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 13LL) == 0)
-                return true;
-        if((curcheckw & 28LL) == 0)
-                return true;
-        if((curcheckw & 33686016LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 1664LL) == 0)
-                return true;
-        if((curcheckw & 3584LL) == 0)
-                return true;
-        if((curcheckw & 16842753LL) == 0)
-                return true;
-        if((curcheckw & 4311810048LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 212992LL) == 0)
-                return true;
-        if((curcheckw & 458752LL) == 0)
-                return true;
-        if((curcheckw & 2155872384LL) == 0)
-                return true;
-        if((curcheckw & 551911686144LL) == 0)
-                return true;
-        if((curcheckw & 2097672LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 27262976LL) == 0)
-                return true;
-        if((curcheckw & 58720256LL) == 0)
-                return true;
-        if((curcheckw & 33026LL) == 0)
-                return true;
-        if((curcheckw & 275951665152LL) == 0)
-                return true;
-        if((curcheckw & 66576LL) == 0)
-                return true;
-        if((curcheckw & 268502016LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 3489660928LL) == 0)
-                return true;
-        if((curcheckw & 7516192768LL) == 0)
-                return true;
-        if((curcheckw & 4227328LL) == 0)
-                return true;
-        if((curcheckw & 8521728LL) == 0)
-                return true;
-        if((curcheckw & 34368258048LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 446676598784LL) == 0)
-                return true;
-        if((curcheckw & 962072674304LL) == 0)
-                return true;
-        if((curcheckw & 541097984LL) == 0)
-                return true;
-        if((curcheckw & 1090781184LL) == 0)
-                return true;
-        return false;
-    }
-}
-
-bool cw3(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 11LL) == 0)
-                return true;
-        if((curcheckw & 26LL) == 0)
-                return true;
-        if((curcheckw & 56LL) == 0)
-                return true;
-        if((curcheckw & 67372032LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 1408LL) == 0)
-                return true;
-        if((curcheckw & 3328LL) == 0)
-                return true;
-        if((curcheckw & 7168LL) == 0)
-                return true;
-        if((curcheckw & 33685506LL) == 0)
-                return true;
-        if((curcheckw & 8623620096LL) == 0)
-                return true;
-        if((curcheckw & 2129928LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 180224LL) == 0)
-                return true;
-        if((curcheckw & 425984LL) == 0)
-                return true;
-        if((curcheckw & 917504LL) == 0)
-                return true;
-        if((curcheckw & 16777473LL) == 0)
-                return true;
-        if((curcheckw & 4311744768LL) == 0)
-                return true;
-        if((curcheckw & 1103823372288LL) == 0)
-                return true;
-        if((curcheckw & 4195344LL) == 0)
-                return true;
-        if((curcheckw & 272630784LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 23068672LL) == 0)
-                return true;
-        if((curcheckw & 54525952LL) == 0)
-                return true;
-        if((curcheckw & 117440512LL) == 0)
-                return true;
-        if((curcheckw & 66052LL) == 0)
-                return true;
-        if((curcheckw & 2147516544LL) == 0)
-                return true;
-        if((curcheckw & 551903330304LL) == 0)
-                return true;
-        if((curcheckw & 133152LL) == 0)
-                return true;
-        if((curcheckw & 537004032LL) == 0)
-                return true;
-        if((curcheckw & 34896740352LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 2952790016LL) == 0)
-                return true;
-        if((curcheckw & 6979321856LL) == 0)
-                return true;
-        if((curcheckw & 15032385536LL) == 0)
-                return true;
-        if((curcheckw & 8454656LL) == 0)
-                return true;
-        if((curcheckw & 274882117632LL) == 0)
-                return true;
-        if((curcheckw & 17043456LL) == 0)
-                return true;
-        if((curcheckw & 68736516096LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 377957122048LL) == 0)
-                return true;
-        if((curcheckw & 893353197568LL) == 0)
-                return true;
-        if((curcheckw & 1924145348608LL) == 0)
-                return true;
-        if((curcheckw & 1082195968LL) == 0)
-                return true;
-        if((curcheckw & 2181562368LL) == 0)
-                return true;
-        return false;
-    }
-}
-
-bool cw4(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 7LL) == 0)
-                return true;
-        if((curcheckw & 22LL) == 0)
-                return true;
-        if((curcheckw & 52LL) == 0)
-                return true;
-        if((curcheckw & 112LL) == 0)
-                return true;
-        if((curcheckw & 134744064LL) == 0)
-                return true;
-        if((curcheckw & 2130432LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 896LL) == 0)
-                return true;
-        if((curcheckw & 2816LL) == 0)
-                return true;
-        if((curcheckw & 6656LL) == 0)
-                return true;
-        if((curcheckw & 14336LL) == 0)
-                return true;
-        if((curcheckw & 67371012LL) == 0)
-                return true;
-        if((curcheckw & 17247240192LL) == 0)
-                return true;
-        if((curcheckw & 4259856LL) == 0)
-                return true;
-        if((curcheckw & 272695296LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 114688LL) == 0)
-                return true;
-        if((curcheckw & 360448LL) == 0)
-                return true;
-        if((curcheckw & 851968LL) == 0)
-                return true;
-        if((curcheckw & 1835008LL) == 0)
-                return true;
-        if((curcheckw & 33554946LL) == 0)
-                return true;
-        if((curcheckw & 8623489536LL) == 0)
-                return true;
-        if((curcheckw & 2207646744576LL) == 0)
-                return true;
-        if((curcheckw & 8390688LL) == 0)
-                return true;
-        if((curcheckw & 545261568LL) == 0)
-                return true;
-        if((curcheckw & 34904997888LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 14680064LL) == 0)
-                return true;
-        if((curcheckw & 46137344LL) == 0)
-                return true;
-        if((curcheckw & 109051904LL) == 0)
-                return true;
-        if((curcheckw & 234881024LL) == 0)
-                return true;
-        if((curcheckw & 132104LL) == 0)
-                return true;
-        if((curcheckw & 65793LL) == 0)
-                return true;
-        if((curcheckw & 4295033088LL) == 0)
-                return true;
-        if((curcheckw & 1103806660608LL) == 0)
-                return true;
-        if((curcheckw & 266304LL) == 0)
-                return true;
-        if((curcheckw & 1074008064LL) == 0)
-                return true;
-        if((curcheckw & 69793480704LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 1879048192LL) == 0)
-                return true;
-        if((curcheckw & 5905580032LL) == 0)
-                return true;
-        if((curcheckw & 13958643712LL) == 0)
-                return true;
-        if((curcheckw & 30064771072LL) == 0)
-                return true;
-        if((curcheckw & 16909312LL) == 0)
-                return true;
-        if((curcheckw & 8421504LL) == 0)
-                return true;
-        if((curcheckw & 549764235264LL) == 0)
-                return true;
-        if((curcheckw & 34086912LL) == 0)
-                return true;
-        if((curcheckw & 137473032192LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 240518168576LL) == 0)
-                return true;
-        if((curcheckw & 755914244096LL) == 0)
-                return true;
-        if((curcheckw & 1786706395136LL) == 0)
-                return true;
-        if((curcheckw & 3848290697216LL) == 0)
-                return true;
-        if((curcheckw & 2164391936LL) == 0)
-                return true;
-        if((curcheckw & 1077952512LL) == 0)
-                return true;
-        if((curcheckw & 4363124736LL) == 0)
-                return true;
-        return false;
-    }
-}
-
-bool cw5(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 14LL) == 0)
-                return true;
-        if((curcheckw & 44LL) == 0)
-                return true;
-        if((curcheckw & 104LL) == 0)
-                return true;
-        if((curcheckw & 4260864LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 1792LL) == 0)
-                return true;
-        if((curcheckw & 5632LL) == 0)
-                return true;
-        if((curcheckw & 13312LL) == 0)
-                return true;
-        if((curcheckw & 134742024LL) == 0)
-                return true;
-        if((curcheckw & 8519712LL) == 0)
-                return true;
-        if((curcheckw & 545390592LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 229376LL) == 0)
-                return true;
-        if((curcheckw & 720896LL) == 0)
-                return true;
-        if((curcheckw & 1703936LL) == 0)
-                return true;
-        if((curcheckw & 67109892LL) == 0)
-                return true;
-        if((curcheckw & 17246979072LL) == 0)
-                return true;
-        if((curcheckw & 16781376LL) == 0)
-                return true;
-        if((curcheckw & 1090523136LL) == 0)
-                return true;
-        if((curcheckw & 69809995776LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 29360128LL) == 0)
-                return true;
-        if((curcheckw & 92274688LL) == 0)
-                return true;
-        if((curcheckw & 218103808LL) == 0)
-                return true;
-        if((curcheckw & 264208LL) == 0)
-                return true;
-        if((curcheckw & 131586LL) == 0)
-                return true;
-        if((curcheckw & 8590066176LL) == 0)
-                return true;
-        if((curcheckw & 2207613321216LL) == 0)
-                return true;
-        if((curcheckw & 2148016128LL) == 0)
-                return true;
-        if((curcheckw & 139586961408LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 3758096384LL) == 0)
-                return true;
-        if((curcheckw & 11811160064LL) == 0)
-                return true;
-        if((curcheckw & 27917287424LL) == 0)
-                return true;
-        if((curcheckw & 33818624LL) == 0)
-                return true;
-        if((curcheckw & 16843008LL) == 0)
-                return true;
-        if((curcheckw & 1099528470528LL) == 0)
-                return true;
-        if((curcheckw & 274946064384LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 481036337152LL) == 0)
-                return true;
-        if((curcheckw & 1511828488192LL) == 0)
-                return true;
-        if((curcheckw & 3573412790272LL) == 0)
-                return true;
-        if((curcheckw & 4328783872LL) == 0)
-                return true;
-        if((curcheckw & 2155905024LL) == 0)
-                return true;
-        return false;
-    }
-}
-
-bool cw6(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 28LL) == 0)
-                return true;
-        if((curcheckw & 88LL) == 0)
-                return true;
-        if((curcheckw & 8521728LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 3584LL) == 0)
-                return true;
-        if((curcheckw & 11264LL) == 0)
-                return true;
-        if((curcheckw & 17039424LL) == 0)
-                return true;
-        if((curcheckw & 1090781184LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 458752LL) == 0)
-                return true;
-        if((curcheckw & 1441792LL) == 0)
-                return true;
-        if((curcheckw & 134219784LL) == 0)
-                return true;
-        if((curcheckw & 2181046272LL) == 0)
-                return true;
-        if((curcheckw & 139619991552LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 58720256LL) == 0)
-                return true;
-        if((curcheckw & 184549376LL) == 0)
-                return true;
-        if((curcheckw & 528416LL) == 0)
-                return true;
-        if((curcheckw & 263172LL) == 0)
-                return true;
-        if((curcheckw & 17180132352LL) == 0)
-                return true;
-        if((curcheckw & 279173922816LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 7516192768LL) == 0)
-                return true;
-        if((curcheckw & 23622320128LL) == 0)
-                return true;
-        if((curcheckw & 67637248LL) == 0)
-                return true;
-        if((curcheckw & 33686016LL) == 0)
-                return true;
-        if((curcheckw & 2199056941056LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 962072674304LL) == 0)
-                return true;
-        if((curcheckw & 3023656976384LL) == 0)
-                return true;
-        if((curcheckw & 8657567744LL) == 0)
-                return true;
-        if((curcheckw & 4311810048LL) == 0)
-                return true;
-        return false;
-    }
-}
-
-bool cw7(uint64_t curcheckw, uint32_t left){
-    curcheckw = ~curcheckw;
-    switch(left){
-        case 6:
-        if((curcheckw & 56LL) == 0)
-                return true;
-        if((curcheckw & 17043456LL) == 0)
-                return true;
-        return false;
-        case 5:
-        if((curcheckw & 7168LL) == 0)
-                return true;
-        if((curcheckw & 2181562368LL) == 0)
-                return true;
-        return false;
-        case 4:
-        if((curcheckw & 917504LL) == 0)
-                return true;
-        if((curcheckw & 279239983104LL) == 0)
-                return true;
-        return false;
-        case 3:
-        if((curcheckw & 117440512LL) == 0)
-                return true;
-        if((curcheckw & 1056832LL) == 0)
-                return true;
-        if((curcheckw & 526344LL) == 0)
-                return true;
-        return false;
-        case 2:
-        if((curcheckw & 15032385536LL) == 0)
-                return true;
-        if((curcheckw & 135274496LL) == 0)
-                return true;
-        if((curcheckw & 67372032LL) == 0)
-                return true;
-        return false;
-        case 1:
-        if((curcheckw & 1924145348608LL) == 0)
-                return true;
-        if((curcheckw & 17315135488LL) == 0)
-                return true;
-        if((curcheckw & 8623620096LL) == 0)
-                return true;
-        return false;
     }
 }
 
@@ -1836,6 +1311,7 @@ field modificate2(field curpos, int last2, uint32_t left){
 
 unordered_map<field, uint32_t, field> TranspositionTable;
 vector<int> tt;
+vector<bool> flag;
 
 const int mincachedepth = 6;
 
@@ -1844,8 +1320,6 @@ const int mincachedepth = 6;
 //5 15367 1300mb 8008mb
 //6 15831 1008mb 7088mb
 //7
-
-int minmultidepth = 20;
 
 int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
     if(player){
@@ -2387,10 +1861,20 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
+        int alphabeg = alpha, index;
+        bool isfound = false;
         if(depth > mincachedepth){
             auto it = TranspositionTable.find({cfir, csec});
-            if (it != TranspositionTable.end())
-                return tt[it->second];
+            if (it != TranspositionTable.end()){
+                index = it->second;
+                if(tt[index] <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
+                    return alpha;
+                if(flag[index]) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
+                    return tt[index];
+
+                //cached alpha is lower bound
+                isfound = true;
+            }
         }
         pair<int, int> scores[7];
         scores[0].first = scoremove(tfir, 3, left4);
@@ -2507,8 +1991,21 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 break;
             }
         if(depth > mincachedepth){
-            TranspositionTable[{cfir,csec}] = tt.size();
-            tt.push_back(alpha);
+            if(isfound){
+                //found alpha will be for sure better than the previous one
+                tt[index] = alpha;
+                if(alpha > alphabeg) //if the alpha is bigger than the begin-alpha then the current alpha is exact, otherwise it is a better smaller bound
+                    flag[index] = true;
+            }
+            else
+            {   
+                TranspositionTable[{cfir,csec}] = tt.size();
+                tt.push_back(alpha);
+                if(alpha > alphabeg) //if the alpha is bigger than the begin-alpha then the current alpha is exact, otherwise it is a smaller bound
+                    flag.push_back(true);
+                else
+                    flag.push_back(false);
+            }
         }
         return alpha;
     }
@@ -3052,10 +2549,20 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
+        int betabeg = beta, index;
+        bool isfound = false;
         if(depth > mincachedepth){
             auto it = TranspositionTable.find({cfir, csec});
-            if (it != TranspositionTable.end())
-                return tt[it->second];
+            if (it != TranspositionTable.end()){
+                index = it->second;
+                if(tt[index] >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
+                    return beta;
+                if(flag[index]) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
+                    return tt[index];
+
+                //cached beta is upper bound
+                isfound = true;
+            }
         }
         if(left4 > 0){
             int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
@@ -3128,105 +2635,134 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(depth > mincachedepth){
-            TranspositionTable[{cfir,csec}] = tt.size();
-            tt.push_back(beta);
+            if(isfound){
+                //found beta will be for sure better than the previous one
+                tt[index] = beta;
+                if(beta < betabeg) //if the beta is smaller than the begin-beta then the current beta is exact, otherwise it is a better upper bound
+                    flag[index] = true; 
+            }
+            else
+            {   
+                TranspositionTable[{cfir,csec}] = tt.size();
+                tt.push_back(beta);
+                if(beta < betabeg) //if the beta is smaller than the begin-beta then the current beta is exact, otherwise it is a upper bound
+                    flag.push_back(true);
+                else
+                    flag.push_back(false);
+            }
         }
         return beta;
     }
 }
 
-int minimaxentry(int depth, bool player, int &beta, int &alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
+int minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
+    cout << "size: " << tt.size() << endl;
     tt.clear();
+    flag.clear();
     TranspositionTable.clear();
     if(player){
         if(left4 > 0)
-            if(cw4(cfir, left4))
+            if(cw(cfir, 3, left4))
                 return 3;
         if(left3 > 0)
-            if(cw3(cfir, left3))
+            if(cw(cfir, 2, left3))
                 return 2;
         if(left5 > 0)
-            if(cw5(cfir, left5))
+            if(cw(cfir, 4, left5))
                 return 4;
         if(left2 > 0)
-            if(cw2(cfir, left2))
+            if(cw(cfir, 1, left2))
                 return 1;
         if(left6 > 0)
-            if(cw6(cfir, left6))
+            if(cw(cfir, 5, left6))
                 return 5;
         if(left1 > 0)
-            if(cw1(cfir, left1))
+            if(cw(cfir, 0, left1))
                 return 0;
         if(left7 > 0)
-            if(cw7(cfir, left7))
+            if(cw(cfir, 6, left7))
                 return 6;
         int ret = -1;
         if(left4 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-            cout << "res4: " << reschild << endl;
+            cout << "res4: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 3;
+                if(depth > 19)
+                    return 3;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left3 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-            cout << "res3: " << reschild << endl;
+            cout << "res3: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 2;
+                if(depth > 19)
+                    return 2;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left5 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-            cout << "res5: " << reschild << endl;
+            cout << "res5: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 4;
+                if(depth > 19)
+                    return 4;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left2 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-            cout << "res2: " << reschild << endl;
+            cout << "res2: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 1;
+                if(depth > 19)
+                    return 1;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left6 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-            cout << "res6: " << reschild << endl;
+            cout << "res6: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 5;
+                if(depth > 19)
+                    return 5;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left1 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-            cout << "res1: " << reschild << endl;
+            cout << "res1: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 0;
+                if(depth > 19)
+                    return 0;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left7 > 0){
             int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-            cout << "res7: " << reschild << endl;
+            cout << "res7: " << reschild << " ";
             if(reschild > alpha){
                 alpha = reschild;
                 ret = 6;
+                if(depth > 19)
+                    return 6;
             }
             if(beta <= alpha)
                 return ret;
@@ -3236,93 +2772,110 @@ int minimaxentry(int depth, bool player, int &beta, int &alpha, uint64_t cfir, u
     else
     {
         if(left4 > 0)
-            if(cw4(csec, left4))
+            if(cw(csec, 3, left4))
                 return 3;
         if(left3 > 0)
-            if(cw3(csec, left3))
+            if(cw(csec, 2, left3))
                 return 2;
         if(left5 > 0)
-            if(cw5(csec, left5))
+            if(cw(csec, 4, left5))
                 return 4;
         if(left2 > 0)
-            if(cw2(csec, left2))
+            if(cw(csec, 1, left2))
                 return 1;
         if(left6 > 0)
-            if(cw6(csec, left6))
+            if(cw(csec, 5, left6))
                 return 5;
         if(left1 > 0)
-            if(cw1(csec, left1))
+            if(cw(csec, 0, left1))
                 return 0;
         if(left7 > 0)
-            if(cw7(csec, left7))
+            if(cw(csec, 6, left7))
                 return 6;
         int ret = -1;
+        bool desperate = true;
+        if(beta == 0)
+            desperate = false;
         if(left4 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
-            cout << "res4: " << reschild << endl;
+            cout << "res4: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 3;
+                if(depth > 19 and desperate == false)
+                    return 3;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left3 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-            cout << "res3: " << reschild << endl;
+            cout << "res3: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 2;
+                if(depth > 19 and desperate == false)
+                    return 2;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left5 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-            cout << "res5: " << reschild << endl;
+            cout << "res5: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 4;
+                if(depth > 19 and desperate == false)
+                    return 4;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left2 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-            cout << "res2: " << reschild << endl;
+            cout << "res2: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 1;
+                if(depth > 19 and desperate == false)
+                    return 1;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left6 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-            cout << "res6: " << reschild << endl;
+            cout << "res6: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 5;
+                if(depth > 19 and desperate == false)
+                    return 5;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left1 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-            cout << "res1: " << reschild << endl;
+            cout << "res1: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 0;
+                if(depth > 19 and desperate == false)
+                    return 0;
             }
             if(beta <= alpha)
                 return ret;
         }
         if(left7 > 0){
             int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-            cout << "res7: " << reschild << endl;
+            cout << "res7: " << reschild << " ";
             if(reschild < beta){
                 beta = reschild;
                 ret = 6;
+                if(depth > 19 and desperate == false)
+                    return 6;
             }
             if(beta <= alpha)
                 return ret;
@@ -3367,14 +2920,14 @@ int main(){
 		curpos.sec = 0;
         //debug(curpos);
 		uint64_t last;
-        //cout << "Start first? " << endl;
+        cout << "Start first? " << endl;
         bool start = rand() % 2;
-        //cin >> start;
+        cin >> start;
 		int left[7] = {6,6,6,6,6,6,6};
 		if (start == 0)
 		{
 			//cout << "bot starts first" << endl;
-			for (int itmain = 0; itmain < 4; itmain++) //change back to 0
+			for (int itmain = 0;; itmain++) //change back to 0
 			{                
                 auto it = cache.find(curpos);
                 if(it != cache.end()){
@@ -3429,34 +2982,28 @@ int main(){
                     debug("\033[32m", "D", left, 7);
                     int safedepth = 42 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth);
-                    minmultidepth = 18;
                     //debug("\033[31m", "A", "minimax part1...");
-                    int maxrdepth = safedepth - 1;
+                    int maxrdepth = 19;
                     for(; maxrdepth < safedepth; maxrdepth += 2){
-                        int eval = 0;
                         auto startin = high_resolution_clock::now();
-                        int tmove = minimaxentry(maxrdepth, true, maxrdepth, eval, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        int tmove = minimaxentry(maxrdepth, true, maxrdepth, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        cout << endl;
                         auto endin = high_resolution_clock::now();
                         if(tmove == -1){
                             debug("\033[31m", "A", "win is in >", maxrdepth, "moves...");
                             auto duration = duration_cast<milliseconds>(endin - startin);
                             debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                            if(maxrdepth == 19 and duration.count() > 1000)
-                                minmultidepth -= 2;
                         }
                         else{
                             auto duration = duration_cast<milliseconds>(endin - startin);
                             debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
                             last = tmove;
-                            debug("\033[35m", "A", "Guess who's losing in", maxrdepth, "moves");
-                            //debug("\033[32m", "D", "move: ", last + 1);
                             break;
                         }
                     }
                     if(19 > safedepth){
-                        int eval = 0;
-                        last = minimaxentry(safedepth, true, safedepth, eval, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        debug("\033[35m", "A", "Guess who's losing in", safedepth - eval, "moves");
+                        last = minimaxentry(safedepth, true, safedepth, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        cout << endl;
                     }
                     cache[curpos] = pl.size();
                     pl.push_back(curpos);
@@ -3510,8 +3057,8 @@ int main(){
 				int p2;
 				for (;;)
 				{
-					//cout << "Your move: ";
-					//cin >> p2;
+					cout << "Your move: ";
+					cin >> p2;
                     // if(p2 == 1234){
                     //     cin >> p2;
                     //     pl.erase(pl.begin() + p2);
@@ -3531,7 +3078,7 @@ int main(){
                     //     dumpai.close();
                     //     return -1;
                     // }
-                    p2 = (rand() % 7) + 1;
+                    //p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -3568,7 +3115,7 @@ int main(){
 		else
         {
             //cout << "you start first" << endl;
-            for (int itmain = 0; itmain < 4; itmain++)
+            for (int itmain = 0;; itmain++)
             {
                 for (int u = 41; u > -1; u--)
 				{
@@ -3584,8 +3131,8 @@ int main(){
                 int p2;
 				for (;;)
 				{
-					//cout << "Your move: ";
-					//cin >> p2;
+					cout << "Your move: ";
+					cin >> p2;
                     // if(p2 == 1234){
                     //     cin >> p2;
                     //     pl.erase(pl.begin() + p2);
@@ -3605,7 +3152,7 @@ int main(){
                     //     dumpai.close();
                     //     return -1;
                     // }
-                    p2 = (rand() % 7) + 1;
+                    //p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -3667,44 +3214,37 @@ int main(){
                     // }
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth);
-                    minmultidepth = 18;
                     //debug("\033[31m", "A", "minimax part1...");
-                    int maxrdepth = safedepth;
+                    int maxrdepth = 19;
                     for(; maxrdepth < safedepth + 1; maxrdepth += 2){
-                        int eval = 0, tdepth = -maxrdepth;
                         auto startin = high_resolution_clock::now();
-                        int tmove = minimaxentry(maxrdepth, false, eval, tdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        int tmove = minimaxentry(maxrdepth, false, 0, -maxrdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        cout << endl;
                         auto endin = high_resolution_clock::now();
                         if(tmove == -1){
                             if(maxrdepth == safedepth){
-                                tmove = minimaxentry(maxrdepth, false, maxrdepth, tdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                                cout << tmove << endl;
-                                last = tmove;
+                                last = minimaxentry(maxrdepth, false, maxrdepth, -maxrdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]); 
+                                cout << endl;  
                                 break;
                             }
                             debug("\033[31m", "A", "win is in >", maxrdepth, "moves...");
                             auto duration = duration_cast<milliseconds>(endin - startin);
                             debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                            if(maxrdepth == 19 and duration.count() > 1000)
-                                minmultidepth -= 2;
                         }
                         else{
                             auto duration = duration_cast<milliseconds>(endin - startin);
                             debug("\033[31m", "A", "Minimax milliseconds:", duration.count());
-                            debug("\033[35m", "A", "Guess who's losing in", eval + maxrdepth, "moves");
                             last = tmove;
-                            //debug("\033[32m", "D", "move: ", last + 1);
                             break;
                         }
                     }
                     if(19 > safedepth){
-                        int eval = 0, tdepth = -maxrdepth;
-                        last = minimaxentry(safedepth, false, eval, tdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        last = minimaxentry(safedepth, false, 0, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                        cout << endl;
                         if(last == -1){
-                            last = minimaxentry(maxrdepth, false, maxrdepth, tdepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                            last = minimaxentry(safedepth, false, safedepth, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                            cout << endl;
                         }
-                        else
-                            debug("\033[35m", "A", "Guess who's losing in", eval + safedepth, "moves");
                     }
                     cache[curpos] = pl.size();
                     pl.push_back(curpos);
