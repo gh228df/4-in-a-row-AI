@@ -1286,13 +1286,12 @@ unordered_map<field, uint32_t, field> TranspositionTable;
 vector<int> tt;
 vector<bool> flag;
 
-const int mincachedepth = 6;
+const int mincachedepth = 7;
 
-//3 21313
-//4 18381
-//5 15367 1300mb 8008mb
-//6 15831 1008mb 7088mb
-//7
+//5 14654 1100mb
+//6 14213 892mb
+//7 12659 691mb
+//8 13345 525mb
 
 int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
     if(player){
@@ -2797,12 +2796,12 @@ pair<int, int> minimaxentry(int depth, bool player, int beta, int alpha, uint64_
     }
 }
 
-void display(uint64_t fir, uint64_t sec){
+void display(field pos){
     for (int u = 41; u > -1; --u)
     {
-        if((fir >> u) & 1)
+        if((pos.fir >> u) & 1)
             cout << "X ";
-        else if((sec >> u) & 1)
+        else if((pos.sec >> u) & 1)
             cout << "O ";
         else
             cout << ". ";
@@ -2817,26 +2816,19 @@ int main(){
 	if(loadai){
 		uint64_t size;
 		loadai.read(reinterpret_cast<char*>(&size), sizeof(uint64_t));
-		for(uint64_t i = 0; i < size; i++){
-			uint64_t temp1, temp2;
-			loadai.read(reinterpret_cast<char*>(&temp1), sizeof(uint64_t));
-			loadai.read(reinterpret_cast<char*>(&temp2), sizeof(uint64_t));
-			pl.push_back({temp1, temp2});
-		}
-		for(uint64_t i = 0; i < size; i++){
-			unsigned short temp;
-			loadai.read(reinterpret_cast<char*>(&temp), sizeof(unsigned short));
-			pr.push_back(temp);
-		}
+        pr.resize(size);
+        pl.resize(size);
+		for(uint64_t i = 0; i < size; ++i)
+			loadai.read(reinterpret_cast<char*>(&pl[i]), sizeof(field));
+		for(uint64_t i = 0; i < size; ++i)
+			loadai.read(reinterpret_cast<char*>(&pr[i]), sizeof(unsigned short));
 		for (uint64_t i = 0; i < size; ++i)
 			cache[pl[i]] = i;
 	}
 	loadai.close();
 	for (;;)
 	{
-		field curpos;
-		curpos.fir = 0;
-		curpos.sec = 0;
+		field curpos = {0, 0};
 		uint64_t last;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
@@ -2848,7 +2840,7 @@ int main(){
 			for (int itmain = 0;; ++itmain)
 			{                
                 auto it = cache.find(curpos);
-                if(it != cache.end())
+                if(it != cache.end() and itmain < 3)
                     last = pr[it->second];
                 else
                 {
@@ -2890,12 +2882,9 @@ int main(){
                         ofstream dumpai("AIn.bin", ios::binary);
                         uint64_t size = pl.size();
                         dumpai.write(reinterpret_cast<const char*>(&size), sizeof(uint64_t));
-                        for (uint64_t i = 0; i < size; i++){
-                            uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                            dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                            dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                        }
-                        for(uint64_t i = 0; i < size; i++)
+                        for (uint64_t i = 0; i < size; ++i)
+                            dumpai.write(reinterpret_cast<const char*>(&pl[i]), sizeof(field));
+                        for(uint64_t i = 0; i < size; ++i)
                             dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
                         dumpai.close();
                     }
@@ -2905,11 +2894,11 @@ int main(){
 				if (cw(curpos.fir, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
-					display(curpos.fir, curpos.sec);
+					display(curpos);
 					break;
 				}
 				left[last]--;
-				display(curpos.fir, curpos.sec);
+				display(curpos);
 				int p2;
 				for (;;)
 				{
@@ -2928,7 +2917,7 @@ int main(){
 				if (cw(curpos.sec, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-					display(curpos.fir, curpos.sec);
+					display(curpos);
 					break;
 				}
 				left[p2 - 1]--;
@@ -2944,7 +2933,7 @@ int main(){
             //cout << "you start first" << endl;
             for (int itmain = 0;; ++itmain)
             {
-                display(curpos.fir, curpos.sec);
+                display(curpos);
                 int p2;
 				for (;;)
 				{
@@ -2963,7 +2952,7 @@ int main(){
 				if (cw(curpos.fir, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-					display(curpos.fir, curpos.sec);
+					display(curpos);
 					break;
 				}
 				left[p2 - 1]--;
@@ -3010,12 +2999,9 @@ int main(){
                         ofstream dumpai("AIn.bin", ios::binary);
                         uint64_t size = pl.size();
                         dumpai.write(reinterpret_cast<const char*>(&size), sizeof(uint64_t));
-                        for (uint64_t i = 0; i < size; i++){
-                            uint64_t temp1 = pl[i].fir, temp2 = pl[i].sec;
-                            dumpai.write(reinterpret_cast<const char*>(&temp1), sizeof(uint64_t));
-                            dumpai.write(reinterpret_cast<const char*>(&temp2), sizeof(uint64_t));
-                        }
-                        for(uint64_t i = 0; i < size; i++)
+                        for (uint64_t i = 0; i < size; ++i)
+                            dumpai.write(reinterpret_cast<const char*>(&pl[i]), sizeof(field));
+                        for(uint64_t i = 0; i < size; ++i)
                             dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
                         dumpai.close();
                     }
@@ -3025,7 +3011,7 @@ int main(){
 				if (cw(curpos.sec, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
-					display(curpos.fir, curpos.sec);
+					display(curpos);
 					break;
 				}
 				left[last]--;
