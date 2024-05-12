@@ -2890,6 +2890,7 @@ int main(){
                         dumpai.close();
                     }
                 }
+                debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) - ceval, "moves");
                 debug("\033[32m", "D", "move: ", last + 1);
 				curpos.fir = modificate(curpos.fir, last, left[last]);
 				if (cw(curpos.fir, last, left[last]))
@@ -3004,6 +3005,12 @@ int main(){
                         dumpai.close();
                     }
                 }
+                if(ceval > 0)
+                    debug("\033[35m", "A", "AI is losing in", 40 - (itmain << 1), "moves");
+                else if(ceval == 0)
+                    debug("\033[35m", "A", "AI is drawing in", 41 - (itmain << 1), "moves");
+                else
+                    debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) + ceval, "moves");
                 debug("\033[32m", "D", "move: ", last + 1);
                 curpos.sec = modificate(curpos.sec, last, left[last]);
 				if (cw(curpos.sec, last, left[last]))
