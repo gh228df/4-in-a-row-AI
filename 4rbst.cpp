@@ -635,8 +635,6 @@ bool cw(uint64_t curcheckw, int last, uint32_t left){
 }
 
 int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
-	if(left == 0)
-		return 0;
     int result = 0;
     switch(left){
     case 6:
@@ -1273,7 +1271,8 @@ int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
 }
 
 vector<field> pl;
-vector<uint32_t> pr;
+vector<uint8_t> pr;
+vector<int8_t> eval;
 
 unordered_map<field, int, field> cache;
 
@@ -1288,7 +1287,6 @@ vector<bool> flag;
 
 const int mincachedepth = 7;
 
-//5 14654 1100mb
 //6 14213 892mb
 //7 12659 691mb
 //8 13345 525mb
@@ -1828,8 +1826,8 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             break;
         }
         int maxscore = depth - 3;
-        if(alpha > maxscore)
-			return alpha;
+        // if(alpha > maxscore)
+		// 	return alpha;
         depth--;
         if(depth == 0)
             return 0;
@@ -1848,27 +1846,28 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 isfound = true;
             }
         }
-        pair<int, int> scores[7];
-        scores[0].first = scoremove(tfir, 3, left4);
-        scores[0].second = 3;
-        scores[1].first = scoremove(tfir, 4, left5);
-        scores[1].second = 4;
-        scores[2].first = scoremove(tfir, 2, left3);
-        scores[2].second = 2;
-        scores[3].first = scoremove(tfir, 5, left6);
-        scores[3].second = 5;
-        scores[4].first = scoremove(tfir, 1, left2);
-        scores[4].second = 1;
-        scores[5].first = scoremove(tfir, 6, left7);
-        scores[5].second = 6;
-        scores[6].first = scoremove(tfir, 0, left1);
-        scores[6].second = 0;
-        bool swapped;
+        //953412
+        int scores[7] = {0,0,0,0,0,0,0}, indexes[7] = {3,4,2,5,1,6,0};
+        if(left4 > 0)
+            scores[0] = scoremove(tfir, 3, left4);
+        if(left5 > 0)
+            scores[1] = scoremove(tfir, 4, left5);
+        if(left3 > 0)
+            scores[2] = scoremove(tfir, 2, left3);
+        if(left6 > 0)
+            scores[3] = scoremove(tfir, 5, left6);
+        if(left2 > 0)
+            scores[4] = scoremove(tfir, 1, left2);
+        if(left7 > 0)
+            scores[5] = scoremove(tfir, 6, left7);
+        if(left1 > 0)
+            scores[6] = scoremove(tfir, 0, left1);
         for (int i = 0; i < 6; ++i) {
-            swapped = false;
+            bool swapped = false;
             for (int j = 0; j < 6 - i; ++j) {
-                if (scores[j].first < scores[j + 1].first) {
+                if (scores[j] < scores[j + 1]) {
                     swap(scores[j], scores[j + 1]);
+                    swap(indexes[j], indexes[j + 1]);
                     swapped = true;
                 }
             }
@@ -1876,7 +1875,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 break;
         }
         for(int i = 0; i < 7; ++i)
-            switch(scores[i].second){
+            switch(indexes[i]){
                 case 0:
                 if(left1 > 0){
                     int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
@@ -2516,8 +2515,8 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             break;
         }
         int minscore = 3 - depth;
-        if(beta < minscore)
-			return beta;
+        // if(beta < minscore)
+		// 	return beta;
         depth--;
         if(depth == 0)
             return 0;
@@ -2627,7 +2626,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
     }
 }
 
-pair<int, int> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
+pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
     tt.clear();
     flag.clear();
     TranspositionTable.clear();
@@ -2818,18 +2817,23 @@ int main(){
 		loadai.read(reinterpret_cast<char*>(&size), sizeof(uint64_t));
         pr.resize(size);
         pl.resize(size);
+        eval.resize(size);
 		for(uint64_t i = 0; i < size; ++i)
 			loadai.read(reinterpret_cast<char*>(&pl[i]), sizeof(field));
 		for(uint64_t i = 0; i < size; ++i)
-			loadai.read(reinterpret_cast<char*>(&pr[i]), sizeof(unsigned short));
+			loadai.read(reinterpret_cast<char*>(&pr[i]), sizeof(uint8_t));
+        for(uint64_t i = 0; i < size; ++i)
+			loadai.read(reinterpret_cast<char*>(&eval[i]), sizeof(int8_t));
+        cache.reserve(size);
 		for (uint64_t i = 0; i < size; ++i)
 			cache[pl[i]] = i;
 	}
 	loadai.close();
 	for (;;)
-	{
+    {
 		field curpos = {0, 0};
-		uint64_t last;
+		uint8_t last;
+        int8_t ceval = -1;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
         cin >> start;
@@ -2840,8 +2844,12 @@ int main(){
 			for (int itmain = 0;; ++itmain)
 			{                
                 auto it = cache.find(curpos);
-                if(it != cache.end())
-                    last = pr[it->second];
+                if(it != cache.end()){
+                    int t = it->second;
+                    last = pr[t];
+                    ceval = eval[t];
+                    debug("\033[32m", "D", "poseval f =", eval[t]);
+                }
                 else
                 {
                     debug("\033[32m", "D", curpos.fir);
@@ -2850,34 +2858,25 @@ int main(){
                     debug("\033[32m", "D", left, 7);
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth + 1);
-                    if(safedepth > 23){
-                        auto startin = high_resolution_clock::now();
-                        pair<int, int> result = minimaxentry(23, true, 23, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        auto endin = high_resolution_clock::now();
-                        cout << endl;
-                        last = result.first;
-                        debug("\033[32m", "D", "poseval s =", result.second);
-                        auto duration = duration_cast<milliseconds>(endin - startin);
-                        debug("\033[31m", "A", "Minimax shortdepth milliseconds:", duration.count());
-                        if(last == -1)
-                            goto fulldepth1;
-                    }
+                    int t;
+                    if(ceval == -1)
+                        t = 0;
                     else
-                    {
-                        fulldepth1:
-                        auto startin = high_resolution_clock::now();
-                        pair<int, int> result = minimaxentry(safedepth, true, safedepth, 0, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        auto endin = high_resolution_clock::now();
-                        cout << endl;
-                        last = result.first;
-                        debug("\033[32m", "D", "poseval f =", result.second);
-                        auto duration = duration_cast<milliseconds>(endin - startin);
-                        debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
-                    }
+                        t = ceval - 1;
+                    auto startin = high_resolution_clock::now();
+                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, true, safedepth, t, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                    auto endin = high_resolution_clock::now();
+                    cout << endl;
+                    last = result.first;
+                    debug("\033[32m", "D", "poseval f =", result.second);
+                    auto duration = duration_cast<milliseconds>(endin - startin);
+                    debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
+                    ceval = result.second;
                     if(safedepth > 23){
                         cache[curpos] = pl.size();
                         pl.push_back(curpos);
                         pr.push_back(last);
+                        eval.push_back(result.second);
                         remove("AIn.bin");
                         ofstream dumpai("AIn.bin", ios::binary);
                         uint64_t size = pl.size();
@@ -2885,7 +2884,9 @@ int main(){
                         for (uint64_t i = 0; i < size; ++i)
                             dumpai.write(reinterpret_cast<const char*>(&pl[i]), sizeof(field));
                         for(uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
+                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(uint8_t));
+                        for(uint64_t i = 0; i < size; ++i)
+                            dumpai.write(reinterpret_cast<const char*>(&eval[i]), sizeof(int8_t));
                         dumpai.close();
                     }
                 }
@@ -2957,8 +2958,12 @@ int main(){
 				}
 				left[p2 - 1]--;
                 auto it = cache.find(curpos);
-                if(it != cache.end())
-                    last = pr[it->second];
+                if(it != cache.end()){
+                    int t = it->second;
+                    last = pr[t];
+                    ceval = eval[t];
+                    debug("\033[32m", "D", "poseval =", eval[t]);
+                }
                 else
                 {
                     debug("\033[32m", "D", curpos.fir);
@@ -2967,34 +2972,25 @@ int main(){
                     debug("\033[32m", "D", left, 7);
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth);
-                    if(safedepth > 23){
-                        auto startin = high_resolution_clock::now();
-                        pair<int, int> result = minimaxentry(23, false, 0, -23, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        auto endin = high_resolution_clock::now();
-                        cout << endl;
-                        last = result.first;
-                        debug("\033[32m", "D", "poseval s =", result.second);
-                        auto duration = duration_cast<milliseconds>(endin - startin);
-                        debug("\033[31m", "A", "Minimax shortdepth milliseconds:", duration.count());
-                        if(last == -1)
-                            goto fulldepth2;
-                    }
+                    int t;
+                    if(ceval == -1)
+                        t = 3;
                     else
-                    {
-                        fulldepth2:
-                        auto startin = high_resolution_clock::now();
-                        pair<int, int> result = minimaxentry(safedepth, false, 3, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
-                        auto endin = high_resolution_clock::now();
-                        cout << endl;
-                        last = result.first;
-                        debug("\033[32m", "D", "poseval f =", result.second);
-                        auto duration = duration_cast<milliseconds>(endin - startin);
-                        debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
-                    }
+                        t = ceval + 1;
+                    auto startin = high_resolution_clock::now();
+                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, false, t, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                    auto endin = high_resolution_clock::now();
+                    cout << endl;
+                    last = result.first;
+                    debug("\033[32m", "D", "poseval =", result.second);
+                    auto duration = duration_cast<milliseconds>(endin - startin);
+                    debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
+                    ceval = result.second;
                     if(safedepth > 23){
                         cache[curpos] = pl.size();
                         pl.push_back(curpos);
                         pr.push_back(last);
+                        eval.push_back(result.second);
                         remove("AIn.bin");
                         ofstream dumpai("AIn.bin", ios::binary);
                         uint64_t size = pl.size();
@@ -3002,7 +2998,9 @@ int main(){
                         for (uint64_t i = 0; i < size; ++i)
                             dumpai.write(reinterpret_cast<const char*>(&pl[i]), sizeof(field));
                         for(uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(unsigned short));
+                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(uint8_t));
+                        for(uint64_t i = 0; i < size; ++i)
+                            dumpai.write(reinterpret_cast<const char*>(&eval[i]), sizeof(int8_t));
                         dumpai.close();
                     }
                 }
