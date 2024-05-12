@@ -1847,120 +1847,739 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             }
         }
         //953412
-        int scores[7] = {0,0,0,0,0,0,0}, indexes[7] = {3,4,2,5,1,6,0};
+        int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0, score6 = 0, score7 = 0, index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0;
         if(left4 > 0)
-            scores[0] = scoremove(tfir, 3, left4);
+            score1 = scoremove(tfir, 3, left4);
         if(left5 > 0)
-            scores[1] = scoremove(tfir, 4, left5);
+            score2 = scoremove(tfir, 4, left5);
         if(left3 > 0)
-            scores[2] = scoremove(tfir, 2, left3);
+            score3 = scoremove(tfir, 2, left3);
         if(left6 > 0)
-            scores[3] = scoremove(tfir, 5, left6);
+            score4 = scoremove(tfir, 5, left6);
         if(left2 > 0)
-            scores[4] = scoremove(tfir, 1, left2);
+            score5 = scoremove(tfir, 1, left2);
         if(left7 > 0)
-            scores[5] = scoremove(tfir, 6, left7);
+            score6 = scoremove(tfir, 6, left7);
         if(left1 > 0)
-            scores[6] = scoremove(tfir, 0, left1);
-        for (int i = 0; i < 6; ++i) {
-            bool swapped = false;
-            for (int j = 0; j < 6 - i; ++j) {
-                if (scores[j] < scores[j + 1]) {
-                    swap(scores[j], scores[j + 1]);
-                    swap(indexes[j], indexes[j + 1]);
-                    swapped = true;
-                }
-            }
-            if (swapped == false) 
-                break;
+            score7 = scoremove(tfir, 0, left1);
+        bool swapped = false;
+        if (score1 < score2) {
+            swap(score1, score2);
+            swap(index1, index2);
+            swapped = true;
         }
-        for(int i = 0; i < 7; ++i)
-            switch(indexes[i]){
-                case 0:
-                if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-                    if(reschild > maxscore)
+        if (score2 < score3) {
+            swap(score2, score3);
+            swap(index2, index3);
+            swapped = true;
+        }
+        if (score3 < score4) {
+            swap(score3, score4);
+            swap(index3, index4);
+            swapped = true;
+        }
+        if (score4 < score5) {
+            swap(score4, score5);
+            swap(index4, index5);
+            swapped = true;
+        }
+        if (score5 < score6) {
+            swap(score5, score6);
+            swap(index5, index6);
+            swapped = true;
+        }
+        if (score6 < score7) {
+            swap(score6, score7);
+            swap(index6, index7);
+            swapped = true;
+        }
+        if(swapped == false)
+            goto begineval;
+        if (score1 < score2) {
+            swap(score1, score2);
+            swap(index1, index2);
+            swapped = false;
+        }
+        if (score2 < score3) {
+            swap(score2, score3);
+            swap(index2, index3);
+            swapped = false;
+        }
+        if (score3 < score4) {
+            swap(score3, score4);
+            swap(index3, index4);
+            swapped = false;
+        }
+        if (score4 < score5) {
+            swap(score4, score5);
+            swap(index4, index5);
+            swapped = false;
+        }
+        if (score5 < score6) {
+            swap(score5, score6);
+            swap(index5, index6);
+            swapped = false;
+        }
+        if(swapped == true)
+            goto begineval;
+        if (score1 < score2) {
+            swap(score1, score2);
+            swap(index1, index2);
+            swapped = true;
+        }
+        if (score2 < score3) {
+            swap(score2, score3);
+            swap(index2, index3);
+            swapped = true;
+        }
+        if (score3 < score4) {
+            swap(score3, score4);
+            swap(index3, index4);
+            swapped = true;
+        }
+        if (score4 < score5) {
+            swap(score4, score5);
+            swap(index4, index5);
+            swapped = true;
+        }
+        if(swapped == false)
+            goto begineval;
+        if (score1 < score2) {
+            swap(score1, score2);
+            swap(index1, index2);
+            swapped = false;
+        }
+        if (score2 < score3) {
+            swap(score2, score3);
+            swap(index2, index3);
+            swapped = false;
+        }
+        if (score3 < score4) {
+            swap(score3, score4);
+            swap(index3, index4);
+            swapped = false;
+        }
+        if(swapped == true)
+            goto begineval;
+        if (score1 < score2) {
+            swap(score1, score2);
+            swap(index1, index2);
+            swapped = true;
+        }
+        if (score2 < score3) {
+            swap(score2, score3);
+            swap(index2, index3);
+            swapped = true;
+        }
+        if(swapped == false)
+            goto begineval;
+        if (score1 < score2) {
+            swap(score1, score2);
+            swap(index1, index2);
+        }
+        begineval:
+        switch(index1){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
                         return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
+                    alpha = reschild;
                 }
-                break;
-                case 1:
-                if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                    if(reschild > maxscore)
-                        return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
-                }
-                break;
-                case 2:
-                if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                    if(reschild > maxscore)
-                        return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
-                }
-                break;
-                case 3:
-                if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                    if(reschild > maxscore)
-                        return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
-                }
-                break;
-                case 4:
-                if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                    if(reschild > maxscore)
-                        return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
-                }
-                break;
-                case 5:
-                if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                    if(reschild > maxscore)
-                        return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
-                }
-                break;
-                case 6:
-                if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                    if(reschild > maxscore)
-                        return reschild;
-                    if(reschild > alpha){
-                        if(beta <= reschild)
-                            return reschild;
-                        alpha = reschild;
-                    }
-                }
-                break;
             }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
+        switch(index2){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
+        switch(index3){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
+        switch(index4){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
+        switch(index5){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
+        switch(index6){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
+        switch(index7){
+            case 0:
+            if(left1 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 1:
+            if(left2 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 2:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 3:
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 4:
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 5:
+            if(left6 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+            case 6:
+            if(left7 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild)
+                        return reschild;
+                    alpha = reschild;
+                }
+            }
+            break;
+        }
         if(depth > mincachedepth){
             if(isfound){
                 //found alpha will be for sure better than the previous one
