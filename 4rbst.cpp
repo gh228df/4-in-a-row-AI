@@ -1881,120 +1881,188 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 score6 = scoremove(tfir, 6, left7);
             if(left1 > 0)
                 score7 = scoremove(tfir, 0, left1);
-            bool swapped = false;
+            int t = -1;
             if (score1 < score2) {
-                swap(score1, score2);
-                swap(index1, index2);
-                swapped = true;
+                t = score1;
+                score1 = score2;
+                score2 = t;
+                t = index1;
+                index1 = index2;
+                index2 = t;
             }
             if (score2 < score3) {
-                swap(score2, score3);
-                swap(index2, index3);
-                swapped = true;
+                t = score2;
+                score2 = score3;
+                score3 = t;
+                t = index2;
+                index2 = index3;
+                index3 = t;
             }
             if (score3 < score4) {
-                swap(score3, score4);
-                swap(index3, index4);
-                swapped = true;
+                t = score3;
+                score3 = score4;
+                score4 = t;
+                t = index3;
+                index3 = index4;
+                index4 = t;
             }
             if (score4 < score5) {
-                swap(score4, score5);
-                swap(index4, index5);
-                swapped = true;
+                t = score4;
+                score4 = score5;
+                score5 = t;
+                t = index4;
+                index4 = index5;
+                index5 = t;
             }
             if (score5 < score6) {
-                swap(score5, score6);
-                swap(index5, index6);
-                swapped = true;
+                t = score5;
+                score5 = score6;
+                score6 = t;
+                t = index5;
+                index5 = index6;
+                index6 = t;
             }
             if (score6 < score7) {
-                swap(score6, score7);
-                swap(index6, index7);
-                swapped = true;
+                t = score6;
+                score6 = score7;
+                score7 = t;
+                t = index6;
+                index6 = index7;
+                index7 = t;
             }
-            if(swapped == false)
+            if(t == -1)
                 goto begineval;
+            t = -1;
             if (score1 < score2) {
-                swap(score1, score2);
-                swap(index1, index2);
-                swapped = false;
+                t = score1;
+                score1 = score2;
+                score2 = t;
+                t = index1;
+                index1 = index2;
+                index2 = t;
             }
             if (score2 < score3) {
-                swap(score2, score3);
-                swap(index2, index3);
-                swapped = false;
+                t = score2;
+                score2 = score3;
+                score3 = t;
+                t = index2;
+                index2 = index3;
+                index3 = t;
             }
             if (score3 < score4) {
-                swap(score3, score4);
-                swap(index3, index4);
-                swapped = false;
+                t = score3;
+                score3 = score4;
+                score4 = t;
+                t = index3;
+                index3 = index4;
+                index4 = t;
             }
             if (score4 < score5) {
-                swap(score4, score5);
-                swap(index4, index5);
-                swapped = false;
+                t = score4;
+                score4 = score5;
+                score5 = t;
+                t = index4;
+                index4 = index5;
+                index5 = t;
             }
             if (score5 < score6) {
-                swap(score5, score6);
-                swap(index5, index6);
-                swapped = false;
+                t = score5;
+                score5 = score6;
+                score6 = t;
+                t = index5;
+                index5 = index6;
+                index6 = t;
             }
-            if(swapped == true)
+            if(t == -1)
                 goto begineval;
+            t = -1;
             if (score1 < score2) {
-                swap(score1, score2);
-                swap(index1, index2);
-                swapped = true;
+                t = score1;
+                score1 = score2;
+                score2 = t;
+                t = index1;
+                index1 = index2;
+                index2 = t;
             }
             if (score2 < score3) {
-                swap(score2, score3);
-                swap(index2, index3);
-                swapped = true;
+                t = score2;
+                score2 = score3;
+                score3 = t;
+                t = index2;
+                index2 = index3;
+                index3 = t;
             }
             if (score3 < score4) {
-                swap(score3, score4);
-                swap(index3, index4);
-                swapped = true;
+                t = score3;
+                score3 = score4;
+                score4 = t;
+                t = index3;
+                index3 = index4;
+                index4 = t;
             }
             if (score4 < score5) {
-                swap(score4, score5);
-                swap(index4, index5);
-                swapped = true;
+                t = score4;
+                score4 = score5;
+                score5 = t;
+                t = index4;
+                index4 = index5;
+                index5 = t;
             }
-            if(swapped == false)
+            if(t == -1)
                 goto begineval;
+            t = -1;
             if (score1 < score2) {
-                swap(score1, score2);
-                swap(index1, index2);
-                swapped = false;
+                t = score1;
+                score1 = score2;
+                score2 = t;
+                t = index1;
+                index1 = index2;
+                index2 = t;
             }
             if (score2 < score3) {
-                swap(score2, score3);
-                swap(index2, index3);
-                swapped = false;
+                t = score2;
+                score2 = score3;
+                score3 = t;
+                t = index2;
+                index2 = index3;
+                index3 = t;
             }
             if (score3 < score4) {
-                swap(score3, score4);
-                swap(index3, index4);
-                swapped = false;
+                t = score3;
+                score3 = score4;
+                score4 = t;
+                t = index3;
+                index3 = index4;
+                index4 = t;
             }
-            if(swapped == true)
+            if(t == -1)
                 goto begineval;
+            t = -1;
             if (score1 < score2) {
-                swap(score1, score2);
-                swap(index1, index2);
-                swapped = true;
+                t = score1;
+                score1 = score2;
+                score2 = t;
+                t = index1;
+                index1 = index2;
+                index2 = t;
             }
             if (score2 < score3) {
-                swap(score2, score3);
-                swap(index2, index3);
-                swapped = true;
+                t = score2;
+                score2 = score3;
+                score3 = t;
+                t = index2;
+                index2 = index3;
+                index3 = t;
             }
-            if(swapped == false)
+            if(t == -1)
                 goto begineval;
             if (score1 < score2) {
-                swap(score1, score2);
-                swap(index1, index2);
+                t = score1;
+                score1 = score2;
+                score2 = t;
+                t = index1;
+                index1 = index2;
+                index2 = t;
             }
         }
         begineval:
@@ -3266,9 +3334,6 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 }
 
 pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
-    tt.clear();
-    flag.clear();
-    TranspositionTable.clear();
     if(player){
         if(left4 > 0)
             if(cw(cfir, 3, left4))
@@ -3470,17 +3535,22 @@ int main(){
 	loadai.close();
 	for (;;)
     {
-		field curpos = {8, 1024};
+        // if(tt.size() > 0){
+        //     tt.clear();
+        //     flag.clear();
+        //     TranspositionTable.clear();
+        // }
+		field curpos = {0, 0};
 		uint8_t last;
         int8_t ceval = -1;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
         cin >> start;
-		uint32_t left[7] = {6,6,6,4,6,6,6};
+		uint32_t left[7] = {6,6,6,6,6,6,6};
 		if (start == 0)
 		{
 			//cout << "bot starts first" << endl;
-			for (int itmain = 1;; ++itmain)
+			for (int itmain = 0;; ++itmain)
 			{               
                 auto it = cache.find(curpos);
                 if(it != cache.end()){
