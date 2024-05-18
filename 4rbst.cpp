@@ -2032,9 +2032,8 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
-        int maxscore = depth - 3;
-        int alphabeg = alpha, index;
-        bool isfound = false;
+        int index;
+        bool isfound;
         if(depth > mincachedepth){
             auto it = TranspositionTable.find({cfir, csec});
             if (it != TranspositionTable.end()){
@@ -2047,9 +2046,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 //cached alpha is lower bound
                 isfound = true;
             }
+            else
+                isfound = false;
         }
         //888070
-        int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0;
+        int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, maxscore = depth - 3, alphabeg = alpha;
         if(depth > minscoredepth){
             int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0, score6 = 0, score7 = 0;
             if(left4 > 0)
@@ -3226,9 +3227,8 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
-        int minscore = 3 - depth;
-        int betabeg = beta, index;
-        bool isfound = false;
+        int index;
+        bool isfound;
         if(depth > mincachedepth){
             auto it = TranspositionTable.find({cfir, csec});
             if (it != TranspositionTable.end()){
@@ -3241,7 +3241,10 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 //cached beta is upper bound
                 isfound = true;
             }
+            else
+                isfound = false;
         }
+        int minscore = 3 - depth, betabeg = beta;
         if(left4 > 0){
             int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild < minscore)
@@ -3253,13 +3256,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(left3 > 0){
-			int reschild;
-            reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-            if(reschild > alpha and reschild < beta){
-                reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild < minscore)
-				    return reschild;
-            }
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+            if(reschild < minscore)
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3267,13 +3266,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(left5 > 0){
-			int reschild;
-            reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-            if(reschild > alpha and reschild < beta){
-                reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild < minscore)
-				    return reschild;
-            }
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+            if(reschild < minscore)
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3281,13 +3276,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(left2 > 0){
-			int reschild;
-            reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-            if(reschild > alpha and reschild < beta){
-                reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild < minscore)
-				    return reschild;
-            }
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+            if(reschild < minscore)
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3295,13 +3286,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(left6 > 0){
-			int reschild;
-            reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-            if(reschild > alpha and reschild < beta){
-                reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild < minscore)
-				    return reschild;
-            }
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+            if(reschild < minscore)
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3309,13 +3296,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(left1 > 0){
-			int reschild;
-            reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-            if(reschild > alpha and reschild < beta){
-                reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-                if(reschild < minscore)
-				    return reschild;
-            }
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+            if(reschild < minscore)
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3323,13 +3306,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			}
         }
         if(left7 > 0){
-			int reschild;
-            reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-            if(reschild > alpha and reschild < beta){
-                reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild < minscore)
-				    return reschild;
-            }
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+            if(reschild < minscore)
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
