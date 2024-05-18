@@ -3329,6 +3329,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
+                beta = reschild;
 			}
         }
         if(depth > mincachedepth){
