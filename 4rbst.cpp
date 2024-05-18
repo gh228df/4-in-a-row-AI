@@ -2692,542 +2692,540 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
     else
     {
         uint64_t tsec = ~csec;
-        depth = -depth;
         if(left4 > 0)
             switch(left4){
             case 6:
             if((tsec & 7LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 22LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 52LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 112LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 134744064LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2130432LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 896LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2816LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 6656LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 14336LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 67371012LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17247240192LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4259856LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 272695296LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 114688LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 360448LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 851968LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1835008LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33554946LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8623489536LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2207646744576LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8390688LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 545261568LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 34904997888LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 14680064LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 46137344LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 109051904LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 234881024LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 132104LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 65793LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4295033088LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1103806660608LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 266304LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1074008064LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 69793480704LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 1879048192LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 5905580032LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 13958643712LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 30064771072LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16909312LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8421504LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 549764235264LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 34086912LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 137473032192LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 240518168576LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 755914244096LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1786706395136LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 3848290697216LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2164391936LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1077952512LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4363124736LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
         if(left3 > 0)
             switch(left3){
             case 6:
             if((tsec & 11LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 26LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 56LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 67372032LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 1408LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 3328LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 7168LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33685506LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8623620096LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2129928LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 180224LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 425984LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 917504LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16777473LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4311744768LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1103823372288LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4195344LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 272630784LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 23068672LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 54525952LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 117440512LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 66052LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2147516544LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 551903330304LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 133152LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 537004032LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 34896740352LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 2952790016LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 6979321856LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 15032385536LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8454656LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 274882117632LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17043456LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 68736516096LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 377957122048LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 893353197568LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1924145348608LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1082195968LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2181562368LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
         if(left5 > 0)
             switch(left5){
             case 6:
             if((tsec & 14LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 44LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 104LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4260864LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 1792LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 5632LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 13312LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 134742024LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8519712LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 545390592LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 229376LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 720896LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1703936LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 67109892LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17246979072LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16781376LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1090523136LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 69809995776LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 29360128LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 92274688LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 218103808LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 264208LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 131586LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8590066176LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2207613321216LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2148016128LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 139586961408LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 3758096384LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 11811160064LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 27917287424LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33818624LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16843008LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1099528470528LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 274946064384LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 481036337152LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1511828488192LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 3573412790272LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4328783872LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2155905024LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
         if(left2 > 0)
             switch(left2){
             case 6:
             if((tsec & 13LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 28LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33686016LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 1664LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 3584LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16842753LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4311810048LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 212992LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 458752LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2155872384LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 551911686144LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2097672LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 27262976LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 58720256LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33026LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 275951665152LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 66576LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 268502016LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 3489660928LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 7516192768LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4227328LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8521728LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 34368258048LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 446676598784LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 962072674304LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 541097984LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1090781184LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
         if(left6 > 0)
             switch(left6){
             case 6:
             if((tsec & 28LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 88LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8521728LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 3584LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 11264LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17039424LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1090781184LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 458752LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1441792LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 134219784LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2181046272LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 139619991552LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 58720256LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 184549376LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 528416LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 263172LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17180132352LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 279173922816LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 7516192768LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 23622320128LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 67637248LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33686016LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2199056941056LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 962072674304LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 3023656976384LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8657567744LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4311810048LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
         if(left1 > 0)
             switch(left1){
             case 6:
             if((tsec & 14LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16843008LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 1792LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2155905024LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 229376LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 275955843072LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 29360128LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 16513LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 33288LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 3758096384LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2113664LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 4260864LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 481036337152LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 270548992LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 545390592LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
         if(left7 > 0)
             switch(left7){
             case 6:
             if((tsec & 56LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17043456LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 5:
             if((tsec & 7168LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 2181562368LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 4:
             if((tsec & 917504LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 279239983104LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 3:
             if((tsec & 117440512LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 1056832LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 526344LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 2:
             if((tsec & 15032385536LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 135274496LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 67372032LL) == 0)
-                return depth;
+                return -depth;
             break;
             case 1:
             if((tsec & 1924145348608LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 17315135488LL) == 0)
-                return depth;
+                return -depth;
             if((tsec & 8623620096LL) == 0)
-                return depth;
+                return -depth;
             break;
         }
-        depth++;
+        depth--;
         if(depth == 0)
             return 0;
-        depth = -depth;
         int minscore = 3 - depth;
         int betabeg = beta, index;
         bool isfound = false;
@@ -3247,7 +3245,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left4 > 0){
             int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild < minscore)
-				return reschild;
+                return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3257,10 +3255,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left3 > 0){
 			int reschild;
             reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-            if(reschild > alpha and reschild < beta)
+            if(reschild > alpha and reschild < beta){
                 reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-            if(reschild < minscore)
-				return reschild;
+                if(reschild < minscore)
+				    return reschild;
+            }
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3270,10 +3269,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left5 > 0){
 			int reschild;
             reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-            if(reschild > alpha and reschild < beta)
+            if(reschild > alpha and reschild < beta){
                 reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-            if(reschild < minscore)
-				return reschild;
+                if(reschild < minscore)
+				    return reschild;
+            }
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3283,10 +3283,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left2 > 0){
 			int reschild;
             reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-            if(reschild > alpha and reschild < beta)
+            if(reschild > alpha and reschild < beta){
                 reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-            if(reschild < minscore)
-				return reschild;
+                if(reschild < minscore)
+				    return reschild;
+            }
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3296,10 +3297,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left6 > 0){
 			int reschild;
             reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-            if(reschild > alpha and reschild < beta)
+            if(reschild > alpha and reschild < beta){
                 reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-            if(reschild < minscore)
-				return reschild;
+                if(reschild < minscore)
+				    return reschild;
+            }
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3309,10 +3311,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left1 > 0){
 			int reschild;
             reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-            if(reschild > alpha and reschild < beta)
+            if(reschild > alpha and reschild < beta){
                 reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-            if(reschild < minscore)
-				return reschild;
+                if(reschild < minscore)
+				    return reschild;
+            }
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3322,10 +3325,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         if(left7 > 0){
 			int reschild;
             reschild = minimax(depth, true, beta, beta - 1, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-            if(reschild > alpha and reschild < beta)
+            if(reschild > alpha and reschild < beta){
                 reschild = minimax(depth, true, beta - 1, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-            if(reschild < minscore)
-				return reschild;
+                if(reschild < minscore)
+				    return reschild;
+            }
 			if(reschild < beta){
 				if(reschild <= alpha)
 					return reschild;
@@ -3558,9 +3562,9 @@ void display(field pos){
     for (int u = 41; u > -1; --u)
     {
         if((pos.fir >> u) & 1)
-            cout << "X ";
+            cout << "\033[31mX \033[0m";
         else if((pos.sec >> u) & 1)
-            cout << "O ";
+            cout << "\033[32mO \033[0m";
         else
             cout << ". ";
         if(u % 7 == 0)
