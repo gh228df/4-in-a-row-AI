@@ -1276,11 +1276,6 @@ vector<int8_t> eval;
 
 unordered_map<field, int, field> cache;
 
-uint64_t modificate(uint64_t num, int last, uint32_t left){
-    num |= (1LL << (42 - (left) * 7 + last));
-    return num;
-}
-
 unordered_map<field, uint32_t, field> TranspositionTable;
 vector<int> tt;
 vector<bool> flag;
@@ -1801,39 +1796,30 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return depth;
             break;
         }
-        if(left2 > 0)
-            switch(left2){
-            case 6:
-            if((tfir & 13LL) == 0)
+        switch((left2) | (left6 << 3)){
+        case 1:
+            if((tfir & 446676598784LL) == 0)
                 return depth;
-            if((tfir & 28LL) == 0)
+            if((tfir & 962072674304LL) == 0)
                 return depth;
-            if((tfir & 33686016LL) == 0)
+            if((tfir & 541097984LL) == 0)
                 return depth;
-            break;
-            case 5:
-            if((tfir & 1664LL) == 0)
-                return depth;
-            if((tfir & 3584LL) == 0)
-                return depth;
-            if((tfir & 16842753LL) == 0)
-                return depth;
-            if((tfir & 4311810048LL) == 0)
+            if((tfir & 1090781184LL) == 0)
                 return depth;
             break;
-            case 4:
-            if((tfir & 212992LL) == 0)
+        case 2:
+            if((tfir & 3489660928LL) == 0)
                 return depth;
-            if((tfir & 458752LL) == 0)
+            if((tfir & 7516192768LL) == 0)
                 return depth;
-            if((tfir & 2155872384LL) == 0)
+            if((tfir & 4227328LL) == 0)
                 return depth;
-            if((tfir & 551911686144LL) == 0)
+            if((tfir & 8521728LL) == 0)
                 return depth;
-            if((tfir & 2097672LL) == 0)
+            if((tfir & 34368258048LL) == 0)
                 return depth;
             break;
-            case 3:
+        case 3:
             if((tfir & 27262976LL) == 0)
                 return depth;
             if((tfir & 58720256LL) == 0)
@@ -1847,7 +1833,63 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tfir & 268502016LL) == 0)
                 return depth;
             break;
-            case 2:
+        case 4:
+            if((tfir & 212992LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 2155872384LL) == 0)
+                return depth;
+            if((tfir & 551911686144LL) == 0)
+                return depth;
+            if((tfir & 2097672LL) == 0)
+                return depth;
+            break;
+        case 5:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            break;
+        case 6:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            break;
+        case 8:
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            break;
+        case 9:
+            if((tfir & 446676598784LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 541097984LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            break;
+        case 10:
             if((tfir & 3489660928LL) == 0)
                 return depth;
             if((tfir & 7516192768LL) == 0)
@@ -1858,8 +1900,102 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return depth;
             if((tfir & 34368258048LL) == 0)
                 return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
             break;
-            case 1:
+        case 11:
+            if((tfir & 27262976LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 33026LL) == 0)
+                return depth;
+            if((tfir & 275951665152LL) == 0)
+                return depth;
+            if((tfir & 66576LL) == 0)
+                return depth;
+            if((tfir & 268502016LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            break;
+        case 12:
+            if((tfir & 212992LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 2155872384LL) == 0)
+                return depth;
+            if((tfir & 551911686144LL) == 0)
+                return depth;
+            if((tfir & 2097672LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            break;
+        case 13:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            break;
+        case 14:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 3023656976384LL) == 0)
+                return depth;
+            if((tfir & 8657567744LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            break;
+        case 16:
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
+                return depth;
+            break;
+        case 17:
             if((tfir & 446676598784LL) == 0)
                 return depth;
             if((tfir & 962072674304LL) == 0)
@@ -1868,41 +2004,120 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return depth;
             if((tfir & 1090781184LL) == 0)
                 return depth;
-            break;
-        }
-        if(left6 > 0)
-            switch(left6){
-            case 6:
-            if((tfir & 28LL) == 0)
+            if((tfir & 7516192768LL) == 0)
                 return depth;
-            if((tfir & 88LL) == 0)
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
+                return depth;
+            break;
+        case 18:
+            if((tfir & 3489660928LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 4227328LL) == 0)
                 return depth;
             if((tfir & 8521728LL) == 0)
                 return depth;
+            if((tfir & 34368258048LL) == 0)
+                return depth;
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
+                return depth;
             break;
-            case 5:
-            if((tfir & 3584LL) == 0)
+        case 19:
+            if((tfir & 27262976LL) == 0)
                 return depth;
-            if((tfir & 11264LL) == 0)
+            if((tfir & 58720256LL) == 0)
                 return depth;
-            if((tfir & 17039424LL) == 0)
+            if((tfir & 33026LL) == 0)
                 return depth;
-            if((tfir & 1090781184LL) == 0)
+            if((tfir & 275951665152LL) == 0)
+                return depth;
+            if((tfir & 66576LL) == 0)
+                return depth;
+            if((tfir & 268502016LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
                 return depth;
             break;
-            case 4:
+        case 20:
+            if((tfir & 212992LL) == 0)
+                return depth;
             if((tfir & 458752LL) == 0)
                 return depth;
-            if((tfir & 1441792LL) == 0)
+            if((tfir & 2155872384LL) == 0)
                 return depth;
-            if((tfir & 134219784LL) == 0)
+            if((tfir & 551911686144LL) == 0)
                 return depth;
-            if((tfir & 2181046272LL) == 0)
+            if((tfir & 2097672LL) == 0)
                 return depth;
-            if((tfir & 139619991552LL) == 0)
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
                 return depth;
             break;
-            case 3:
+        case 21:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
+                return depth;
+            break;
+        case 22:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 23622320128LL) == 0)
+                return depth;
+            if((tfir & 67637248LL) == 0)
+                return depth;
+            if((tfir & 2199056941056LL) == 0)
+                return depth;
+            break;
+        case 24:
             if((tfir & 58720256LL) == 0)
                 return depth;
             if((tfir & 184549376LL) == 0)
@@ -1916,66 +2131,507 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tfir & 279173922816LL) == 0)
                 return depth;
             break;
-            case 2:
-            if((tfir & 7516192768LL) == 0)
+        case 25:
+            if((tfir & 446676598784LL) == 0)
                 return depth;
-            if((tfir & 23622320128LL) == 0)
-                return depth;
-            if((tfir & 67637248LL) == 0)
-                return depth;
-            if((tfir & 33686016LL) == 0)
-                return depth;
-            if((tfir & 2199056941056LL) == 0)
-                return depth;
-            break;
-            case 1:
             if((tfir & 962072674304LL) == 0)
                 return depth;
-            if((tfir & 3023656976384LL) == 0)
+            if((tfir & 541097984LL) == 0)
                 return depth;
-            if((tfir & 8657567744LL) == 0)
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 184549376LL) == 0)
+                return depth;
+            if((tfir & 528416LL) == 0)
+                return depth;
+            if((tfir & 263172LL) == 0)
+                return depth;
+            if((tfir & 17180132352LL) == 0)
+                return depth;
+            if((tfir & 279173922816LL) == 0)
+                return depth;
+            break;
+        case 26:
+            if((tfir & 3489660928LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 4227328LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            if((tfir & 34368258048LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 184549376LL) == 0)
+                return depth;
+            if((tfir & 528416LL) == 0)
+                return depth;
+            if((tfir & 263172LL) == 0)
+                return depth;
+            if((tfir & 17180132352LL) == 0)
+                return depth;
+            if((tfir & 279173922816LL) == 0)
+                return depth;
+            break;
+        case 27:
+            if((tfir & 27262976LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 33026LL) == 0)
+                return depth;
+            if((tfir & 275951665152LL) == 0)
+                return depth;
+            if((tfir & 66576LL) == 0)
+                return depth;
+            if((tfir & 268502016LL) == 0)
+                return depth;
+            if((tfir & 184549376LL) == 0)
+                return depth;
+            if((tfir & 528416LL) == 0)
+                return depth;
+            if((tfir & 263172LL) == 0)
+                return depth;
+            if((tfir & 17180132352LL) == 0)
+                return depth;
+            if((tfir & 279173922816LL) == 0)
+                return depth;
+            break;
+        case 28:
+            if((tfir & 212992LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 2155872384LL) == 0)
+                return depth;
+            if((tfir & 551911686144LL) == 0)
+                return depth;
+            if((tfir & 2097672LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 184549376LL) == 0)
+                return depth;
+            if((tfir & 528416LL) == 0)
+                return depth;
+            if((tfir & 263172LL) == 0)
+                return depth;
+            if((tfir & 17180132352LL) == 0)
+                return depth;
+            if((tfir & 279173922816LL) == 0)
+                return depth;
+            break;
+        case 29:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
                 return depth;
             if((tfir & 4311810048LL) == 0)
                 return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 184549376LL) == 0)
+                return depth;
+            if((tfir & 528416LL) == 0)
+                return depth;
+            if((tfir & 263172LL) == 0)
+                return depth;
+            if((tfir & 17180132352LL) == 0)
+                return depth;
+            if((tfir & 279173922816LL) == 0)
+                return depth;
+            break;
+        case 30:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 184549376LL) == 0)
+                return depth;
+            if((tfir & 528416LL) == 0)
+                return depth;
+            if((tfir & 263172LL) == 0)
+                return depth;
+            if((tfir & 17180132352LL) == 0)
+                return depth;
+            if((tfir & 279173922816LL) == 0)
+                return depth;
+            break;
+        case 32:
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 33:
+            if((tfir & 446676598784LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 541097984LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 34:
+            if((tfir & 3489660928LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 4227328LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            if((tfir & 34368258048LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 35:
+            if((tfir & 27262976LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 33026LL) == 0)
+                return depth;
+            if((tfir & 275951665152LL) == 0)
+                return depth;
+            if((tfir & 66576LL) == 0)
+                return depth;
+            if((tfir & 268502016LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 36:
+            if((tfir & 212992LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 2155872384LL) == 0)
+                return depth;
+            if((tfir & 551911686144LL) == 0)
+                return depth;
+            if((tfir & 2097672LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 37:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 38:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 1441792LL) == 0)
+                return depth;
+            if((tfir & 134219784LL) == 0)
+                return depth;
+            if((tfir & 2181046272LL) == 0)
+                return depth;
+            if((tfir & 139619991552LL) == 0)
+                return depth;
+            break;
+        case 40:
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            break;
+        case 41:
+            if((tfir & 446676598784LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 541097984LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            break;
+        case 42:
+            if((tfir & 3489660928LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 4227328LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            if((tfir & 34368258048LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            break;
+        case 43:
+            if((tfir & 27262976LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 33026LL) == 0)
+                return depth;
+            if((tfir & 275951665152LL) == 0)
+                return depth;
+            if((tfir & 66576LL) == 0)
+                return depth;
+            if((tfir & 268502016LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            break;
+        case 44:
+            if((tfir & 212992LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 2155872384LL) == 0)
+                return depth;
+            if((tfir & 551911686144LL) == 0)
+                return depth;
+            if((tfir & 2097672LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            break;
+        case 45:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            break;
+        case 46:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 11264LL) == 0)
+                return depth;
+            if((tfir & 17039424LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            break;
+        case 48:
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            break;
+        case 49:
+            if((tfir & 446676598784LL) == 0)
+                return depth;
+            if((tfir & 962072674304LL) == 0)
+                return depth;
+            if((tfir & 541097984LL) == 0)
+                return depth;
+            if((tfir & 1090781184LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            break;
+        case 50:
+            if((tfir & 3489660928LL) == 0)
+                return depth;
+            if((tfir & 7516192768LL) == 0)
+                return depth;
+            if((tfir & 4227328LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            if((tfir & 34368258048LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            break;
+        case 51:
+            if((tfir & 27262976LL) == 0)
+                return depth;
+            if((tfir & 58720256LL) == 0)
+                return depth;
+            if((tfir & 33026LL) == 0)
+                return depth;
+            if((tfir & 275951665152LL) == 0)
+                return depth;
+            if((tfir & 66576LL) == 0)
+                return depth;
+            if((tfir & 268502016LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            break;
+        case 52:
+            if((tfir & 212992LL) == 0)
+                return depth;
+            if((tfir & 458752LL) == 0)
+                return depth;
+            if((tfir & 2155872384LL) == 0)
+                return depth;
+            if((tfir & 551911686144LL) == 0)
+                return depth;
+            if((tfir & 2097672LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            break;
+        case 53:
+            if((tfir & 1664LL) == 0)
+                return depth;
+            if((tfir & 3584LL) == 0)
+                return depth;
+            if((tfir & 16842753LL) == 0)
+                return depth;
+            if((tfir & 4311810048LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
+            break;
+        case 54:
+            if((tfir & 13LL) == 0)
+                return depth;
+            if((tfir & 28LL) == 0)
+                return depth;
+            if((tfir & 33686016LL) == 0)
+                return depth;
+            if((tfir & 88LL) == 0)
+                return depth;
+            if((tfir & 8521728LL) == 0)
+                return depth;
             break;
         }
-        if(left1 > 0)
-            switch(left1){
-            case 6:
-            if((tfir & 14LL) == 0)
-                return depth;
-            if((tfir & 16843008LL) == 0)
-                return depth;
-            break;
-            case 5:
-            if((tfir & 1792LL) == 0)
-                return depth;
-            if((tfir & 2155905024LL) == 0)
-                return depth;
-            break;
-            case 4:
-            if((tfir & 229376LL) == 0)
-                return depth;
-            if((tfir & 275955843072LL) == 0)
-                return depth;
-            break;
-            case 3:
-            if((tfir & 29360128LL) == 0)
-                return depth;
-            if((tfir & 16513LL) == 0)
-                return depth;
-            if((tfir & 33288LL) == 0)
-                return depth;
-            break;
-            case 2:
-            if((tfir & 3758096384LL) == 0)
-                return depth;
-            if((tfir & 2113664LL) == 0)
-                return depth;
-            if((tfir & 4260864LL) == 0)
-                return depth;
-            break;
-            case 1:
+        switch((left1) | (left7 << 3)){
+        case 1:
             if((tfir & 481036337152LL) == 0)
                 return depth;
             if((tfir & 270548992LL) == 0)
@@ -1983,36 +2639,127 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tfir & 545390592LL) == 0)
                 return depth;
             break;
-        }
-        if(left7 > 0)
-            switch(left7){
-            case 6:
-            if((tfir & 56LL) == 0)
+        case 2:
+            if((tfir & 3758096384LL) == 0)
                 return depth;
-            if((tfir & 17043456LL) == 0)
+            if((tfir & 2113664LL) == 0)
                 return depth;
-            break;
-            case 5:
-            if((tfir & 7168LL) == 0)
-                return depth;
-            if((tfir & 2181562368LL) == 0)
+            if((tfir & 4260864LL) == 0)
                 return depth;
             break;
-            case 4:
-            if((tfir & 917504LL) == 0)
+        case 3:
+            if((tfir & 29360128LL) == 0)
                 return depth;
-            if((tfir & 279239983104LL) == 0)
+            if((tfir & 16513LL) == 0)
                 return depth;
-            break;
-            case 3:
-            if((tfir & 117440512LL) == 0)
-                return depth;
-            if((tfir & 1056832LL) == 0)
-                return depth;
-            if((tfir & 526344LL) == 0)
+            if((tfir & 33288LL) == 0)
                 return depth;
             break;
-            case 2:
+        case 4:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            break;
+        case 5:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            break;
+        case 6:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            break;
+        case 8:
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 9:
+            if((tfir & 481036337152LL) == 0)
+                return depth;
+            if((tfir & 270548992LL) == 0)
+                return depth;
+            if((tfir & 545390592LL) == 0)
+                return depth;
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 10:
+            if((tfir & 3758096384LL) == 0)
+                return depth;
+            if((tfir & 2113664LL) == 0)
+                return depth;
+            if((tfir & 4260864LL) == 0)
+                return depth;
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 11:
+            if((tfir & 29360128LL) == 0)
+                return depth;
+            if((tfir & 16513LL) == 0)
+                return depth;
+            if((tfir & 33288LL) == 0)
+                return depth;
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 12:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 13:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 14:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            if((tfir & 1924145348608LL) == 0)
+                return depth;
+            if((tfir & 17315135488LL) == 0)
+                return depth;
+            if((tfir & 8623620096LL) == 0)
+                return depth;
+            break;
+        case 16:
             if((tfir & 15032385536LL) == 0)
                 return depth;
             if((tfir & 135274496LL) == 0)
@@ -2020,12 +2767,384 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tfir & 67372032LL) == 0)
                 return depth;
             break;
-            case 1:
-            if((tfir & 1924145348608LL) == 0)
+        case 17:
+            if((tfir & 481036337152LL) == 0)
                 return depth;
-            if((tfir & 17315135488LL) == 0)
+            if((tfir & 270548992LL) == 0)
                 return depth;
-            if((tfir & 8623620096LL) == 0)
+            if((tfir & 545390592LL) == 0)
+                return depth;
+            if((tfir & 15032385536LL) == 0)
+                return depth;
+            if((tfir & 135274496LL) == 0)
+                return depth;
+            if((tfir & 67372032LL) == 0)
+                return depth;
+            break;
+        case 18:
+            if((tfir & 3758096384LL) == 0)
+                return depth;
+            if((tfir & 2113664LL) == 0)
+                return depth;
+            if((tfir & 4260864LL) == 0)
+                return depth;
+            if((tfir & 15032385536LL) == 0)
+                return depth;
+            if((tfir & 135274496LL) == 0)
+                return depth;
+            if((tfir & 67372032LL) == 0)
+                return depth;
+            break;
+        case 19:
+            if((tfir & 29360128LL) == 0)
+                return depth;
+            if((tfir & 16513LL) == 0)
+                return depth;
+            if((tfir & 33288LL) == 0)
+                return depth;
+            if((tfir & 15032385536LL) == 0)
+                return depth;
+            if((tfir & 135274496LL) == 0)
+                return depth;
+            if((tfir & 67372032LL) == 0)
+                return depth;
+            break;
+        case 20:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            if((tfir & 15032385536LL) == 0)
+                return depth;
+            if((tfir & 135274496LL) == 0)
+                return depth;
+            if((tfir & 67372032LL) == 0)
+                return depth;
+            break;
+        case 21:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            if((tfir & 15032385536LL) == 0)
+                return depth;
+            if((tfir & 135274496LL) == 0)
+                return depth;
+            if((tfir & 67372032LL) == 0)
+                return depth;
+            break;
+        case 22:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            if((tfir & 15032385536LL) == 0)
+                return depth;
+            if((tfir & 135274496LL) == 0)
+                return depth;
+            if((tfir & 67372032LL) == 0)
+                return depth;
+            break;
+        case 24:
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 25:
+            if((tfir & 481036337152LL) == 0)
+                return depth;
+            if((tfir & 270548992LL) == 0)
+                return depth;
+            if((tfir & 545390592LL) == 0)
+                return depth;
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 26:
+            if((tfir & 3758096384LL) == 0)
+                return depth;
+            if((tfir & 2113664LL) == 0)
+                return depth;
+            if((tfir & 4260864LL) == 0)
+                return depth;
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 27:
+            if((tfir & 29360128LL) == 0)
+                return depth;
+            if((tfir & 16513LL) == 0)
+                return depth;
+            if((tfir & 33288LL) == 0)
+                return depth;
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 28:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 29:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 30:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            if((tfir & 117440512LL) == 0)
+                return depth;
+            if((tfir & 1056832LL) == 0)
+                return depth;
+            if((tfir & 526344LL) == 0)
+                return depth;
+            break;
+        case 32:
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 33:
+            if((tfir & 481036337152LL) == 0)
+                return depth;
+            if((tfir & 270548992LL) == 0)
+                return depth;
+            if((tfir & 545390592LL) == 0)
+                return depth;
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 34:
+            if((tfir & 3758096384LL) == 0)
+                return depth;
+            if((tfir & 2113664LL) == 0)
+                return depth;
+            if((tfir & 4260864LL) == 0)
+                return depth;
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 35:
+            if((tfir & 29360128LL) == 0)
+                return depth;
+            if((tfir & 16513LL) == 0)
+                return depth;
+            if((tfir & 33288LL) == 0)
+                return depth;
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 36:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 37:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 38:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            if((tfir & 917504LL) == 0)
+                return depth;
+            if((tfir & 279239983104LL) == 0)
+                return depth;
+            break;
+        case 40:
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 41:
+            if((tfir & 481036337152LL) == 0)
+                return depth;
+            if((tfir & 270548992LL) == 0)
+                return depth;
+            if((tfir & 545390592LL) == 0)
+                return depth;
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 42:
+            if((tfir & 3758096384LL) == 0)
+                return depth;
+            if((tfir & 2113664LL) == 0)
+                return depth;
+            if((tfir & 4260864LL) == 0)
+                return depth;
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 43:
+            if((tfir & 29360128LL) == 0)
+                return depth;
+            if((tfir & 16513LL) == 0)
+                return depth;
+            if((tfir & 33288LL) == 0)
+                return depth;
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 44:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 45:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 46:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            if((tfir & 7168LL) == 0)
+                return depth;
+            if((tfir & 2181562368LL) == 0)
+                return depth;
+            break;
+        case 48:
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
+                return depth;
+            break;
+        case 49:
+            if((tfir & 481036337152LL) == 0)
+                return depth;
+            if((tfir & 270548992LL) == 0)
+                return depth;
+            if((tfir & 545390592LL) == 0)
+                return depth;
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
+                return depth;
+            break;
+        case 50:
+            if((tfir & 3758096384LL) == 0)
+                return depth;
+            if((tfir & 2113664LL) == 0)
+                return depth;
+            if((tfir & 4260864LL) == 0)
+                return depth;
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
+                return depth;
+            break;
+        case 51:
+            if((tfir & 29360128LL) == 0)
+                return depth;
+            if((tfir & 16513LL) == 0)
+                return depth;
+            if((tfir & 33288LL) == 0)
+                return depth;
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
+                return depth;
+            break;
+        case 52:
+            if((tfir & 229376LL) == 0)
+                return depth;
+            if((tfir & 275955843072LL) == 0)
+                return depth;
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
+                return depth;
+            break;
+        case 53:
+            if((tfir & 1792LL) == 0)
+                return depth;
+            if((tfir & 2155905024LL) == 0)
+                return depth;
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
+                return depth;
+            break;
+        case 54:
+            if((tfir & 14LL) == 0)
+                return depth;
+            if((tfir & 16843008LL) == 0)
+                return depth;
+            if((tfir & 56LL) == 0)
+                return depth;
+            if((tfir & 17043456LL) == 0)
                 return depth;
             break;
         }
@@ -2050,7 +3169,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 isfound = false;
         }
         //888070
-        int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, maxscore = depth - 3, alphabeg = alpha;
+        int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, maxscore = depth - 2, alphabeg = alpha;
         if(depth > minscoredepth){
             int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0, score6 = 0, score7 = 0;
             if(left4 > 0)
@@ -2996,39 +4115,30 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return -depth;
             break;
         }
-        if(left2 > 0)
-            switch(left2){
-            case 6:
-            if((tsec & 13LL) == 0)
+        switch((left2) | (left6 << 3)){
+        case 1:
+            if((tsec & 446676598784LL) == 0)
                 return -depth;
-            if((tsec & 28LL) == 0)
+            if((tsec & 962072674304LL) == 0)
                 return -depth;
-            if((tsec & 33686016LL) == 0)
+            if((tsec & 541097984LL) == 0)
                 return -depth;
-            break;
-            case 5:
-            if((tsec & 1664LL) == 0)
-                return -depth;
-            if((tsec & 3584LL) == 0)
-                return -depth;
-            if((tsec & 16842753LL) == 0)
-                return -depth;
-            if((tsec & 4311810048LL) == 0)
+            if((tsec & 1090781184LL) == 0)
                 return -depth;
             break;
-            case 4:
-            if((tsec & 212992LL) == 0)
+        case 2:
+            if((tsec & 3489660928LL) == 0)
                 return -depth;
-            if((tsec & 458752LL) == 0)
+            if((tsec & 7516192768LL) == 0)
                 return -depth;
-            if((tsec & 2155872384LL) == 0)
+            if((tsec & 4227328LL) == 0)
                 return -depth;
-            if((tsec & 551911686144LL) == 0)
+            if((tsec & 8521728LL) == 0)
                 return -depth;
-            if((tsec & 2097672LL) == 0)
+            if((tsec & 34368258048LL) == 0)
                 return -depth;
             break;
-            case 3:
+        case 3:
             if((tsec & 27262976LL) == 0)
                 return -depth;
             if((tsec & 58720256LL) == 0)
@@ -3042,7 +4152,63 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tsec & 268502016LL) == 0)
                 return -depth;
             break;
-            case 2:
+        case 4:
+            if((tsec & 212992LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 2155872384LL) == 0)
+                return -depth;
+            if((tsec & 551911686144LL) == 0)
+                return -depth;
+            if((tsec & 2097672LL) == 0)
+                return -depth;
+            break;
+        case 5:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            break;
+        case 6:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            break;
+        case 8:
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            break;
+        case 9:
+            if((tsec & 446676598784LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 541097984LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            break;
+        case 10:
             if((tsec & 3489660928LL) == 0)
                 return -depth;
             if((tsec & 7516192768LL) == 0)
@@ -3053,8 +4219,102 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return -depth;
             if((tsec & 34368258048LL) == 0)
                 return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
             break;
-            case 1:
+        case 11:
+            if((tsec & 27262976LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 33026LL) == 0)
+                return -depth;
+            if((tsec & 275951665152LL) == 0)
+                return -depth;
+            if((tsec & 66576LL) == 0)
+                return -depth;
+            if((tsec & 268502016LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            break;
+        case 12:
+            if((tsec & 212992LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 2155872384LL) == 0)
+                return -depth;
+            if((tsec & 551911686144LL) == 0)
+                return -depth;
+            if((tsec & 2097672LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            break;
+        case 13:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            break;
+        case 14:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 3023656976384LL) == 0)
+                return -depth;
+            if((tsec & 8657567744LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            break;
+        case 16:
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
+                return -depth;
+            break;
+        case 17:
             if((tsec & 446676598784LL) == 0)
                 return -depth;
             if((tsec & 962072674304LL) == 0)
@@ -3063,41 +4323,120 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return -depth;
             if((tsec & 1090781184LL) == 0)
                 return -depth;
-            break;
-        }
-        if(left6 > 0)
-            switch(left6){
-            case 6:
-            if((tsec & 28LL) == 0)
+            if((tsec & 7516192768LL) == 0)
                 return -depth;
-            if((tsec & 88LL) == 0)
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
+                return -depth;
+            break;
+        case 18:
+            if((tsec & 3489660928LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 4227328LL) == 0)
                 return -depth;
             if((tsec & 8521728LL) == 0)
                 return -depth;
+            if((tsec & 34368258048LL) == 0)
+                return -depth;
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
+                return -depth;
             break;
-            case 5:
-            if((tsec & 3584LL) == 0)
+        case 19:
+            if((tsec & 27262976LL) == 0)
                 return -depth;
-            if((tsec & 11264LL) == 0)
+            if((tsec & 58720256LL) == 0)
                 return -depth;
-            if((tsec & 17039424LL) == 0)
+            if((tsec & 33026LL) == 0)
                 return -depth;
-            if((tsec & 1090781184LL) == 0)
+            if((tsec & 275951665152LL) == 0)
+                return -depth;
+            if((tsec & 66576LL) == 0)
+                return -depth;
+            if((tsec & 268502016LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
                 return -depth;
             break;
-            case 4:
+        case 20:
+            if((tsec & 212992LL) == 0)
+                return -depth;
             if((tsec & 458752LL) == 0)
                 return -depth;
-            if((tsec & 1441792LL) == 0)
+            if((tsec & 2155872384LL) == 0)
                 return -depth;
-            if((tsec & 134219784LL) == 0)
+            if((tsec & 551911686144LL) == 0)
                 return -depth;
-            if((tsec & 2181046272LL) == 0)
+            if((tsec & 2097672LL) == 0)
                 return -depth;
-            if((tsec & 139619991552LL) == 0)
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
                 return -depth;
             break;
-            case 3:
+        case 21:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
+                return -depth;
+            break;
+        case 22:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 23622320128LL) == 0)
+                return -depth;
+            if((tsec & 67637248LL) == 0)
+                return -depth;
+            if((tsec & 2199056941056LL) == 0)
+                return -depth;
+            break;
+        case 24:
             if((tsec & 58720256LL) == 0)
                 return -depth;
             if((tsec & 184549376LL) == 0)
@@ -3111,66 +4450,507 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tsec & 279173922816LL) == 0)
                 return -depth;
             break;
-            case 2:
-            if((tsec & 7516192768LL) == 0)
+        case 25:
+            if((tsec & 446676598784LL) == 0)
                 return -depth;
-            if((tsec & 23622320128LL) == 0)
-                return -depth;
-            if((tsec & 67637248LL) == 0)
-                return -depth;
-            if((tsec & 33686016LL) == 0)
-                return -depth;
-            if((tsec & 2199056941056LL) == 0)
-                return -depth;
-            break;
-            case 1:
             if((tsec & 962072674304LL) == 0)
                 return -depth;
-            if((tsec & 3023656976384LL) == 0)
+            if((tsec & 541097984LL) == 0)
                 return -depth;
-            if((tsec & 8657567744LL) == 0)
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 184549376LL) == 0)
+                return -depth;
+            if((tsec & 528416LL) == 0)
+                return -depth;
+            if((tsec & 263172LL) == 0)
+                return -depth;
+            if((tsec & 17180132352LL) == 0)
+                return -depth;
+            if((tsec & 279173922816LL) == 0)
+                return -depth;
+            break;
+        case 26:
+            if((tsec & 3489660928LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 4227328LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            if((tsec & 34368258048LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 184549376LL) == 0)
+                return -depth;
+            if((tsec & 528416LL) == 0)
+                return -depth;
+            if((tsec & 263172LL) == 0)
+                return -depth;
+            if((tsec & 17180132352LL) == 0)
+                return -depth;
+            if((tsec & 279173922816LL) == 0)
+                return -depth;
+            break;
+        case 27:
+            if((tsec & 27262976LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 33026LL) == 0)
+                return -depth;
+            if((tsec & 275951665152LL) == 0)
+                return -depth;
+            if((tsec & 66576LL) == 0)
+                return -depth;
+            if((tsec & 268502016LL) == 0)
+                return -depth;
+            if((tsec & 184549376LL) == 0)
+                return -depth;
+            if((tsec & 528416LL) == 0)
+                return -depth;
+            if((tsec & 263172LL) == 0)
+                return -depth;
+            if((tsec & 17180132352LL) == 0)
+                return -depth;
+            if((tsec & 279173922816LL) == 0)
+                return -depth;
+            break;
+        case 28:
+            if((tsec & 212992LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 2155872384LL) == 0)
+                return -depth;
+            if((tsec & 551911686144LL) == 0)
+                return -depth;
+            if((tsec & 2097672LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 184549376LL) == 0)
+                return -depth;
+            if((tsec & 528416LL) == 0)
+                return -depth;
+            if((tsec & 263172LL) == 0)
+                return -depth;
+            if((tsec & 17180132352LL) == 0)
+                return -depth;
+            if((tsec & 279173922816LL) == 0)
+                return -depth;
+            break;
+        case 29:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
                 return -depth;
             if((tsec & 4311810048LL) == 0)
                 return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 184549376LL) == 0)
+                return -depth;
+            if((tsec & 528416LL) == 0)
+                return -depth;
+            if((tsec & 263172LL) == 0)
+                return -depth;
+            if((tsec & 17180132352LL) == 0)
+                return -depth;
+            if((tsec & 279173922816LL) == 0)
+                return -depth;
+            break;
+        case 30:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 184549376LL) == 0)
+                return -depth;
+            if((tsec & 528416LL) == 0)
+                return -depth;
+            if((tsec & 263172LL) == 0)
+                return -depth;
+            if((tsec & 17180132352LL) == 0)
+                return -depth;
+            if((tsec & 279173922816LL) == 0)
+                return -depth;
+            break;
+        case 32:
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 33:
+            if((tsec & 446676598784LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 541097984LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 34:
+            if((tsec & 3489660928LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 4227328LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            if((tsec & 34368258048LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 35:
+            if((tsec & 27262976LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 33026LL) == 0)
+                return -depth;
+            if((tsec & 275951665152LL) == 0)
+                return -depth;
+            if((tsec & 66576LL) == 0)
+                return -depth;
+            if((tsec & 268502016LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 36:
+            if((tsec & 212992LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 2155872384LL) == 0)
+                return -depth;
+            if((tsec & 551911686144LL) == 0)
+                return -depth;
+            if((tsec & 2097672LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 37:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 38:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 1441792LL) == 0)
+                return -depth;
+            if((tsec & 134219784LL) == 0)
+                return -depth;
+            if((tsec & 2181046272LL) == 0)
+                return -depth;
+            if((tsec & 139619991552LL) == 0)
+                return -depth;
+            break;
+        case 40:
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            break;
+        case 41:
+            if((tsec & 446676598784LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 541097984LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            break;
+        case 42:
+            if((tsec & 3489660928LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 4227328LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            if((tsec & 34368258048LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            break;
+        case 43:
+            if((tsec & 27262976LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 33026LL) == 0)
+                return -depth;
+            if((tsec & 275951665152LL) == 0)
+                return -depth;
+            if((tsec & 66576LL) == 0)
+                return -depth;
+            if((tsec & 268502016LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            break;
+        case 44:
+            if((tsec & 212992LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 2155872384LL) == 0)
+                return -depth;
+            if((tsec & 551911686144LL) == 0)
+                return -depth;
+            if((tsec & 2097672LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            break;
+        case 45:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            break;
+        case 46:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 11264LL) == 0)
+                return -depth;
+            if((tsec & 17039424LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            break;
+        case 48:
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            break;
+        case 49:
+            if((tsec & 446676598784LL) == 0)
+                return -depth;
+            if((tsec & 962072674304LL) == 0)
+                return -depth;
+            if((tsec & 541097984LL) == 0)
+                return -depth;
+            if((tsec & 1090781184LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            break;
+        case 50:
+            if((tsec & 3489660928LL) == 0)
+                return -depth;
+            if((tsec & 7516192768LL) == 0)
+                return -depth;
+            if((tsec & 4227328LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            if((tsec & 34368258048LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            break;
+        case 51:
+            if((tsec & 27262976LL) == 0)
+                return -depth;
+            if((tsec & 58720256LL) == 0)
+                return -depth;
+            if((tsec & 33026LL) == 0)
+                return -depth;
+            if((tsec & 275951665152LL) == 0)
+                return -depth;
+            if((tsec & 66576LL) == 0)
+                return -depth;
+            if((tsec & 268502016LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            break;
+        case 52:
+            if((tsec & 212992LL) == 0)
+                return -depth;
+            if((tsec & 458752LL) == 0)
+                return -depth;
+            if((tsec & 2155872384LL) == 0)
+                return -depth;
+            if((tsec & 551911686144LL) == 0)
+                return -depth;
+            if((tsec & 2097672LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            break;
+        case 53:
+            if((tsec & 1664LL) == 0)
+                return -depth;
+            if((tsec & 3584LL) == 0)
+                return -depth;
+            if((tsec & 16842753LL) == 0)
+                return -depth;
+            if((tsec & 4311810048LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
+            break;
+        case 54:
+            if((tsec & 13LL) == 0)
+                return -depth;
+            if((tsec & 28LL) == 0)
+                return -depth;
+            if((tsec & 33686016LL) == 0)
+                return -depth;
+            if((tsec & 88LL) == 0)
+                return -depth;
+            if((tsec & 8521728LL) == 0)
+                return -depth;
             break;
         }
-        if(left1 > 0)
-            switch(left1){
-            case 6:
-            if((tsec & 14LL) == 0)
-                return -depth;
-            if((tsec & 16843008LL) == 0)
-                return -depth;
-            break;
-            case 5:
-            if((tsec & 1792LL) == 0)
-                return -depth;
-            if((tsec & 2155905024LL) == 0)
-                return -depth;
-            break;
-            case 4:
-            if((tsec & 229376LL) == 0)
-                return -depth;
-            if((tsec & 275955843072LL) == 0)
-                return -depth;
-            break;
-            case 3:
-            if((tsec & 29360128LL) == 0)
-                return -depth;
-            if((tsec & 16513LL) == 0)
-                return -depth;
-            if((tsec & 33288LL) == 0)
-                return -depth;
-            break;
-            case 2:
-            if((tsec & 3758096384LL) == 0)
-                return -depth;
-            if((tsec & 2113664LL) == 0)
-                return -depth;
-            if((tsec & 4260864LL) == 0)
-                return -depth;
-            break;
-            case 1:
+        switch((left1) | (left7 << 3)){
+        case 1:
             if((tsec & 481036337152LL) == 0)
                 return -depth;
             if((tsec & 270548992LL) == 0)
@@ -3178,36 +4958,127 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tsec & 545390592LL) == 0)
                 return -depth;
             break;
-        }
-        if(left7 > 0)
-            switch(left7){
-            case 6:
-            if((tsec & 56LL) == 0)
+        case 2:
+            if((tsec & 3758096384LL) == 0)
                 return -depth;
-            if((tsec & 17043456LL) == 0)
+            if((tsec & 2113664LL) == 0)
                 return -depth;
-            break;
-            case 5:
-            if((tsec & 7168LL) == 0)
-                return -depth;
-            if((tsec & 2181562368LL) == 0)
+            if((tsec & 4260864LL) == 0)
                 return -depth;
             break;
-            case 4:
-            if((tsec & 917504LL) == 0)
+        case 3:
+            if((tsec & 29360128LL) == 0)
                 return -depth;
-            if((tsec & 279239983104LL) == 0)
+            if((tsec & 16513LL) == 0)
                 return -depth;
-            break;
-            case 3:
-            if((tsec & 117440512LL) == 0)
-                return -depth;
-            if((tsec & 1056832LL) == 0)
-                return -depth;
-            if((tsec & 526344LL) == 0)
+            if((tsec & 33288LL) == 0)
                 return -depth;
             break;
-            case 2:
+        case 4:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            break;
+        case 5:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            break;
+        case 6:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            break;
+        case 8:
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 9:
+            if((tsec & 481036337152LL) == 0)
+                return -depth;
+            if((tsec & 270548992LL) == 0)
+                return -depth;
+            if((tsec & 545390592LL) == 0)
+                return -depth;
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 10:
+            if((tsec & 3758096384LL) == 0)
+                return -depth;
+            if((tsec & 2113664LL) == 0)
+                return -depth;
+            if((tsec & 4260864LL) == 0)
+                return -depth;
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 11:
+            if((tsec & 29360128LL) == 0)
+                return -depth;
+            if((tsec & 16513LL) == 0)
+                return -depth;
+            if((tsec & 33288LL) == 0)
+                return -depth;
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 12:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 13:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 14:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            if((tsec & 1924145348608LL) == 0)
+                return -depth;
+            if((tsec & 17315135488LL) == 0)
+                return -depth;
+            if((tsec & 8623620096LL) == 0)
+                return -depth;
+            break;
+        case 16:
             if((tsec & 15032385536LL) == 0)
                 return -depth;
             if((tsec & 135274496LL) == 0)
@@ -3215,12 +5086,384 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if((tsec & 67372032LL) == 0)
                 return -depth;
             break;
-            case 1:
-            if((tsec & 1924145348608LL) == 0)
+        case 17:
+            if((tsec & 481036337152LL) == 0)
                 return -depth;
-            if((tsec & 17315135488LL) == 0)
+            if((tsec & 270548992LL) == 0)
                 return -depth;
-            if((tsec & 8623620096LL) == 0)
+            if((tsec & 545390592LL) == 0)
+                return -depth;
+            if((tsec & 15032385536LL) == 0)
+                return -depth;
+            if((tsec & 135274496LL) == 0)
+                return -depth;
+            if((tsec & 67372032LL) == 0)
+                return -depth;
+            break;
+        case 18:
+            if((tsec & 3758096384LL) == 0)
+                return -depth;
+            if((tsec & 2113664LL) == 0)
+                return -depth;
+            if((tsec & 4260864LL) == 0)
+                return -depth;
+            if((tsec & 15032385536LL) == 0)
+                return -depth;
+            if((tsec & 135274496LL) == 0)
+                return -depth;
+            if((tsec & 67372032LL) == 0)
+                return -depth;
+            break;
+        case 19:
+            if((tsec & 29360128LL) == 0)
+                return -depth;
+            if((tsec & 16513LL) == 0)
+                return -depth;
+            if((tsec & 33288LL) == 0)
+                return -depth;
+            if((tsec & 15032385536LL) == 0)
+                return -depth;
+            if((tsec & 135274496LL) == 0)
+                return -depth;
+            if((tsec & 67372032LL) == 0)
+                return -depth;
+            break;
+        case 20:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            if((tsec & 15032385536LL) == 0)
+                return -depth;
+            if((tsec & 135274496LL) == 0)
+                return -depth;
+            if((tsec & 67372032LL) == 0)
+                return -depth;
+            break;
+        case 21:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            if((tsec & 15032385536LL) == 0)
+                return -depth;
+            if((tsec & 135274496LL) == 0)
+                return -depth;
+            if((tsec & 67372032LL) == 0)
+                return -depth;
+            break;
+        case 22:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            if((tsec & 15032385536LL) == 0)
+                return -depth;
+            if((tsec & 135274496LL) == 0)
+                return -depth;
+            if((tsec & 67372032LL) == 0)
+                return -depth;
+            break;
+        case 24:
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 25:
+            if((tsec & 481036337152LL) == 0)
+                return -depth;
+            if((tsec & 270548992LL) == 0)
+                return -depth;
+            if((tsec & 545390592LL) == 0)
+                return -depth;
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 26:
+            if((tsec & 3758096384LL) == 0)
+                return -depth;
+            if((tsec & 2113664LL) == 0)
+                return -depth;
+            if((tsec & 4260864LL) == 0)
+                return -depth;
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 27:
+            if((tsec & 29360128LL) == 0)
+                return -depth;
+            if((tsec & 16513LL) == 0)
+                return -depth;
+            if((tsec & 33288LL) == 0)
+                return -depth;
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 28:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 29:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 30:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            if((tsec & 117440512LL) == 0)
+                return -depth;
+            if((tsec & 1056832LL) == 0)
+                return -depth;
+            if((tsec & 526344LL) == 0)
+                return -depth;
+            break;
+        case 32:
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 33:
+            if((tsec & 481036337152LL) == 0)
+                return -depth;
+            if((tsec & 270548992LL) == 0)
+                return -depth;
+            if((tsec & 545390592LL) == 0)
+                return -depth;
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 34:
+            if((tsec & 3758096384LL) == 0)
+                return -depth;
+            if((tsec & 2113664LL) == 0)
+                return -depth;
+            if((tsec & 4260864LL) == 0)
+                return -depth;
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 35:
+            if((tsec & 29360128LL) == 0)
+                return -depth;
+            if((tsec & 16513LL) == 0)
+                return -depth;
+            if((tsec & 33288LL) == 0)
+                return -depth;
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 36:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 37:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 38:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            if((tsec & 917504LL) == 0)
+                return -depth;
+            if((tsec & 279239983104LL) == 0)
+                return -depth;
+            break;
+        case 40:
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 41:
+            if((tsec & 481036337152LL) == 0)
+                return -depth;
+            if((tsec & 270548992LL) == 0)
+                return -depth;
+            if((tsec & 545390592LL) == 0)
+                return -depth;
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 42:
+            if((tsec & 3758096384LL) == 0)
+                return -depth;
+            if((tsec & 2113664LL) == 0)
+                return -depth;
+            if((tsec & 4260864LL) == 0)
+                return -depth;
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 43:
+            if((tsec & 29360128LL) == 0)
+                return -depth;
+            if((tsec & 16513LL) == 0)
+                return -depth;
+            if((tsec & 33288LL) == 0)
+                return -depth;
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 44:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 45:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 46:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            if((tsec & 7168LL) == 0)
+                return -depth;
+            if((tsec & 2181562368LL) == 0)
+                return -depth;
+            break;
+        case 48:
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
+                return -depth;
+            break;
+        case 49:
+            if((tsec & 481036337152LL) == 0)
+                return -depth;
+            if((tsec & 270548992LL) == 0)
+                return -depth;
+            if((tsec & 545390592LL) == 0)
+                return -depth;
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
+                return -depth;
+            break;
+        case 50:
+            if((tsec & 3758096384LL) == 0)
+                return -depth;
+            if((tsec & 2113664LL) == 0)
+                return -depth;
+            if((tsec & 4260864LL) == 0)
+                return -depth;
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
+                return -depth;
+            break;
+        case 51:
+            if((tsec & 29360128LL) == 0)
+                return -depth;
+            if((tsec & 16513LL) == 0)
+                return -depth;
+            if((tsec & 33288LL) == 0)
+                return -depth;
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
+                return -depth;
+            break;
+        case 52:
+            if((tsec & 229376LL) == 0)
+                return -depth;
+            if((tsec & 275955843072LL) == 0)
+                return -depth;
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
+                return -depth;
+            break;
+        case 53:
+            if((tsec & 1792LL) == 0)
+                return -depth;
+            if((tsec & 2155905024LL) == 0)
+                return -depth;
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
+                return -depth;
+            break;
+        case 54:
+            if((tsec & 14LL) == 0)
+                return -depth;
+            if((tsec & 16843008LL) == 0)
+                return -depth;
+            if((tsec & 56LL) == 0)
+                return -depth;
+            if((tsec & 17043456LL) == 0)
                 return -depth;
             break;
         }
@@ -3244,7 +5487,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             else
                 isfound = false;
         }
-        int minscore = 3 - depth, betabeg = beta;
+        int minscore = 2 - depth, betabeg = beta;
         if(left4 > 0){
             int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild < minscore)
@@ -3337,13 +5580,13 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 }
 
 pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
-    // res4: 1 430318
-    // res3: 1 30552
-    // res5: 1 46423
-    // res2: 1 121667
-    // res6: 1 124531
-    // res1: 1 3086
-    // res7: 1 1115
+    // res4: 1 397602
+    // res3: 1 26880
+    // res5: 1 39074
+    // res2: 1 161362
+    // res6: 1 71138
+    // res1: 1 2202
+    // res7: 1 879
     if(player){
         if(left4 > 0)
             if(cw(cfir, 3, left4))
@@ -3567,7 +5810,7 @@ int main(){
         for(uint64_t i = 0; i < size; ++i)
 			loadai.read(reinterpret_cast<char*>(&eval[i]), sizeof(int8_t));
         cache.reserve(size);
-		for (uint64_t i = 0; i < size; ++i)
+		for(uint64_t i = 0; i < size; ++i)
 			cache[pl[i]] = i;
 	}
 	loadai.close();
@@ -3639,7 +5882,7 @@ int main(){
                 }
                 debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) - ceval, "moves");
                 debug("\033[32m", "D", "move: ", last + 1);
-				curpos.fir = modificate(curpos.fir, last, left[last]);
+                curpos.fir |= (1LL << (42 - (left[last]) * 7 + last));
 				if (cw(curpos.fir, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
@@ -3659,7 +5902,7 @@ int main(){
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-						curpos.sec = modificate(curpos.sec, p2 - 1, left[p2 - 1]);
+                        curpos.sec |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
 						break;
 					}
 				}
@@ -3694,7 +5937,7 @@ int main(){
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-						curpos.fir = modificate(curpos.fir, p2 - 1, left[p2 - 1]);
+                        curpos.fir |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
 						break;
 					}
 				}
@@ -3759,7 +6002,7 @@ int main(){
                 else
                     debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) + ceval, "moves");
                 debug("\033[32m", "D", "move: ", last + 1);
-                curpos.sec = modificate(curpos.sec, last, left[last]);
+                curpos.sec |= (1LL << (42 - (left[last]) * 7 + last));
 				if (cw(curpos.sec, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
