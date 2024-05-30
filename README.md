@@ -2,7 +2,7 @@
 
 The goal of this project is to solve the classic Connect 4 game played on a 6 by 7 board. The AI is designed to consistently win when it plays first or to play optimally as the second player. If the first player makes a mistake, the AI can secure a win or at least force a draw.
 
-The initial board evaluation is 1, indicating that the first player can force win in 41 moves.
+The initial board evaluation is 2, indicating that the first player can force win in 40 moves.
 
 # Installation
 
