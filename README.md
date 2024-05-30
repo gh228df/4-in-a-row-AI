@@ -20,4 +20,5 @@ Pre-calculated data for the first 4 moves for both players can be found in the A
 
 Cache Size: The first 64 bits indicate the size of the cache.<br>
 Cached Positions: Following the cache size, positions for both players are stored as 64-bit unsigned variables <br>
-Best Moves: The remaining part of the file contains best moves represented as 16-bit unsigned variables.<br>
+Best Moves: The next part of the file contains best moves represented as 8-bit unsigned variables.<br>
+Evaluation: The remaining part of the file contains board evaluation represented as 8-bit signed variables.<br>
