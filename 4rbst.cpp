@@ -5,55 +5,6 @@
 #include <fstream>
 #include <unordered_map>
 #include <string>
-#include <mutex>
-
-/*
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 19 moves...
-[A] Minimax milliseconds: 67
-size: 1969
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 21 moves...
-[A] Minimax milliseconds: 132
-size: 5520
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 23 moves...
-[A] Minimax milliseconds: 262
-size: 16024
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 25 moves...
-[A] Minimax milliseconds: 504
-size: 44881
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 27 moves...
-[A] Minimax milliseconds: 866
-size: 118146
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 29 moves...
-[A] Minimax milliseconds: 1346
-size: 283601
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 31 moves...
-[A] Minimax milliseconds: 2076
-size: 650610
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 33 moves...
-[A] Minimax milliseconds: 4297
-size: 1706416
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 35 moves...
-[A] Minimax milliseconds: 25580
-size: 8281973
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 37 moves...
-[A] Minimax milliseconds: 120112
-size: 42839251
-res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
-[A] win is in > 39 moves...
-[A] Minimax milliseconds: 341468
-size: 180804455
-
-*/
 
 using namespace std;
 using namespace chrono;
@@ -66,7 +17,7 @@ struct field
         return sec == other.sec && fir == other.fir;
     }
 	size_t operator()(const field& s) const {
-        return hash<uint64_t>()(s.sec) ^ (hash<uint64_t>()(s.fir << 20));
+        return hash<uint32_t>()(s.sec) ^ (hash<uint32_t>()(s.fir << 20) << 1);
     }
 };
 
@@ -641,630 +592,630 @@ int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
         switch(last){
             case 0:
                 if((curcheckw & 16842752ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16777472ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 1:
                 if((curcheckw & 33685504ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 33554944ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 2:
                 if((curcheckw & 67371008ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 67109888ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 3:
                 if((curcheckw & 134742016ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2129920ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 134219776ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2097664ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 4:
                 if((curcheckw & 4259840ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4195328ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 5:
                 if((curcheckw & 8519680ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8390656ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 6:
                 if((curcheckw & 17039360ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16781312ULL) == 0)
-                    result++;
+                    ++result;
             return result;
         }
     case 5:
         switch(last){
             case 0:
                 if((curcheckw & 1536ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2155872256ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1280ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2147516416ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 1:
                 if((curcheckw & 3072ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4311744512ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1152ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16777217ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2560ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4295032832ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 2:
                 if((curcheckw & 6144ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8623489024ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1152ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2304ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2097160ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 33554434ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 5120ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8590065664ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 3:
                 if((curcheckw & 12288ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 17246978048ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 272629760ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 384ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2304ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4608ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4194320ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 67108868ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 10240ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 640ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 17180131328ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 268500992ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 4:
                 if((curcheckw & 545259520ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 768ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4608ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 9216ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8388640ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 134217736ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1280ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 537001984ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 5:
                 if((curcheckw & 1090519040ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1536ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 9216ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16777280ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2560ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1074003968ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 6:
                 if((curcheckw & 2181038080ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 3072ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 5120ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2148007936ULL) == 0)
-                    result++;
+                    ++result;
             return result;
         }
     case 4:
         switch(last){
             case 0:
                 if((curcheckw & 196608ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 275951648768ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 163840ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 274882101248ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 1:
                 if((curcheckw & 393216ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 551903297536ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 147456ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2097160ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2147483776ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 327680ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 549764202496ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 2:
                 if((curcheckw & 786432ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1103806595072ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 147456ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 294912ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16777217ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4194320ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 268436480ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4294967552ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 655360ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1099528404992ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 3:
                 if((curcheckw & 1572864ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2207613190144ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 34896609280ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 49152ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 294912ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 589824ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 33554434ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8388640ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 536872960ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8589935104ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1310720ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 81920ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2199056809984ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 34368126976ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 4:
                 if((curcheckw & 69793218560ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 98304ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 589824ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1179648ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 67108868ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16777280ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1073745920ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 17179870208ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 163840ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 68736253952ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 5:
                 if((curcheckw & 139586437120ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 196608ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1179648ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 134217736ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2147491840ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 327680ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 137472507904ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 6:
                 if((curcheckw & 279172874240ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 393216ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 655360ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 274945015808ULL) == 0)
-                    result++;
+                    ++result;
             return result;
         }
     case 3:
         switch(last){
             case 0:
                 if((curcheckw & 25165824ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 520ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 20971520ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 32776ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 1:
                 if((curcheckw & 50331648ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1040ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 18874368ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 268436480ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 274877923328ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 41943040ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 65552ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 2:
                 if((curcheckw & 100663296ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2080ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 18874368ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 37748736ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2147483776ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 536872960ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 34359869440ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 549755846656ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 83886080ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 131104ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 3:
                 if((curcheckw & 201326592ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 6291456ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4160ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 257ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 37748736ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 75497472ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4294967552ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1073745920ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 68719738880ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1099511693312ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 167772160ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 10485760ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 262208ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 65537ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 4:
                 if((curcheckw & 12582912ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 514ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 75497472ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 150994944ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8589935104ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2147491840ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 137439477760ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2199023386624ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 20971520ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 131074ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 5:
                 if((curcheckw & 25165824ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1028ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 150994944ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 17179870208ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 274878955520ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 41943040ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 262148ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 6:
                 if((curcheckw & 50331648ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2056ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 83886080ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 524296ULL) == 0)
-                    result++;
+                    ++result;
             return result;
         }
     case 2:
         switch(last){
             case 0:
                 if((curcheckw & 3221225472ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 66560ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2684354560ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4195328ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 1:
                 if((curcheckw & 6442450944ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 133120ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2415919104ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 34359869440ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 5368709120ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8390656ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 2:
                 if((curcheckw & 12884901888ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 266240ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2415919104ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4831838208ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 274877923328ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 68719738880ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 10737418240ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16781312ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 3:
                 if((curcheckw & 25769803776ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 805306368ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 532480ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 32896ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4831838208ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 9663676416ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 549755846656ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 137439477760ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 21474836480ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1342177280ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 33562624ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8388736ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 4:
                 if((curcheckw & 1610612736ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 65792ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 9663676416ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 19327352832ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1099511693312ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 274878955520ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2684354560ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16777472ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 5:
                 if((curcheckw & 3221225472ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 131584ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 19327352832ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2199023386624ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 5368709120ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 33554944ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 6:
                 if((curcheckw & 6442450944ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 263168ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 10737418240ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 67109888ULL) == 0)
-                    result++;
+                    ++result;
             return result;
         }
     case 1:
         switch(last){
             case 0:
                 if((curcheckw & 412316860416ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8519680ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 343597383680ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 537001984ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 1:
                 if((curcheckw & 824633720832ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 17039360ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 309237645312ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 687194767360ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1074003968ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 2:
                 if((curcheckw & 1649267441664ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 34078720ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 309237645312ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 618475290624ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1374389534720ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2148007936ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 3:
                 if((curcheckw & 3298534883328ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 103079215104ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 68157440ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4210688ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 618475290624ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1236950581248ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2748779069440ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 171798691840ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4296015872ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1073758208ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 4:
                 if((curcheckw & 206158430208ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8421376ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1236950581248ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2473901162496ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 343597383680ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2147516416ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 5:
                 if((curcheckw & 412316860416ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 16842752ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 2473901162496ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 687194767360ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 4295032832ULL) == 0)
-                    result++;
+                    ++result;
             return result;
             case 6:
                 if((curcheckw & 824633720832ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 33685504ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 1374389534720ULL) == 0)
-                    result++;
+                    ++result;
                 if((curcheckw & 8590065664ULL) == 0)
-                    result++;
+                    ++result;
             return result;
         }
     }
@@ -1276,15 +1227,19 @@ vector<int8_t> eval;
 
 unordered_map<field, int, field> cache;
 
-unordered_map<field, uint32_t, field> TranspositionTable;
-vector<int> tt;
-vector<bool> flag;
+struct ttentry{
+    int eval;
+    bool flag;
+};
 
-const int mincachedepth = 7;
+vector<unordered_map<field, ttentry, field>> transportationtable;
 
-//6 14213 892mb
-//7 12659 691mb
-//8 13345 525mb
+const int mincachedepth = 9;
+
+//7 745206 28000mb
+//8 745354 21700mb
+//9 743308 18000mb #
+//10 862331 14100mb
 
 const int minscoredepth = 9;
 
@@ -3151,24 +3106,18 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
-        int index;
-        bool isfound;
         if(depth > mincachedepth){
-            auto it = TranspositionTable.find({cfir, csec});
-            if (it != TranspositionTable.end()){
-                index = it->second;
-                if(tt[index] <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
+            auto it = transportationtable[depth].find({cfir, csec});
+            if (it != transportationtable[depth].end()){
+                ttentry entry = it->second;
+                if(entry.eval <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
                     return alpha;
-                if(flag[index]) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
-                    return tt[index];
+                if(entry.flag) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
+                    return entry.eval;
 
                 //cached alpha is lower bound
-                isfound = true;
             }
-            else
-                isfound = false;
         }
-        //888070
         int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, maxscore = depth - 2, alphabeg = alpha;
         if(depth > minscoredepth){
             int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0, score6 = 0, score7 = 0;
@@ -3790,23 +3739,8 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             }
             break;
         }
-        if(depth > mincachedepth){
-            if(isfound){
-                //found alpha will be for sure better than the previous one
-                tt[index] = alpha;
-                if(alpha > alphabeg) //if the alpha is bigger than the begin-alpha then the current alpha is exact, otherwise it is a better smaller bound
-                    flag[index] = true;
-            }
-            else
-            {   
-                TranspositionTable[{cfir,csec}] = tt.size();
-                tt.push_back(alpha);
-                if(alpha > alphabeg) //if the alpha is bigger than the begin-alpha then the current alpha is exact, otherwise it is a smaller bound
-                    flag.push_back(true);
-                else
-                    flag.push_back(false);
-            }
-        }
+        if(depth > mincachedepth)
+            transportationtable[depth][{cfir,csec}] = {alpha, (alpha > alphabeg) ? true : false};
         return alpha;
     }
     else
@@ -5470,22 +5404,17 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
-        int index;
-        bool isfound;
         if(depth > mincachedepth){
-            auto it = TranspositionTable.find({cfir, csec});
-            if (it != TranspositionTable.end()){
-                index = it->second;
-                if(tt[index] >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
+            auto it = transportationtable[depth].find({cfir, csec});
+            if (it != transportationtable[depth].end()){
+                ttentry entry = it->second;
+                if(entry.eval >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
                     return beta;
-                if(flag[index]) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
-                    return tt[index];
+                if(entry.flag) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
+                    return entry.eval;
 
                 //cached beta is upper bound
-                isfound = true;
             }
-            else
-                isfound = false;
         }
         int minscore = 2 - depth, betabeg = beta;
         if(left4 > 0){
@@ -5558,35 +5487,21 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 beta = reschild;
 			}
         }
-        if(depth > mincachedepth){
-            if(isfound){
-                //found beta will be for sure better than the previous one
-                tt[index] = beta;
-                if(beta < betabeg) //if the beta is smaller than the begin-beta then the current beta is exact, otherwise it is a better upper bound
-                    flag[index] = true; 
-            }
-            else
-            {   
-                TranspositionTable[{cfir,csec}] = tt.size();
-                tt.push_back(beta);
-                if(beta < betabeg) //if the beta is smaller than the begin-beta then the current beta is exact, otherwise it is a upper bound
-                    flag.push_back(true);
-                else
-                    flag.push_back(false);
-            }
-        }
+        if(depth > mincachedepth)
+            transportationtable[depth][{cfir,csec}] = {beta, (beta < betabeg) ? true : false};
         return beta;
     }
 }
 
 pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
-    // res4: 1 397602
-    // res3: 1 26880
-    // res5: 1 39074
-    // res2: 1 161362
-    // res6: 1 71138
-    // res1: 1 2202
-    // res7: 1 879
+    transportationtable.resize(depth);
+    // res4: 1 455644
+    // res3: 1 22976
+    // res5: 1 38033
+    // res2: 1 103246
+    // res6: 1 65676
+    // res1: 1 1957
+    // res7: 1 883
     if(player){
         if(left4 > 0)
             if(cw(cfir, 3, left4))
@@ -5816,11 +5731,6 @@ int main(){
 	loadai.close();
 	for (;;)
     {
-        if(TranspositionTable.size() > 0){
-            tt.clear();
-            flag.clear();
-            TranspositionTable.clear();
-        }
 		field curpos = {0, 0};
 		uint8_t last;
         int8_t ceval = -1;
