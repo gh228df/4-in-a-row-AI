@@ -1230,6 +1230,7 @@ unordered_map<field, int, field> cache;
 struct ttentry{
     int eval;
     bool flag;
+    bool notcutoff;
 };
 
 vector<unordered_map<field, ttentry, field>> transportationtable;
@@ -3110,12 +3111,23 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             auto it = transportationtable[depth].find({cfir, csec});
             if (it != transportationtable[depth].end()){
                 ttentry entry = it->second;
-                if(entry.eval <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
-                    return alpha;
-                if(entry.flag) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
-                    return entry.eval;
-
-                //cached alpha is lower bound
+                if(entry.notcutoff){
+                    if(entry.eval <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
+                        return alpha;
+                    if(entry.flag) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
+                        return entry.eval;
+                    beta = entry.eval;
+                    //cached alpha is lower bound
+                }
+                else
+                {
+                    if(entry.eval > alpha){
+                        if(entry.eval >= beta)
+                            return entry.eval;
+                        alpha = entry.eval;
+                    }
+                }
+                
             }
         }
         int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, maxscore = depth - 2, alphabeg = alpha;
@@ -3144,8 +3156,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3156,8 +3171,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3168,8 +3186,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3180,8 +3201,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3192,8 +3216,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3204,8 +3231,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3216,8 +3246,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3230,8 +3263,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3242,8 +3278,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3254,8 +3293,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3266,8 +3308,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3278,8 +3323,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3290,8 +3338,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3302,8 +3353,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3316,8 +3370,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3328,8 +3385,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3340,8 +3400,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3352,8 +3415,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3364,8 +3430,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3376,8 +3445,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3388,8 +3460,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3402,8 +3477,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3414,8 +3492,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3426,8 +3507,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3438,8 +3522,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3450,8 +3537,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3462,8 +3552,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3474,8 +3567,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3488,8 +3584,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3500,8 +3599,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3512,8 +3614,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3524,8 +3629,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3536,8 +3644,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3548,8 +3659,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3560,8 +3674,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3574,8 +3691,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3586,8 +3706,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3598,8 +3721,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3610,8 +3736,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3622,8 +3751,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3634,8 +3766,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3646,8 +3781,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3660,8 +3798,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3672,8 +3813,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3684,8 +3828,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3696,8 +3843,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3708,8 +3858,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3720,8 +3873,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
@@ -3732,15 +3888,18 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
-                    if(beta <= reschild)
+                    if(beta <= reschild){
+                        if(depth > mincachedepth)
+                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
+                    }
                     alpha = reschild;
                 }
             }
             break;
         }
         if(depth > mincachedepth)
-            transportationtable[depth][{cfir,csec}] = {alpha, (alpha > alphabeg) ? true : false};
+            transportationtable[depth][{cfir,csec}] = {alpha, (alpha > alphabeg) ? true : false, true};
         return alpha;
     }
     else
@@ -5408,12 +5567,22 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             auto it = transportationtable[depth].find({cfir, csec});
             if (it != transportationtable[depth].end()){
                 ttentry entry = it->second;
-                if(entry.eval >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
-                    return beta;
-                if(entry.flag) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
-                    return entry.eval;
-
-                //cached beta is upper bound
+                if(entry.notcutoff){
+                    if(entry.eval >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
+                        return beta;
+                    if(entry.flag) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
+                        return entry.eval;
+                    alpha = entry.eval;
+                    //cached beta is upper bound
+                }
+                else
+                {
+                    if(entry.eval < beta){
+                        if(entry.eval <= alpha)
+                            return entry.eval;
+                        beta = entry.eval;
+                    }
+                }
             }
         }
         int minscore = 2 - depth, betabeg = beta;
@@ -5422,8 +5591,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
 				beta = reschild;
 			}
         }
@@ -5432,8 +5604,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
 				beta = reschild;
 			}
         }
@@ -5442,8 +5617,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
 				beta = reschild;
 			}
         }
@@ -5452,8 +5630,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
 				beta = reschild;
 			}
         }
@@ -5462,8 +5643,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
 				beta = reschild;
 			}
         }
@@ -5472,8 +5656,11 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
 				beta = reschild;
 			}
         }
@@ -5482,13 +5669,16 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
-				if(reschild <= alpha)
+				if(reschild <= alpha){
+                    if(depth > mincachedepth)
+                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
 					return reschild;
+                }
                 beta = reschild;
 			}
         }
         if(depth > mincachedepth)
-            transportationtable[depth][{cfir,csec}] = {beta, (beta < betabeg) ? true : false};
+            transportationtable[depth][{cfir,csec}] = {beta, (beta < betabeg) ? true : false, true};
         return beta;
     }
 }
