@@ -5,6 +5,55 @@
 #include <fstream>
 #include <unordered_map>
 #include <string>
+#include <mutex>
+
+/*
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 19 moves...
+[A] Minimax milliseconds: 67
+size: 1969
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 21 moves...
+[A] Minimax milliseconds: 132
+size: 5520
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 23 moves...
+[A] Minimax milliseconds: 262
+size: 16024
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 25 moves...
+[A] Minimax milliseconds: 504
+size: 44881
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 27 moves...
+[A] Minimax milliseconds: 866
+size: 118146
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 29 moves...
+[A] Minimax milliseconds: 1346
+size: 283601
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 31 moves...
+[A] Minimax milliseconds: 2076
+size: 650610
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 33 moves...
+[A] Minimax milliseconds: 4297
+size: 1706416
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 35 moves...
+[A] Minimax milliseconds: 25580
+size: 8281973
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 37 moves...
+[A] Minimax milliseconds: 120112
+size: 42839251
+res4: 0 res3: 0 res5: 0 res2: 0 res6: 0 res1: 0 res7: 0 
+[A] win is in > 39 moves...
+[A] Minimax milliseconds: 341468
+size: 180804455
+
+*/
 
 using namespace std;
 using namespace chrono;
@@ -17,7 +66,7 @@ struct field
         return sec == other.sec && fir == other.fir;
     }
 	size_t operator()(const field& s) const {
-        return hash<uint32_t>()(s.sec) ^ (hash<uint32_t>()(s.fir << 20) << 1);
+        return hash<uint64_t>()(s.sec) ^ (hash<uint64_t>()(s.fir << 20));
     }
 };
 
@@ -48,7 +97,7 @@ void debug(string color, string init, uint32_t* to_debug, int size){
     cout << endl;
 }
 
-bool cw(uint64_t curcheckw, int last, uint32_t left){
+inline bool cw(uint64_t curcheckw, int last, uint32_t left){
     curcheckw = ~curcheckw;
     switch(last){
         case 0:
@@ -585,637 +634,637 @@ bool cw(uint64_t curcheckw, int last, uint32_t left){
     }
 }
 
-int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
+inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
     int result = 0;
     switch(left){
     case 6:
         switch(last){
             case 0:
                 if((curcheckw & 16842752ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16777472ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 1:
                 if((curcheckw & 33685504ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 33554944ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 2:
                 if((curcheckw & 67371008ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 67109888ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 3:
                 if((curcheckw & 134742016ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2129920ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 134219776ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2097664ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 4:
                 if((curcheckw & 4259840ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4195328ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 5:
                 if((curcheckw & 8519680ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8390656ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 6:
                 if((curcheckw & 17039360ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16781312ULL) == 0)
-                    ++result;
+                    result++;
             return result;
         }
     case 5:
         switch(last){
             case 0:
                 if((curcheckw & 1536ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2155872256ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1280ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2147516416ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 1:
                 if((curcheckw & 3072ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4311744512ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1152ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16777217ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2560ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4295032832ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 2:
                 if((curcheckw & 6144ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8623489024ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1152ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2304ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2097160ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 33554434ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 5120ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8590065664ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 3:
                 if((curcheckw & 12288ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 17246978048ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 272629760ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 384ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2304ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4608ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4194320ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 67108868ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 10240ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 640ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 17180131328ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 268500992ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 4:
                 if((curcheckw & 545259520ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 768ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4608ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 9216ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8388640ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 134217736ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1280ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 537001984ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 5:
                 if((curcheckw & 1090519040ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1536ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 9216ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16777280ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2560ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1074003968ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 6:
                 if((curcheckw & 2181038080ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 3072ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 5120ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2148007936ULL) == 0)
-                    ++result;
+                    result++;
             return result;
         }
     case 4:
         switch(last){
             case 0:
                 if((curcheckw & 196608ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 275951648768ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 163840ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 274882101248ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 1:
                 if((curcheckw & 393216ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 551903297536ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 147456ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2097160ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2147483776ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 327680ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 549764202496ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 2:
                 if((curcheckw & 786432ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1103806595072ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 147456ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 294912ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16777217ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4194320ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 268436480ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4294967552ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 655360ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1099528404992ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 3:
                 if((curcheckw & 1572864ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2207613190144ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 34896609280ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 49152ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 294912ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 589824ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 33554434ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8388640ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 536872960ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8589935104ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1310720ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 81920ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2199056809984ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 34368126976ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 4:
                 if((curcheckw & 69793218560ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 98304ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 589824ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1179648ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 67108868ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16777280ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1073745920ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 17179870208ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 163840ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 68736253952ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 5:
                 if((curcheckw & 139586437120ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 196608ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1179648ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 134217736ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2147491840ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 327680ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 137472507904ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 6:
                 if((curcheckw & 279172874240ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 393216ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 655360ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 274945015808ULL) == 0)
-                    ++result;
+                    result++;
             return result;
         }
     case 3:
         switch(last){
             case 0:
                 if((curcheckw & 25165824ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 520ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 20971520ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 32776ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 1:
                 if((curcheckw & 50331648ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1040ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 18874368ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 268436480ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 274877923328ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 41943040ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 65552ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 2:
                 if((curcheckw & 100663296ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2080ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 18874368ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 37748736ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2147483776ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 536872960ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 34359869440ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 549755846656ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 83886080ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 131104ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 3:
                 if((curcheckw & 201326592ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 6291456ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4160ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 257ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 37748736ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 75497472ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4294967552ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1073745920ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 68719738880ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1099511693312ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 167772160ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 10485760ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 262208ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 65537ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 4:
                 if((curcheckw & 12582912ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 514ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 75497472ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 150994944ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8589935104ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2147491840ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 137439477760ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2199023386624ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 20971520ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 131074ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 5:
                 if((curcheckw & 25165824ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1028ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 150994944ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 17179870208ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 274878955520ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 41943040ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 262148ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 6:
                 if((curcheckw & 50331648ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2056ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 83886080ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 524296ULL) == 0)
-                    ++result;
+                    result++;
             return result;
         }
     case 2:
         switch(last){
             case 0:
                 if((curcheckw & 3221225472ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 66560ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2684354560ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4195328ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 1:
                 if((curcheckw & 6442450944ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 133120ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2415919104ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 34359869440ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 5368709120ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8390656ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 2:
                 if((curcheckw & 12884901888ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 266240ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2415919104ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4831838208ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 274877923328ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 68719738880ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 10737418240ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16781312ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 3:
                 if((curcheckw & 25769803776ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 805306368ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 532480ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 32896ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4831838208ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 9663676416ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 549755846656ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 137439477760ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 21474836480ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1342177280ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 33562624ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8388736ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 4:
                 if((curcheckw & 1610612736ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 65792ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 9663676416ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 19327352832ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1099511693312ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 274878955520ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2684354560ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16777472ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 5:
                 if((curcheckw & 3221225472ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 131584ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 19327352832ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2199023386624ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 5368709120ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 33554944ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 6:
                 if((curcheckw & 6442450944ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 263168ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 10737418240ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 67109888ULL) == 0)
-                    ++result;
+                    result++;
             return result;
         }
     case 1:
         switch(last){
             case 0:
                 if((curcheckw & 412316860416ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8519680ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 343597383680ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 537001984ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 1:
                 if((curcheckw & 824633720832ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 17039360ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 309237645312ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 687194767360ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1074003968ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 2:
                 if((curcheckw & 1649267441664ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 34078720ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 309237645312ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 618475290624ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1374389534720ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2148007936ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 3:
                 if((curcheckw & 3298534883328ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 103079215104ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 68157440ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4210688ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 618475290624ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1236950581248ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2748779069440ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 171798691840ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4296015872ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1073758208ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 4:
                 if((curcheckw & 206158430208ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8421376ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1236950581248ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2473901162496ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 343597383680ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2147516416ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 5:
                 if((curcheckw & 412316860416ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 16842752ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 2473901162496ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 687194767360ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 4295032832ULL) == 0)
-                    ++result;
+                    result++;
             return result;
             case 6:
                 if((curcheckw & 824633720832ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 33685504ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 1374389534720ULL) == 0)
-                    ++result;
+                    result++;
                 if((curcheckw & 8590065664ULL) == 0)
-                    ++result;
+                    result++;
             return result;
         }
     }
@@ -1225,25 +1274,23 @@ vector<field> pl;
 vector<uint8_t> pr;
 vector<int8_t> eval;
 
-unordered_map<field, int, field> cache;
-
 struct ttentry{
-    int eval;
-    bool flag;
-    bool notcutoff;
+	int score;
+	uint8_t flag;
 };
 
-vector<unordered_map<field, ttentry, field>> transportationtable;
+
+unordered_map<field, int, field> cache;
+
+unordered_map<field, ttentry, field> TranspositionTable;
 
 const int mincachedepth = 9;
 
-//7 745206 28000mb
-//8 745354 21700mb
-//9 743308 18000mb #
-//10 862331 14100mb
+//6 14213 892mb
+//7 12659 691mb
+//8 13345 525mb
 
 const int minscoredepth = 9;
-
 
 
 //0 92668
@@ -1260,7 +1307,7 @@ const int minscoredepth = 9;
 //11 82022
 //99 92942
 
-void sorter(int &index1, int &index2, int &index3, int &index4, int &index5, int &index6, int &index7, int &score1, int &score2, int &score3, int &score4, int &score5, int &score6, int &score7){
+inline void sorter(int &index1, int &index2, int &index3, int &index4, int &index5, int &index6, int &index7, int &score1, int &score2, int &score3, int &score4, int &score5, int &score6, int &score7){
     int t = -1;
     if (score1 < score2) {
         t = score1;
@@ -3107,32 +3154,33 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
+        int alphabeg = alpha, maxscore = depth - 2;
         if(depth > mincachedepth){
-            auto it = transportationtable[depth].find({cfir, csec});
-            if (it != transportationtable[depth].end()){
+            auto it = TranspositionTable.find({cfir, csec});
+            if (it != TranspositionTable.end()){
                 ttentry entry = it->second;
-                if(entry.notcutoff){
-                    if(entry.eval <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
+                if(entry.flag & 1){
+                    if(entry.score <= alpha) //if current alpha >= cached alpha then the alpha during evaluation wont change, thus we can return the current alpha
                         return alpha;
-                    if(entry.flag) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
-                        return entry.eval;
-                    beta = entry.eval;
+                    if(entry.flag > 1) //if the cached alpha is exact and it is bigger than the current alpha (because of the condition above) then we can return it
+                        return entry.score;
+                    beta = min(beta, entry.score);
                     //cached alpha is lower bound
                 }
                 else
                 {
-                    if(entry.eval > alpha){
-                        if(entry.eval >= beta)
-                            return entry.eval;
-                        alpha = entry.eval;
+                    if(entry.score > alpha){
+                        if(entry.score >= beta)
+                            return entry.score;
+                        alpha = entry.score;
                     }
                 }
-                
             }
+            alphabeg = alpha;
         }
-        int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, maxscore = depth - 2, alphabeg = alpha;
+        //888070
         if(depth > minscoredepth){
-            int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0, score6 = 0, score7 = 0;
+            int index1 = 3, index2 = 4, index3 = 2, index4 = 5, index5 = 1, index6 = 6, index7 = 0, score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0, score6 = 0, score7 = 0;
             if(left4 > 0)
                 score1 = scoremove(tfir, 3, left4);
             if(left5 > 0)
@@ -3148,24 +3196,749 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
             if(left1 > 0)
                 score7 = scoremove(tfir, 0, left1);
             sorter(index1, index2, index3, index4, index5, index6, index7, score1, score2, score3, score4, score5, score6, score7);
+            switch(index1){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
+            switch(index2){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
+            switch(index3){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
+            switch(index4){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
+            switch(index5){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
+            switch(index6){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
+            switch(index7){
+                case 0:
+                if(left1 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 1:
+                if(left2 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 2:
+                if(left3 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 3:
+                if(left4 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 4:
+                if(left5 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 5:
+                if(left6 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+                case 6:
+                if(left7 > 0){
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    if(reschild > maxscore)
+                        return reschild;
+                    if(reschild > alpha){
+                        if(beta <= reschild){
+                            if(depth > mincachedepth)
+                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            return reschild;
+                        }
+                        alpha = reschild;
+                    }
+                }
+                break;
+            }
         }
-        switch(index1){
-            case 0:
-            if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+        else
+        {
+            if(left4 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
                     if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
-            break;
-            case 1:
+            if(left3 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild){
+                        return reschild;
+                    }
+                    alpha = reschild;
+                }
+            }
+            if(left5 > 0){
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                if(reschild > maxscore)
+                    return reschild;
+                if(reschild > alpha){
+                    if(beta <= reschild){
+                        return reschild;
+                    }
+                    alpha = reschild;
+                }
+            }
             if(left2 > 0){
                 int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
                 if(reschild > maxscore)
@@ -3173,59 +3946,12 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
+                            TranspositionTable[{cfir, csec}] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
             if(left6 > 0){
                 int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
                 if(reschild > maxscore)
@@ -3233,31 +3959,12 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
+                            TranspositionTable[{cfir, csec}] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
-            break;
-            case 6:
-            if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-        }
-        switch(index2){
-            case 0:
             if(left1 > 0){
                 int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
                 if(reschild > maxscore)
@@ -3265,89 +3972,12 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
+                            TranspositionTable[{cfir, csec}] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
-            break;
-            case 1:
-            if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
-            if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 6:
             if(left7 > 0){
                 int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
                 if(reschild > maxscore)
@@ -3355,551 +3985,16 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
+                            TranspositionTable[{cfir, csec}] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
-            break;
         }
-        switch(index3){
-            case 0:
-            if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 1:
-            if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
-            if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 6:
-            if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
+        if(depth > mincachedepth){
+            TranspositionTable[{cfir, csec}] = {alpha, (alpha > alphabeg) ? uint8_t(3) : uint8_t(1)};
         }
-        switch(index4){
-            case 0:
-            if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 1:
-            if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
-            if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 6:
-            if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-        }
-        switch(index5){
-            case 0:
-            if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 1:
-            if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
-            if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 6:
-            if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-        }
-        switch(index6){
-            case 0:
-            if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 1:
-            if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
-            if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 6:
-            if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-        }
-        switch(index7){
-            case 0:
-            if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 1:
-            if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 2:
-            if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 3:
-            if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 4:
-            if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 5:
-            if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-            case 6:
-            if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-                if(reschild > maxscore)
-                    return reschild;
-                if(reschild > alpha){
-                    if(beta <= reschild){
-                        if(depth > mincachedepth)
-                            transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-                        return reschild;
-                    }
-                    alpha = reschild;
-                }
-            }
-            break;
-        }
-        if(depth > mincachedepth)
-            transportationtable[depth][{cfir,csec}] = {alpha, (alpha > alphabeg) ? true : false, true};
         return alpha;
     }
     else
@@ -5563,40 +5658,39 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
+        int minscore = 2 - depth, betabeg = beta;
         if(depth > mincachedepth){
-            auto it = transportationtable[depth].find({cfir, csec});
-            if (it != transportationtable[depth].end()){
+            auto it = TranspositionTable.find({cfir, csec});
+            if (it != TranspositionTable.end()){
                 ttentry entry = it->second;
-                if(entry.notcutoff){
-                    if(entry.eval >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
+                if(entry.flag & 1){
+                    if(entry.score >= beta) //if current beta <= cached beta then the beta during evaluation wont change, thus we can return the current beta
                         return beta;
-                    if(entry.flag) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
-                        return entry.eval;
-                    alpha = entry.eval;
+                    if(entry.flag > 1) //if the cached beta is exact and it is smaller than the current beta (because of the condition above) then we can return it
+                        return entry.score;
+                    alpha = max(alpha, entry.score);
                     //cached beta is upper bound
                 }
                 else
                 {
-                    if(entry.eval < beta){
-                        if(entry.eval <= alpha)
-                            return entry.eval;
-                        beta = entry.eval;
+                    if(entry.score < beta){
+                        if(entry.score <= alpha)
+                            return entry.score;
+                        beta = entry.score;
                     }
                 }
             }
+            betabeg = beta;
         }
-        int minscore = 2 - depth, betabeg = beta;
         if(left4 > 0){
             int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
-                    if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                    return reschild;
                 }
-				beta = reschild;
+                beta = reschild;
 			}
         }
         if(left3 > 0){
@@ -5605,11 +5699,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
-                    if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                    return reschild;
                 }
-				beta = reschild;
+                beta = reschild;
 			}
         }
         if(left5 > 0){
@@ -5618,11 +5710,9 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
-                    if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                    return reschild;
                 }
-				beta = reschild;
+                beta = reschild;
 			}
         }
         if(left2 > 0){
@@ -5632,10 +5722,10 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                    return reschild;
                 }
-				beta = reschild;
+                beta = reschild;
 			}
         }
         if(left6 > 0){
@@ -5645,10 +5735,10 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                    return reschild;
                 }
-				beta = reschild;
+                beta = reschild;
 			}
         }
         if(left1 > 0){
@@ -5658,10 +5748,10 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                    return reschild;
                 }
-				beta = reschild;
+                beta = reschild;
 			}
         }
         if(left7 > 0){
@@ -5671,27 +5761,27 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        transportationtable[depth][{cfir,csec}] = {reschild, false, false};
-					return reschild;
+                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                    return reschild;
                 }
                 beta = reschild;
 			}
         }
-        if(depth > mincachedepth)
-            transportationtable[depth][{cfir,csec}] = {beta, (beta < betabeg) ? true : false, true};
+        if(depth > mincachedepth){
+            TranspositionTable[{cfir,csec}] = {beta, (beta < betabeg) ? uint8_t(3) : uint8_t(1)};
+        }
         return beta;
     }
 }
 
 pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
-    transportationtable.resize(depth);
-    // res4: 1 455644
-    // res3: 1 22976
-    // res5: 1 38033
-    // res2: 1 103246
-    // res6: 1 65676
-    // res1: 1 1957
-    // res7: 1 883
+    // res4: 1 397602
+    // res3: 1 26880
+    // res5: 1 39074
+    // res2: 1 161362
+    // res6: 1 71138
+    // res1: 1 2202
+    // res7: 1 879
     if(player){
         if(left4 > 0)
             if(cw(cfir, 3, left4))
@@ -5921,6 +6011,9 @@ int main(){
 	loadai.close();
 	for (;;)
     {
+        if(TranspositionTable.size() > 0){
+            TranspositionTable.clear();
+        }
 		field curpos = {0, 0};
 		uint8_t last;
         int8_t ceval = -1;
