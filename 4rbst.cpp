@@ -1292,6 +1292,8 @@ const int mincachedepth = 9;
 
 const int minscoredepth = 9;
 
+const bool showstats = true;
+
 
 //0 92668
 //1 
@@ -1493,7 +1495,7 @@ inline void sorter(int &index1, int &index2, int &index3, int &index4, int &inde
     }
 }
 
-int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
+int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cfir, const uint64_t csec, const uint32_t left1, const uint32_t left2, const uint32_t left3, const uint32_t left4, const uint32_t left5, const uint32_t left6, const uint32_t left7){
     if(player){
         uint64_t tfir = ~cfir;
         if(left4 > 0)
@@ -3154,7 +3156,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
-        int alphabeg = alpha, maxscore = depth - 2;
+        int alphabeg, maxscore = depth - 2;
         if(depth > mincachedepth){
             auto it = TranspositionTable.find({cfir, csec});
             if (it != TranspositionTable.end()){
@@ -5658,7 +5660,7 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
         depth--;
         if(depth == 0)
             return 0;
-        int minscore = 2 - depth, betabeg = beta;
+        int betabeg, minscore = 2 - depth;
         if(depth > mincachedepth){
             auto it = TranspositionTable.find({cfir, csec});
             if (it != TranspositionTable.end()){
@@ -5774,6 +5776,187 @@ int minimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t
     }
 }
 
+int concurrentminimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
+    int tcount = 0;
+    if(player){
+        if(left4 > 0){
+            if(cw(cfir, 3, left4))
+                return depth;
+            ++tcount;
+        }
+        if(left3 > 0){
+            if(cw(cfir, 2, left3))
+                return depth;
+            ++tcount;
+        }
+        if(left5 > 0){
+            if(cw(cfir, 4, left5))
+                return depth;
+            ++tcount;
+        }
+        if(left2 > 0){
+            if(cw(cfir, 1, left2))
+                return depth;
+            ++tcount;
+        }
+        if(left6 > 0){
+            if(cw(cfir, 5, left6))
+                return depth;
+            ++tcount;
+        }
+        if(left1 > 0){
+            if(cw(cfir, 0, left1))
+                return depth;
+            ++tcount;
+        }
+        if(left7 > 0){
+            if(cw(cfir, 6, left7))
+                return depth;
+            ++tcount;
+        }
+        vector<thread> threads(tcount);
+        vector<int> scores(tcount);
+        tcount = 0;
+        if(left4 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left3 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left5 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left2 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left6 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+            });
+            ++tcount;
+        }
+        if(left1 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left7 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+            });
+            ++tcount;
+        }
+        for(int i = 0; i < tcount; ++i)
+            threads[i].join();
+        for(int i = 0; i < tcount; ++i)
+            if(scores[i] > alpha)
+                alpha = scores[i];
+        return alpha;
+    }
+    else
+    {
+        if(left4 > 0){
+            if(cw(csec, 3, left4))
+                return -depth;
+            ++tcount;
+        }
+        if(left3 > 0){
+            if(cw(csec, 2, left3))
+                return -depth;
+            ++tcount;
+        }
+        if(left5 > 0){
+            if(cw(csec, 4, left5))
+                return -depth;
+            ++tcount;
+        }
+        if(left2 > 0){
+            if(cw(csec, 1, left2))
+                return -depth;
+            ++tcount;
+        }
+        if(left6 > 0){
+            if(cw(csec, 5, left6))
+                return -depth;
+            ++tcount;
+        }
+        if(left1 > 0){
+            if(cw(csec, 0, left1))
+                return -depth;
+            ++tcount;
+        }
+        if(left7 > 0){
+            if(cw(csec, 6, left7))
+                return -depth;
+            ++tcount;
+        }
+        vector<thread> threads(tcount);
+        vector<int> scores(tcount);
+        tcount = 0;
+        if(left4 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left3 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left5 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left2 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left6 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+            });
+            ++tcount;
+        }
+        if(left1 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+            });
+            ++tcount;
+        }
+        if(left7 > 0){
+            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
+                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+            });
+            ++tcount;
+        }
+        for(int i = 0; i < tcount; ++i)
+            threads[i].join();
+        for(int i = 0; i < tcount; ++i)
+            if(scores[i] < beta)
+                beta = scores[i];
+        return beta;
+    }
+}
+
 pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
     // res4: 1 397602
     // res3: 1 26880
@@ -5807,88 +5990,144 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
         int ret = -1;
         auto start = high_resolution_clock::now();
         if(left4 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-            cout << "res4: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+            if(showstats)
+                cout << "res4 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 3;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         auto end = high_resolution_clock::now();
         auto duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left3 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-            cout << "res3: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+            if(showstats)
+                cout << "res3 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 2;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         end = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left5 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-            cout << "res5: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+            if(showstats)
+                cout << "res5 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 4;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         end = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left2 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-            cout << "res2: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+            if(showstats)
+                cout << "res2 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 1;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         end = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left6 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-            cout << "res6: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+            if(showstats)
+                cout << "res6 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 5;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         end = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left1 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-            cout << "res1: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+            if(showstats)
+                cout << "res1 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 0;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         end = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left7 > 0){
-            int reschild = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-            cout << "res7: " << reschild << " ";
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+            if(reschild > alpha)
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+            if(showstats)
+                cout << "res7 ";
             if(reschild > alpha){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 alpha = reschild;
                 ret = 6;
             }
+            else if(showstats)
+                cout << "\033[31m<= \033[0m" << alpha << " ";
         }
         end = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(end - start);
-        cout << duration.count() << endl;
+        if(showstats)
+            cout << duration.count() << endl;
         return make_pair(ret, alpha);
     }
     else
@@ -5915,62 +6154,146 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if(cw(csec, 6, left7))
                 return make_pair(6, -depth);
         int ret = -1;
+        auto start = high_resolution_clock::now();
         if(left4 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
-            cout << "res4: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
+            if(showstats)
+                cout << "res4 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 3;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
+        start = high_resolution_clock::now();
         if(left3 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-            cout << "res3: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+            if(showstats)
+                cout << "res3 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 2;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        end = high_resolution_clock::now();
+        duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
+        start = high_resolution_clock::now();
         if(left5 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-            cout << "res5: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+            if(showstats)
+                cout << "res5 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 4;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        end = high_resolution_clock::now();
+        duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
+        start = high_resolution_clock::now();
         if(left2 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-            cout << "res2: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+            if(showstats)
+                cout << "res2 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 1;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        end = high_resolution_clock::now();
+        duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
+        start = high_resolution_clock::now();
         if(left6 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-            cout << "res6: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+            if(showstats)
+                cout << "res6 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 5;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        end = high_resolution_clock::now();
+        duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
+        start = high_resolution_clock::now();
         if(left1 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-            cout << "res1: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+            if(showstats)
+                cout << "res1 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 0;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        end = high_resolution_clock::now();
+        duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
+        start = high_resolution_clock::now();
         if(left7 > 0){
-            int reschild = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-            cout << "res7: " << reschild << " ";
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+            if(reschild < beta)
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+            if(showstats)
+                cout << "res7 ";
             if(reschild < beta){
+                if(showstats)
+                    cout << "\033[32m== \033[0m" << reschild << " ";
                 beta = reschild;
                 ret = 6;
             }
+            else if(showstats)
+                cout << "\033[31m>= \033[0m" << beta << " ";
         }
+        end = high_resolution_clock::now();
+        duration = duration_cast<milliseconds>(end - start);
+        if(showstats)
+            cout << duration.count() << endl;
         return make_pair(ret, beta);
     }
 }
@@ -6018,13 +6341,13 @@ int main(){
 		uint8_t last;
         int8_t ceval = -1;
         cout << "Start first? " << endl;
-        bool start = 0;
-        cin >> start;
+        bool start = rand() % 2;
+        //cin >> start;
 		uint32_t left[7] = {6,6,6,6,6,6,6};
 		if (start == 0)
 		{
 			//cout << "bot starts first" << endl;
-			for (int itmain = 0;; ++itmain)
+			for (int itmain = 0; itmain < 4; ++itmain)
 			{               
                 auto it = cache.find(curpos);
                 if(it != cache.end()){
@@ -6087,9 +6410,9 @@ int main(){
 				int p2;
 				for (;;)
 				{
-					cout << "Your move: ";
-					cin >> p2;
-                    //p2 = (rand() % 7) + 1;
+					//cout << "Your move: ";
+					//cin >> p2;
+                    p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -6116,15 +6439,15 @@ int main(){
 		else
         {
             //cout << "you start first" << endl;
-            for (int itmain = 0;; ++itmain)
+            for (int itmain = 0; itmain < 4; ++itmain)
             {
                 display(curpos);
                 int p2;
 				for (;;)
 				{
-					cout << "Your move: ";
-					cin >> p2;
-                    //p2 = (rand() % 7) + 1;
+					//cout << "Your move: ";
+					//cin >> p2;
+                    p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
