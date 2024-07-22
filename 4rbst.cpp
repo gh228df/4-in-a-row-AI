@@ -6162,7 +6162,7 @@ int main(){
         }
 		field curpos = {0, 562949953421311};
 		uint8_t last;
-        int8_t ceval = -1;
+        int8_t ceval = -100;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
         cin >> start;
@@ -6188,7 +6188,7 @@ int main(){
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth + 1);
                     int t;
-                    if(ceval == -1)
+                    if(ceval == -100)
                         t = 0;
                     else
                         t = ceval - 1;
@@ -6305,7 +6305,7 @@ int main(){
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth);
                     int t;
-                    if(ceval == -1)
+                    if(ceval == -100)
                         t = 3;
                     else
                         t = ceval + 1;
