@@ -98,7 +98,6 @@ void debug(string color, string init, uint32_t* to_debug, int size){
 }
 
 inline bool cw(uint64_t curcheckw, int last, uint32_t left){
-    curcheckw = ~curcheckw;
     switch(last){
         case 0:
         switch(left){
@@ -1279,10 +1278,13 @@ struct ttentry{
 	uint8_t flag;
 };
 
+inline uint64_t generatecache(const uint64_t &cfir, const uint32_t &left1, const uint32_t &left2, const uint32_t &left3, const uint32_t &left4, const uint32_t &left5, const uint32_t &left6, const uint32_t &left7){
+    return (cfir | (1LL << (42 - left1 * 7)) | (1LL << (43 - left2 * 7)) | (1LL << (44 - left3 * 7)) | (1LL << (45 - left4 * 7)) | (1LL << (46 - left5 * 7)) | (1LL << (47 - left6 * 7)) | (1LL << (48 - left7 * 7)));
+}
 
 unordered_map<field, int, field> cache;
 
-unordered_map<field, ttentry, field> TranspositionTable;
+unordered_map<uint64_t, ttentry> TranspositionTable;
 
 const int mincachedepth = 9;
 
@@ -1308,6 +1310,22 @@ const bool showstats = true;
 //10 82597
 //11 82022
 //99 92942
+
+void display(field pos){
+    for (int u = 41; u > -1; --u)
+    {
+        if(((pos.sec >> u) & 1) == 0){
+            if((pos.fir >> u) & 1)
+                cout << "\033[31mX \033[0m";
+            else
+                cout << "\033[32mO \033[0m";
+        }
+        else
+            cout << ". ";
+        if(u % 7 == 0)
+            cout << endl;
+    }
+}
 
 inline void sorter(int &index1, int &index2, int &index3, int &index4, int &index5, int &index6, int &index7, int &score1, int &score2, int &score3, int &score4, int &score5, int &score6, int &score7){
     int t = -1;
@@ -3158,7 +3176,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             return 0;
         int alphabeg, maxscore = depth - 2;
         if(depth > mincachedepth){
-            auto it = TranspositionTable.find({cfir, csec});
+            auto it = TranspositionTable.find(cfir | (csec << 7));
             if (it != TranspositionTable.end()){
                 ttentry entry = it->second;
                 if(entry.flag & 1){
@@ -3201,13 +3219,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index1){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3216,13 +3234,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3231,7 +3249,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3244,7 +3262,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3257,7 +3275,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3270,13 +3288,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3285,13 +3303,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3302,13 +3320,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index2){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3317,13 +3335,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3332,7 +3350,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3345,7 +3363,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3358,7 +3376,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3371,13 +3389,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3386,13 +3404,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3403,13 +3421,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index3){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3418,13 +3436,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3433,7 +3451,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3446,7 +3464,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3459,7 +3477,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3472,13 +3490,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3487,13 +3505,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3504,13 +3522,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index4){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3519,13 +3537,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3534,7 +3552,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3547,7 +3565,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3560,7 +3578,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3573,13 +3591,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3588,13 +3606,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3605,13 +3623,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index5){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3620,13 +3638,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3635,7 +3653,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3648,7 +3666,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3661,7 +3679,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3674,13 +3692,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3689,13 +3707,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3706,13 +3724,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index6){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3721,13 +3739,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3736,7 +3754,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3749,7 +3767,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3762,7 +3780,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3775,13 +3793,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3790,13 +3808,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3807,13 +3825,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             switch(index7){
                 case 0:
                 if(left1 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3822,13 +3840,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 1:
                 if(left2 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3837,7 +3855,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 2:
                 if(left3 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3850,7 +3868,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 3:
                 if(left4 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3863,7 +3881,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 4:
                 if(left5 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
@@ -3876,13 +3894,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 5:
                 if(left6 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3891,13 +3909,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 break;
                 case 6:
                 if(left7 > 0){
-                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                    int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                     if(reschild > maxscore)
                         return reschild;
                     if(reschild > alpha){
                         if(beta <= reschild){
                             if(depth > mincachedepth)
-                                TranspositionTable[{cfir, csec}] = {reschild, 0};
+                                TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                             return reschild;
                         }
                         alpha = reschild;
@@ -3909,7 +3927,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
         else
         {
             if(left4 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
@@ -3920,7 +3938,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 }
             }
             if(left3 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
@@ -3931,7 +3949,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 }
             }
             if(left5 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
@@ -3942,52 +3960,52 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
                 }
             }
             if(left2 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
             if(left6 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
             if(left1 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
                 }
             }
             if(left7 > 0){
-                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                int reschild = minimax(depth, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
                 if(reschild > maxscore)
                     return reschild;
                 if(reschild > alpha){
                     if(beta <= reschild){
                         if(depth > mincachedepth)
-                            TranspositionTable[{cfir, csec}] = {reschild, 0};
+                            TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                         return reschild;
                     }
                     alpha = reschild;
@@ -3995,13 +4013,13 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             }
         }
         if(depth > mincachedepth){
-            TranspositionTable[{cfir, csec}] = {alpha, (alpha > alphabeg) ? uint8_t(3) : uint8_t(1)};
+            TranspositionTable[cfir | (csec << 7)] = {alpha, (alpha > alphabeg) ? uint8_t(3) : uint8_t(1)};
         }
         return alpha;
     }
     else
     {
-        uint64_t tsec = ~csec;
+        uint64_t tsec = cfir | csec;
         if(left4 > 0)
             switch(left4){
             case 6:
@@ -5662,7 +5680,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             return 0;
         int betabeg, minscore = 2 - depth;
         if(depth > mincachedepth){
-            auto it = TranspositionTable.find({cfir, csec});
+            auto it = TranspositionTable.find(cfir | (csec << 7));
             if (it != TranspositionTable.end()){
                 ttentry entry = it->second;
                 if(entry.flag & 1){
@@ -5685,7 +5703,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
             betabeg = beta;
         }
         if(left4 > 0){
-            int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
@@ -5696,7 +5714,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
 			}
         }
         if(left3 > 0){
-			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
@@ -5707,7 +5725,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
 			}
         }
         if(left5 > 0){
-			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
@@ -5718,241 +5736,60 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
 			}
         }
         if(left2 > 0){
-			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                        TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                     return reschild;
                 }
                 beta = reschild;
 			}
         }
         if(left6 > 0){
-			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                        TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                     return reschild;
                 }
                 beta = reschild;
 			}
         }
         if(left1 > 0){
-			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                        TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                     return reschild;
                 }
                 beta = reschild;
 			}
         }
         if(left7 > 0){
-			int reschild = minimax(depth, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+			int reschild = minimax(depth, true, beta, alpha, cfir, csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if(reschild < minscore)
                 return reschild;
 			if(reschild < beta){
 				if(reschild <= alpha){
                     if(depth > mincachedepth)
-                        TranspositionTable[{cfir, csec}] = {reschild, 0};
+                        TranspositionTable[cfir | (csec << 7)] = {reschild, 0};
                     return reschild;
                 }
                 beta = reschild;
 			}
         }
         if(depth > mincachedepth){
-            TranspositionTable[{cfir,csec}] = {beta, (beta < betabeg) ? uint8_t(3) : uint8_t(1)};
+            TranspositionTable[cfir | (csec << 7)] = {beta, (beta < betabeg) ? uint8_t(3) : uint8_t(1)};
         }
-        return beta;
-    }
-}
-
-int concurrentminimax(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7){
-    int tcount = 0;
-    if(player){
-        if(left4 > 0){
-            if(cw(cfir, 3, left4))
-                return depth;
-            ++tcount;
-        }
-        if(left3 > 0){
-            if(cw(cfir, 2, left3))
-                return depth;
-            ++tcount;
-        }
-        if(left5 > 0){
-            if(cw(cfir, 4, left5))
-                return depth;
-            ++tcount;
-        }
-        if(left2 > 0){
-            if(cw(cfir, 1, left2))
-                return depth;
-            ++tcount;
-        }
-        if(left6 > 0){
-            if(cw(cfir, 5, left6))
-                return depth;
-            ++tcount;
-        }
-        if(left1 > 0){
-            if(cw(cfir, 0, left1))
-                return depth;
-            ++tcount;
-        }
-        if(left7 > 0){
-            if(cw(cfir, 6, left7))
-                return depth;
-            ++tcount;
-        }
-        vector<thread> threads(tcount);
-        vector<int> scores(tcount);
-        tcount = 0;
-        if(left4 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left3 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left5 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left2 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left6 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
-            });
-            ++tcount;
-        }
-        if(left1 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left7 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, false, beta, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
-            });
-            ++tcount;
-        }
-        for(int i = 0; i < tcount; ++i)
-            threads[i].join();
-        for(int i = 0; i < tcount; ++i)
-            if(scores[i] > alpha)
-                alpha = scores[i];
-        return alpha;
-    }
-    else
-    {
-        if(left4 > 0){
-            if(cw(csec, 3, left4))
-                return -depth;
-            ++tcount;
-        }
-        if(left3 > 0){
-            if(cw(csec, 2, left3))
-                return -depth;
-            ++tcount;
-        }
-        if(left5 > 0){
-            if(cw(csec, 4, left5))
-                return -depth;
-            ++tcount;
-        }
-        if(left2 > 0){
-            if(cw(csec, 1, left2))
-                return -depth;
-            ++tcount;
-        }
-        if(left6 > 0){
-            if(cw(csec, 5, left6))
-                return -depth;
-            ++tcount;
-        }
-        if(left1 > 0){
-            if(cw(csec, 0, left1))
-                return -depth;
-            ++tcount;
-        }
-        if(left7 > 0){
-            if(cw(csec, 6, left7))
-                return -depth;
-            ++tcount;
-        }
-        vector<thread> threads(tcount);
-        vector<int> scores(tcount);
-        tcount = 0;
-        if(left4 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left3 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left5 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left2 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left6 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
-            });
-            ++tcount;
-        }
-        if(left1 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
-            });
-            ++tcount;
-        }
-        if(left7 > 0){
-            threads[tcount] = thread([&scores, tcount, depth, alpha, beta, cfir, csec, left1, left2, left3, left4, left5, left6, left7]() {
-                scores[tcount] = minimax(depth - 1, true, beta, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
-            });
-            ++tcount;
-        }
-        for(int i = 0; i < tcount; ++i)
-            threads[i].join();
-        for(int i = 0; i < tcount; ++i)
-            if(scores[i] < beta)
-                beta = scores[i];
         return beta;
     }
 }
@@ -5967,32 +5804,32 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
     // res7: 1 879
     if(player){
         if(left4 > 0)
-            if(cw(cfir, 3, left4))
+            if(cw(~cfir, 3, left4))
                 return make_pair(3, depth);
         if(left3 > 0)
-            if(cw(cfir, 2, left3))
+            if(cw(~cfir, 2, left3))
                 return make_pair(2, depth);
         if(left5 > 0)
-            if(cw(cfir, 4, left5))
+            if(cw(~cfir, 4, left5))
                 return make_pair(4, depth);
         if(left2 > 0)
-            if(cw(cfir, 1, left2))
+            if(cw(~cfir, 1, left2))
                 return make_pair(1, depth);
         if(left6 > 0)
-            if(cw(cfir, 5, left6))
+            if(cw(~cfir, 5, left6))
                 return make_pair(5, depth);
         if(left1 > 0)
-            if(cw(cfir, 0, left1))
+            if(cw(~cfir, 0, left1))
                 return make_pair(0, depth);
         if(left7 > 0)
-            if(cw(cfir, 6, left7))
+            if(cw(~cfir, 6, left7))
                 return make_pair(6, depth);
         int ret = -1;
         auto start = high_resolution_clock::now();
         if(left4 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (45 - (left4) * 7)), csec, left1, left2, left3, left4 - 1, left5, left6, left7);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(showstats)
                 cout << "res4 ";
             if(reschild > alpha){
@@ -6010,9 +5847,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left3 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (44 - (left3) * 7)), csec, left1, left2, left3 - 1, left4, left5, left6, left7);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if(showstats)
                 cout << "res3 ";
             if(reschild > alpha){
@@ -6030,9 +5867,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left5 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (46 - (left5) * 7)), csec, left1, left2, left3, left4, left5 - 1, left6, left7);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if(showstats)
                 cout << "res5 ";
             if(reschild > alpha){
@@ -6050,9 +5887,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left2 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (43 - (left2) * 7)), csec, left1, left2 - 1, left3, left4, left5, left6, left7);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if(showstats)
                 cout << "res2 ";
             if(reschild > alpha){
@@ -6070,9 +5907,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left6 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (47 - (left6) * 7)), csec, left1, left2, left3, left4, left5, left6 - 1, left7);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if(showstats)
                 cout << "res6 ";
             if(reschild > alpha){
@@ -6090,9 +5927,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left1 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (42 - (left1) * 7)), csec, left1 - 1, left2, left3, left4, left5, left6, left7);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if(showstats)
                 cout << "res1 ";
             if(reschild > alpha){
@@ -6110,9 +5947,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left7 > 0){
-            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+            int reschild = minimax(depth - 1, false, alpha + 1, alpha, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if(reschild > alpha)
-                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (48 - (left7) * 7)), csec, left1, left2, left3, left4, left5, left6, left7 - 1);
+                reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if(showstats)
                 cout << "res7 ";
             if(reschild > alpha){
@@ -6133,32 +5970,32 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
     else
     {
         if(left4 > 0)
-            if(cw(csec, 3, left4))
+            if(cw(cfir | csec, 3, left4))
                 return make_pair(3, -depth);
         if(left3 > 0)
-            if(cw(csec, 2, left3))
+            if(cw(cfir | csec, 2, left3))
                 return make_pair(2, -depth);
         if(left5 > 0)
-            if(cw(csec, 4, left5))
+            if(cw(cfir | csec, 4, left5))
                 return make_pair(4, -depth);
         if(left2 > 0)
-            if(cw(csec, 1, left2))
+            if(cw(cfir | csec, 1, left2))
                 return make_pair(1, -depth);
         if(left6 > 0)
-            if(cw(csec, 5, left6))
+            if(cw(cfir | csec, 5, left6))
                 return make_pair(5, -depth);
         if(left1 > 0)
-            if(cw(csec, 0, left1))
+            if(cw(cfir | csec, 0, left1))
                 return make_pair(0, -depth);
         if(left7 > 0)
-            if(cw(csec, 6, left7))
+            if(cw(cfir | csec, 6, left7))
                 return make_pair(6, -depth);
         int ret = -1;
         auto start = high_resolution_clock::now();
         if(left4 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if(showstats)
                 cout << "res4 ";
             if(reschild < beta){
@@ -6176,9 +6013,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left3 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if(showstats)
                 cout << "res3 ";
             if(reschild < beta){
@@ -6196,9 +6033,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left5 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if(showstats)
                 cout << "res5 ";
             if(reschild < beta){
@@ -6216,9 +6053,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left2 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if(showstats)
                 cout << "res2 ";
             if(reschild < beta){
@@ -6236,9 +6073,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left6 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if(showstats)
                 cout << "res6 ";
             if(reschild < beta){
@@ -6256,9 +6093,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left1 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if(showstats)
                 cout << "res1 ";
             if(reschild < beta){
@@ -6276,9 +6113,9 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             cout << duration.count() << endl;
         start = high_resolution_clock::now();
         if(left7 > 0){
-            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+            int reschild = minimax(depth - 1, true, beta, beta - 1, cfir, csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if(reschild < beta)
-                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec | (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
+                reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if(showstats)
                 cout << "res7 ";
             if(reschild < beta){
@@ -6295,20 +6132,6 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
         if(showstats)
             cout << duration.count() << endl;
         return make_pair(ret, beta);
-    }
-}
-
-void display(field pos){
-    for (int u = 41; u > -1; --u)
-    {
-        if((pos.fir >> u) & 1)
-            cout << "\033[31mX \033[0m";
-        else if((pos.sec >> u) & 1)
-            cout << "\033[32mO \033[0m";
-        else
-            cout << ". ";
-        if(u % 7 == 0)
-            cout << endl;
     }
 }
 
@@ -6337,17 +6160,17 @@ int main(){
         if(TranspositionTable.size() > 0){
             TranspositionTable.clear();
         }
-		field curpos = {0, 0};
+		field curpos = {0, 562949953421311};
 		uint8_t last;
         int8_t ceval = -1;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
-        //cin >> start;
+        cin >> start;
 		uint32_t left[7] = {6,6,6,6,6,6,6};
 		if (start == 0)
 		{
 			//cout << "bot starts first" << endl;
-			for (int itmain = 0; itmain < 4; ++itmain)
+			for (int itmain = 0;; ++itmain)
 			{               
                 auto it = cache.find(curpos);
                 if(it != cache.end()){
@@ -6399,7 +6222,8 @@ int main(){
                 debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) - ceval, "moves");
                 debug("\033[32m", "D", "move: ", last + 1);
                 curpos.fir |= (1LL << (42 - (left[last]) * 7 + last));
-				if (cw(curpos.fir, last, left[last]))
+                curpos.sec ^= (1LL << (42 - (left[last]) * 7 + last));
+				if (cw(~curpos.fir, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
 					display(curpos);
@@ -6410,22 +6234,22 @@ int main(){
 				int p2;
 				for (;;)
 				{
-					//cout << "Your move: ";
-					//cin >> p2;
-                    p2 = (rand() % 7) + 1;
+					cout << "Your move: ";
+					cin >> p2;
+                    //p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-                        curpos.sec |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
+                        curpos.sec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
 						break;
 					}
 				}
-				if (cw(curpos.sec, p2 - 1, left[p2 - 1]))
+				if (cw(curpos.fir | curpos.sec, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-					display(curpos);
+				    display(curpos);
 					break;
 				}
 				left[p2 - 1]--;
@@ -6439,25 +6263,26 @@ int main(){
 		else
         {
             //cout << "you start first" << endl;
-            for (int itmain = 0; itmain < 4; ++itmain)
+            for (int itmain = 0;; ++itmain)
             {
                 display(curpos);
                 int p2;
 				for (;;)
 				{
-					//cout << "Your move: ";
-					//cin >> p2;
-                    p2 = (rand() % 7) + 1;
+					cout << "Your move: ";
+					cin >> p2;
+                    //p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
                         curpos.fir |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
+                        curpos.sec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
 						break;
 					}
 				}
-				if (cw(curpos.fir, p2 - 1, left[p2 - 1]))
+				if (cw(~curpos.fir, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
 					display(curpos);
@@ -6518,8 +6343,8 @@ int main(){
                 else
                     debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) + ceval, "moves");
                 debug("\033[32m", "D", "move: ", last + 1);
-                curpos.sec |= (1LL << (42 - (left[last]) * 7 + last));
-				if (cw(curpos.sec, last, left[last]))
+                curpos.sec ^= (1LL << (42 - (left[last]) * 7 + last));
+				if (cw(curpos.fir | curpos.sec, last, left[last]))
 				{
 					cout << "Looks like pc won" << endl;
 					display(curpos);
