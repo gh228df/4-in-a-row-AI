@@ -97,8 +97,8 @@ void debug(string color, string init, uint32_t* to_debug, int size){
     cout << endl;
 }
 
-inline bool cw(uint64_t curcheckw, int last, uint32_t left){
-    switch(last){
+inline bool cw(uint64_t curcheckw, int moveindex, uint32_t left){
+    switch(moveindex){
         case 0:
         switch(left){
             case 6:
@@ -633,11 +633,11 @@ inline bool cw(uint64_t curcheckw, int last, uint32_t left){
     }
 }
 
-inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
+inline int scoremove(uint64_t curcheckw, uint32_t moveindex, uint32_t left){
     int result = 0;
     switch(left){
     case 6:
-        switch(last){
+        switch(moveindex){
             case 0:
                 if((curcheckw & 16842752ULL) == 0)
                     result++;
@@ -686,7 +686,7 @@ inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
             return result;
         }
     case 5:
-        switch(last){
+        switch(moveindex){
             case 0:
                 if((curcheckw & 1536ULL) == 0)
                     result++;
@@ -799,7 +799,7 @@ inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
             return result;
         }
     case 4:
-        switch(last){
+        switch(moveindex){
             case 0:
                 if((curcheckw & 196608ULL) == 0)
                     result++;
@@ -928,7 +928,7 @@ inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
             return result;
         }
     case 3:
-        switch(last){
+        switch(moveindex){
             case 0:
                 if((curcheckw & 25165824ULL) == 0)
                     result++;
@@ -1057,7 +1057,7 @@ inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
             return result;
         }
     case 2:
-        switch(last){
+        switch(moveindex){
             case 0:
                 if((curcheckw & 3221225472ULL) == 0)
                     result++;
@@ -1170,7 +1170,7 @@ inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
             return result;
         }
     case 1:
-        switch(last){
+        switch(moveindex){
             case 0:
                 if((curcheckw & 412316860416ULL) == 0)
                     result++;
@@ -1269,20 +1269,12 @@ inline int scoremove(uint64_t curcheckw, uint32_t last, uint32_t left){
     }
 }
 
-vector<field> pl;
-vector<uint8_t> pr;
-vector<int8_t> eval;
-
 struct ttentry{
 	int score;
 	uint8_t flag;
 };
 
-inline uint64_t generatecache(const uint64_t &cfir, const uint32_t &left1, const uint32_t &left2, const uint32_t &left3, const uint32_t &left4, const uint32_t &left5, const uint32_t &left6, const uint32_t &left7){
-    return (cfir | (1LL << (42 - left1 * 7)) | (1LL << (43 - left2 * 7)) | (1LL << (44 - left3 * 7)) | (1LL << (45 - left4 * 7)) | (1LL << (46 - left5 * 7)) | (1LL << (47 - left6 * 7)) | (1LL << (48 - left7 * 7)));
-}
-
-unordered_map<field, int, field> cache;
+unordered_map<uint64_t, uint16_t> cache;
 
 unordered_map<uint64_t, ttentry> TranspositionTable;
 
@@ -1311,11 +1303,11 @@ const bool showstats = true;
 //11 82022
 //99 92942
 
-void display(field pos){
+void display(const uint64_t &cfir, const uint64_t &csec){
     for (int u = 41; u > -1; --u)
     {
-        if(((pos.sec >> u) & 1) == 0){
-            if((pos.fir >> u) & 1)
+        if(((csec >> u) & 1) == 0){
+            if((cfir >> u) & 1)
                 cout << "\033[31mX \033[0m";
             else
                 cout << "\033[32mO \033[0m";
@@ -6139,30 +6131,30 @@ int main(){
 	srand(time(NULL));
 	ifstream loadai("AIn.bin", ios::binary);
 	if(loadai){
-		uint64_t size;
-		loadai.read(reinterpret_cast<char*>(&size), sizeof(uint64_t));
-        pr.resize(size);
-        pl.resize(size);
-        eval.resize(size);
-		for(uint64_t i = 0; i < size; ++i)
-			loadai.read(reinterpret_cast<char*>(&pl[i]), sizeof(field));
-		for(uint64_t i = 0; i < size; ++i)
-			loadai.read(reinterpret_cast<char*>(&pr[i]), sizeof(uint8_t));
-        for(uint64_t i = 0; i < size; ++i)
-			loadai.read(reinterpret_cast<char*>(&eval[i]), sizeof(int8_t));
-        cache.reserve(size);
-		for(uint64_t i = 0; i < size; ++i)
-			cache[pl[i]] = i;
+		uint64_t t;
+		loadai.read(reinterpret_cast<char*>(&t), sizeof(uint32_t));
+        cache.reserve(t);
+		for(uint64_t i = t; i; --i){
+            loadai.read(reinterpret_cast<char*>(&t), sizeof(uint64_t));
+			cache[t & 562949953421311ULL] = (t >> 52);
+        }
+        loadai.close();
 	}
-	loadai.close();
+    else
+    {
+        loadai.close();
+        ofstream createai("AIn.bin", ios::binary);
+        uint32_t t = 0;
+        createai.write(reinterpret_cast<char*>(&t), sizeof(uint32_t));
+        createai.close();
+    }
 	for (;;)
     {
-        if(TranspositionTable.size() > 0){
+        if(TranspositionTable.size() > 0)
             TranspositionTable.clear();
-        }
-		field curpos = {0, 562949953421311};
-		uint8_t last;
-        int8_t ceval = -100;
+        uint64_t cfir = 0, csec = 4398046511103;
+		uint8_t moveindex;
+        int8_t currenteval;
         cout << "Start first? " << endl;
         bool start = rand() % 2;
         cin >> start;
@@ -6172,84 +6164,77 @@ int main(){
 			//cout << "bot starts first" << endl;
 			for (int itmain = 0;; ++itmain)
 			{               
-                auto it = cache.find(curpos);
+                auto it = cache.find(cfir | (csec << 7));
                 if(it != cache.end()){
-                    int t = it->second;
-                    last = pr[t];
-                    ceval = eval[t];
-                    debug("\033[32m", "D", "poseval f =", eval[t]);
+                    uint32_t t = it->second;
+                    moveindex = (t & 7);
+                    currenteval = (t >> 4);
+                    debug("\033[32m", "D", "poseval f =", currenteval);
                 }
                 else
                 {
-                    debug("\033[32m", "D", curpos.fir);
-                    debug("\033[32m", "D", curpos.sec);
+                    debug("\033[32m", "D", cfir);
+                    debug("\033[32m", "D", csec);
                     debug("\033[32m", "D", itmain);
                     debug("\033[32m", "D", left, 7);
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth + 1);
-                    int t;
-                    if(ceval == -100)
-                        t = 0;
+                    int talpha;
+                    if(itmain == 0)
+                        talpha = 0;
                     else
-                        t = ceval - 1;
+                        talpha = currenteval - 1;
                     auto startin = high_resolution_clock::now();
-                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, true, safedepth, t, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, true, safedepth, talpha, cfir, csec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                     auto endin = high_resolution_clock::now();
                     cout << endl;
-                    last = result.first;
+                    moveindex = result.first;
                     debug("\033[32m", "D", "poseval f =", result.second);
                     auto duration = duration_cast<milliseconds>(endin - startin);
                     debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
-                    ceval = result.second;
+                    currenteval = result.second;
                     if(safedepth > 23){
-                        cache[curpos] = pl.size();
-                        pl.push_back(curpos);
-                        pr.push_back(last);
-                        eval.push_back(result.second);
-                        remove("AIn.bin");
-                        ofstream dumpai("AIn.bin", ios::binary);
-                        uint64_t size = pl.size();
-                        dumpai.write(reinterpret_cast<const char*>(&size), sizeof(uint64_t));
-                        for (uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&pl[i]), sizeof(field));
-                        for(uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(uint8_t));
-                        for(uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&eval[i]), sizeof(int8_t));
+                        cache[cfir | (csec << 7)] = (static_cast<uint16_t>(result.second) << 4) | moveindex;
+                        fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
+                        uint64_t t = cache.size();
+                        dumpai.write(reinterpret_cast<const char*>(&t), sizeof(uint32_t));
+                        dumpai.seekp(0, ios::end);
+                        t = (static_cast<uint64_t>(result.second) << 56) | cfir | (csec << 7) | (static_cast<uint64_t>(moveindex) << 52);
+                        dumpai.write(reinterpret_cast<const char*>(&t), sizeof(uint64_t));
                         dumpai.close();
                     }
                 }
-                debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) - ceval, "moves");
-                debug("\033[32m", "D", "move: ", last + 1);
-                curpos.fir |= (1LL << (42 - (left[last]) * 7 + last));
-                curpos.sec ^= (1LL << (42 - (left[last]) * 7 + last));
-				if (cw(~curpos.fir, last, left[last]))
+                debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) - currenteval, "moves");
+                debug("\033[32m", "D", "move: ", moveindex + 1);
+                cfir |= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
+                csec ^= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
+				if (cw(~cfir, moveindex, left[moveindex]))
 				{
 					cout << "Looks like pc won" << endl;
-					display(curpos);
+					display(cfir, csec);
 					break;
 				}
-				left[last]--;
-				display(curpos);
+				left[moveindex]--;
+				display(cfir, csec);
 				int p2;
 				for (;;)
 				{
 					cout << "Your move: ";
 					cin >> p2;
-                    //p2 = (rand() % 7) + 1;
+                    // p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-                        curpos.sec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
+                        csec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
 						break;
 					}
 				}
-				if (cw(curpos.fir | curpos.sec, p2 - 1, left[p2 - 1]))
+				if (cw(cfir | csec, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-				    display(curpos);
+				    display(cfir, csec);
 					break;
 				}
 				left[p2 - 1]--;
@@ -6265,92 +6250,85 @@ int main(){
             //cout << "you start first" << endl;
             for (int itmain = 0;; ++itmain)
             {
-                display(curpos);
+                display(cfir, csec);
                 int p2;
 				for (;;)
 				{
 					cout << "Your move: ";
-					cin >> p2;
-                    //p2 = (rand() % 7) + 1;
+				    cin >> p2;
+                    // p2 = (rand() % 7) + 1;
 					if(cin.fail()){
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0){
-                        curpos.fir |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
-                        curpos.sec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
+                        cfir |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
+                        csec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
 						break;
 					}
 				}
-				if (cw(~curpos.fir, p2 - 1, left[p2 - 1]))
+				if (cw(~cfir, p2 - 1, left[p2 - 1]))
 				{
 					cout << "Algorithm is trash..." << endl;
-					display(curpos);
+					display(cfir, csec);
 					break;
 				}
 				left[p2 - 1]--;
-                auto it = cache.find(curpos);
+                auto it = cache.find(cfir | (csec << 7));
                 if(it != cache.end()){
-                    int t = it->second;
-                    last = pr[t];
-                    ceval = eval[t];
-                    debug("\033[32m", "D", "poseval =", eval[t]);
+                    uint32_t t = it->second;
+                    moveindex = (t & 7);
+                    currenteval = (t >> 4);
+                    debug("\033[32m", "D", "poseval f =", currenteval);
                 }
                 else
                 {
-                    debug("\033[32m", "D", curpos.fir);
-                    debug("\033[32m", "D", curpos.sec);
+                    debug("\033[32m", "D", cfir);
+                    debug("\033[32m", "D", csec);
                     debug("\033[32m", "D", itmain);
                     debug("\033[32m", "D", left, 7);
                     int safedepth = 41 - (itmain << 1);
                     debug("\033[32m", "D", "safedepth =", safedepth);
                     int t;
-                    if(ceval == -100)
+                    if(itmain == 0)
                         t = 3;
                     else
-                        t = ceval + 1;
+                        t = currenteval + 1;
                     auto startin = high_resolution_clock::now();
-                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, false, t, -safedepth, curpos.fir, curpos.sec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, false, t, -safedepth, cfir, csec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                     auto endin = high_resolution_clock::now();
                     cout << endl;
-                    last = result.first;
+                    moveindex = result.first;
                     debug("\033[32m", "D", "poseval =", result.second);
                     auto duration = duration_cast<milliseconds>(endin - startin);
                     debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
-                    ceval = result.second;
+                    currenteval = result.second;
                     if(safedepth > 23){
-                        cache[curpos] = pl.size();
-                        pl.push_back(curpos);
-                        pr.push_back(last);
-                        eval.push_back(result.second);
-                        remove("AIn.bin");
-                        ofstream dumpai("AIn.bin", ios::binary);
-                        uint64_t size = pl.size();
-                        dumpai.write(reinterpret_cast<const char*>(&size), sizeof(uint64_t));
-                        for (uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&pl[i]), sizeof(field));
-                        for(uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&pr[i]), sizeof(uint8_t));
-                        for(uint64_t i = 0; i < size; ++i)
-                            dumpai.write(reinterpret_cast<const char*>(&eval[i]), sizeof(int8_t));
+                        cache[cfir | (csec << 7)] = (static_cast<uint16_t>(result.second) << 4) | moveindex;
+                        fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
+                        uint64_t t = cache.size();
+                        dumpai.write(reinterpret_cast<const char*>(&t), sizeof(uint32_t));
+                        dumpai.seekp(0, ios::end);
+                        t = (static_cast<uint64_t>(result.second) << 56) | cfir | (csec << 7) | (static_cast<uint64_t>(moveindex) << 52);
+                        dumpai.write(reinterpret_cast<const char*>(&t), sizeof(uint64_t));
                         dumpai.close();
                     }
                 }
-                if(ceval > 0)
+                if(currenteval > 0)
                     debug("\033[35m", "A", "AI is losing in", 40 - (itmain << 1), "moves");
-                else if(ceval == 0)
+                else if(currenteval == 0)
                     debug("\033[35m", "A", "AI is drawing in", 41 - (itmain << 1), "moves");
                 else
-                    debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) + ceval, "moves");
-                debug("\033[32m", "D", "move: ", last + 1);
-                curpos.sec ^= (1LL << (42 - (left[last]) * 7 + last));
-				if (cw(curpos.fir | curpos.sec, last, left[last]))
+                    debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) + currenteval, "moves");
+                debug("\033[32m", "D", "move: ", moveindex + 1);
+                csec ^= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
+				if (cw(cfir | csec, moveindex, left[moveindex]))
 				{
 					cout << "Looks like pc won" << endl;
-					display(curpos);
+					display(cfir, csec);
 					break;
 				}
-				left[last]--;
+				left[moveindex]--;
 				if (itmain == 20)
 				{
 					cout << "DRAW" << endl;
