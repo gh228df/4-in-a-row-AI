@@ -12,13 +12,13 @@ The initial board evaluation is 2, indicating that the first player can force wi
 
 # Features
 
-The AI game solver guarantees optimal play by completely solving the game. By utilizing hashing, the RAM usage for calculating the first move can reach approximately 26GB.
+AI guarantees to play optimally by completely solving the game. Solving Connect 4 for the first time may take up to 500 seconds and around 23GB of system memory. 
 
-Pre-calculated data for the first 4 moves for both players can be found in the AIn.bin file. Integrating this file with the main program ensures optimal performance. Additionally, new moves will be cached in the AIn.bin file.
+Solving the game is not required because pre-calculated data for the first 4 moves for both players can be found in the AIn.bin file. Additionally, new moves will be cached in the AIn.bin file.
 
 # AIn.bin encoding
 
-Cache Size: The first 64 bits indicate the size of the cache.<br>
-Cached Positions: Following the cache size, positions for both players are stored as 64-bit unsigned variables <br>
-Best Moves: The next part of the file contains best moves represented as 8-bit unsigned variables.<br>
-Evaluation: The remaining part of the file contains board evaluation represented as 8-bit signed variables.<br>
+Cache Size: The first 32 bits indicate the size of the cache.<br>
+Cached Positions: Following the cache size, positions for both players are stored as 49-bit unsigned variables <br>
+Best Moves: In the same variable the best move is stored as a 3-bit unsigned integer shifted by 52 bits.<br>
+Evaluation: The remaining part of the variable contains board evaluation represented as 8-bit signed variable shifted by 56 bits.<br>
