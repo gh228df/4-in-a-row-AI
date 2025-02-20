@@ -1,48 +1,16 @@
-#include <iostream>
 #include <chrono>
 #include <vector>
 #include <thread>
 #include <fstream>
-#include <ankerl/unordered_dense.h>
-#include <string>
+#include <string.h>
+#if defined(__x86_64__)
 #include <xmmintrin.h>
 #include <malloc.h>
-
+#else
+#include <ankerl/unordered_dense.h>
+#endif
 using namespace std;
 using namespace chrono;
-
-void debug(string color, string init, string to_debug)
-{
-    cout << color << "[" << init << "] \033[0m" << to_debug << endl;
-}
-
-void debug(string color, string init, string to_debug, int64_t num)
-{
-    cout << color << "[" << init << "] \033[0m" << to_debug << " " << num << endl;
-}
-
-void debug(string color, string init, string to_debug, int64_t num, string to_debug2)
-{
-    cout << color << "[" << init << "] \033[0m" << to_debug << " " << num << " " << to_debug2 << endl;
-}
-
-void debug(string color, string init, int to_debug)
-{
-    cout << color << "[" << init << "] \033[0m" << to_debug << endl;
-}
-
-void debug(string color, string init, uint64_t to_debug)
-{
-    cout << color << "[" << init << "] \033[0m" << to_debug << endl;
-}
-
-void debug(string color, string init, uint32_t *to_debug, int size)
-{
-    cout << color << "[" << init << "] \033[0m";
-    for (int i = 0; i < size; i++)
-        cout << to_debug[i];
-    cout << endl;
-}
 
 bool cw(uint64_t curcheckw, int moveindex, uint32_t left)
 {
@@ -1233,8 +1201,6 @@ inline int scoremove(uint64_t curcheckw, uint32_t moveindex, uint32_t left)
     }
 }
 
-ankerl::unordered_dense::map<uint64_t, uint16_t> cache;
-
 #if defined(PRESET_MEMORY_SAVE)
 #define MIN_CACHE_DEPTH 10
 #elif defined(PRESET_SPEED)
@@ -1245,7 +1211,7 @@ ankerl::unordered_dense::map<uint64_t, uint16_t> cache;
 
 #define MIN_SCORE_DEPTH 9
 
-#define showstats false
+#define showstats true
 
 void display(const uint64_t &cfir, const uint64_t &csec)
 {
@@ -1254,14 +1220,14 @@ void display(const uint64_t &cfir, const uint64_t &csec)
         if (((csec >> u) & 1) == 0)
         {
             if ((cfir >> u) & 1)
-                cout << "\033[31mX \033[0m";
+                printf("\033[31mX \033[0m");
             else
-                cout << "\033[32mO \033[0m";
+                printf("\033[32mO \033[0m");
         }
         else
-            cout << ". ";
+            printf(". ");
         if (u % 7 == 0)
-            cout << endl;
+            printf("\n");
     }
 }
 
@@ -1502,6 +1468,7 @@ typedef struct
 } gmap;
 
 gmap main_gmap;
+gmap cache;
 
 void free_gmap(gmap *node)
 {
@@ -1853,6 +1820,23 @@ __uint16_t binary_search(gmap *node, __uint64_t lookup)
     }
     return INVALID_RESULT;
 }
+
+__uint32_t size(gmap *node)
+{
+    __uint32_t capacity = *(__uint32_t *)node->data;
+    if (capacity)
+    {
+        capacity = 1 << capacity;
+        __uint32_t res = 0;
+        gmap *t = (gmap *)node->data + 1;
+        for (__uint32_t i = 0; i < capacity; ++i)
+            if (t->data)
+                res += size(t);
+        return res;
+    }
+    return *((__uint16_t *)node->data + 2);
+}
+
 #else
 #if defined(PRESET_MEMORY_SAVE)
 perror("PRESET CANNOT BE APPLIED ON AN UNSUPPORTED ARCHITECTURE\n");
@@ -1860,6 +1844,7 @@ perror("PRESET CANNOT BE APPLIED ON AN UNSUPPORTED ARCHITECTURE\n");
 perror("PRESET CANNOT BE APPLIED ON AN UNSUPPORTED ARCHITECTURE\n");
 #endif
 ankerl::unordered_dense::map<uint64_t, uint16_t> TranspositionTable;
+ankerl::unordered_dense::map<uint64_t, uint16_t> cache;
 #endif
 
 void insert(__uint64_t element, __uint64_t pair)
@@ -5691,7 +5676,7 @@ int minimax(int depth, const bool player, int beta, int alpha, const uint64_t cf
     }
 }
 
-pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7)
+pair<int, int> minimaxentry(int depth, bool player, int beta, int alpha, uint64_t cfir, uint64_t csec, uint32_t left1, uint32_t left2, uint32_t left3, uint32_t left4, uint32_t left5, uint32_t left6, uint32_t left7)
 {
     // res4: 1 397602
     // res3: 1 26880
@@ -5731,21 +5716,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (45 - (left4) * 7)), csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if (showstats)
-                cout << "res4 ";
+                printf("res4 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 3;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         auto end = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left3)
         {
@@ -5753,21 +5737,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (44 - (left3) * 7)), csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if (showstats)
-                cout << "res3 ";
+                printf("res3 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 2;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left5)
         {
@@ -5775,21 +5758,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (46 - (left5) * 7)), csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if (showstats)
-                cout << "res5 ";
+                printf("res5 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 4;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left2)
         {
@@ -5797,21 +5779,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (43 - (left2) * 7)), csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if (showstats)
-                cout << "res2 ";
+                printf("res2 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 1;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left6)
         {
@@ -5819,21 +5800,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (47 - (left6) * 7)), csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if (showstats)
-                cout << "res6 ";
+                printf("res6 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 5;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left1)
         {
@@ -5841,21 +5821,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (42 - (left1) * 7)), csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if (showstats)
-                cout << "res1 ";
+                printf("res1 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 0;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left7)
         {
@@ -5863,21 +5842,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild > alpha)
                 reschild = minimax(depth - 1, false, beta, reschild, cfir | (1LL << (48 - (left7) * 7)), csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if (showstats)
-                cout << "res7 ";
+                printf("res7 ");
             if (reschild > alpha)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 alpha = reschild;
                 ret = 6;
             }
             else if (showstats)
-                cout << "\033[31m<= \033[0m" << alpha << " ";
+                printf("\033[31m<= \033[0m%d ", alpha);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         return make_pair(ret, alpha);
     }
     else
@@ -5911,21 +5889,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (45 - (left4) * 7)), left1, left2, left3, left4 - 1, left5, left6, left7);
             if (showstats)
-                cout << "res4 ";
+                printf("res4 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 3;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         auto end = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left3)
         {
@@ -5933,21 +5910,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (44 - (left3) * 7)), left1, left2, left3 - 1, left4, left5, left6, left7);
             if (showstats)
-                cout << "res3 ";
+                printf("res3 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 2;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left5)
         {
@@ -5955,21 +5931,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (46 - (left5) * 7)), left1, left2, left3, left4, left5 - 1, left6, left7);
             if (showstats)
-                cout << "res5 ";
+                printf("res5 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 4;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left2)
         {
@@ -5977,21 +5952,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (43 - (left2) * 7)), left1, left2 - 1, left3, left4, left5, left6, left7);
             if (showstats)
-                cout << "res2 ";
+                printf("res2 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 1;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left6)
         {
@@ -5999,21 +5973,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (47 - (left6) * 7)), left1, left2, left3, left4, left5, left6 - 1, left7);
             if (showstats)
-                cout << "res6 ";
+                printf("res6 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 5;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left1)
         {
@@ -6021,21 +5994,20 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (42 - (left1) * 7)), left1 - 1, left2, left3, left4, left5, left6, left7);
             if (showstats)
-                cout << "res1 ";
+                printf("res1 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 0;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         start = high_resolution_clock::now();
         if (left7)
         {
@@ -6043,29 +6015,36 @@ pair<uint8_t, int8_t> minimaxentry(int depth, bool player, int beta, int alpha, 
             if (reschild < beta)
                 reschild = minimax(depth - 1, true, reschild, alpha, cfir, csec ^ (1LL << (48 - (left7) * 7)), left1, left2, left3, left4, left5, left6, left7 - 1);
             if (showstats)
-                cout << "res7 ";
+                printf("res7 ");
             if (reschild < beta)
             {
                 if (showstats)
-                    cout << "\033[32m== \033[0m" << reschild << " ";
+                    printf("\033[32m== \033[0m%d ", reschild);
                 beta = reschild;
                 ret = 6;
             }
             else if (showstats)
-                cout << "\033[31m>= \033[0m" << beta << " ";
+                printf("\033[31m>= \033[0m%d ", beta);
         }
         end = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(end - start);
         if (showstats)
-            cout << duration.count() << endl;
+            printf("%lu\n", duration_cast<milliseconds>(end - start).count());
         return make_pair(ret, beta);
     }
+}
+
+void clear_input_buffer()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
 }
 
 int main()
 {
 #if defined(__x86_64__)
     create_gmap(&main_gmap);
+    create_gmap(&cache);
 #endif
     srand(time(NULL));
     ifstream loadai("AIn.bin", ios::binary);
@@ -6073,11 +6052,14 @@ int main()
     {
         uint64_t t = 0;
         loadai.read(reinterpret_cast<char *>(&t), sizeof(uint32_t));
-        cache.reserve(t);
         for (uint64_t i = t; i; --i)
         {
             loadai.read(reinterpret_cast<char *>(&t), sizeof(uint64_t));
+#if defined(__x86_64__)
+            add_data(&cache, (t & 562949953421311ULL), (t >> 52));
+#else
             cache[t & 562949953421311ULL] = (t >> 52);
+#endif
         }
         loadai.close();
     }
@@ -6098,52 +6080,60 @@ int main()
             TranspositionTable.clear();
 #endif
         uint64_t cfir = 0, csec = 4398046511103;
-        uint8_t moveindex;
-        int8_t currenteval;
-        cout << "Start first? " << endl;
-        bool start = rand() % 2;
-        cin >> start;
+        int moveindex = 0;
+        int currenteval = 0;
+        printf("Start first?\n");
+        __uint32_t start = (rand() & 1);
+        while (scanf("%d", &start) != 1 || start > 1)
+            clear_input_buffer();
         uint32_t left[7] = {6, 6, 6, 6, 6, 6, 6};
         if (start == 0)
         {
-            // cout << "bot starts first" << endl;
+            // printf("bot starts first\n");
             for (int itmain = 0;; ++itmain)
             {
+#if defined(__x86_64__)
+                __uint16_t res = binary_search(&cache, cfir | (csec << 7));
+                if (res != INVALID_RESULT)
+                {
+#else
                 auto it = cache.find(cfir | (csec << 7));
                 if (it != cache.end())
                 {
-                    uint32_t t = it->second;
-                    moveindex = (t & 7);
-                    currenteval = (t >> 4);
-                    debug("\033[32m", "D", "poseval f =", currenteval);
+                    __uint16_t res = it->second;
+#endif
+                    moveindex = (res & 7);
+                    currenteval = int8_t(res >> 4);
+                    printf("\033[32m[D]\033[0m poseval f = %d\n", currenteval);
                 }
                 else
                 {
-                    debug("\033[32m", "D", cfir);
-                    debug("\033[32m", "D", csec);
-                    debug("\033[32m", "D", itmain);
-                    debug("\033[32m", "D", left, 7);
+                    printf("\033[32m[D]\033[0m cfir = %lu\n", cfir);
+                    printf("\033[32m[D]\033[0m csec = %lu\n", csec);
+                    printf("\033[32m[D]\033[0m itmain = %d\n", itmain);
+                    printf("\033[32m[D]\033[0m left = %d %d %d %d %d %d %d\n", left[6], left[5], left[4], left[3], left[2], left[1], left[0]);
                     int safedepth = 41 - (itmain << 1);
-                    debug("\033[32m", "D", "safedepth =", safedepth + 1);
-                    int talpha;
-                    if (itmain == 0)
-                        talpha = 0;
-                    else
-                        talpha = currenteval - 1;
+                    printf("\033[32m[D]\033[0m safedepth = %d\n", safedepth + 1);
                     auto startin = high_resolution_clock::now();
-                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, true, safedepth, talpha, cfir, csec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                    pair<int, int> result = minimaxentry(safedepth, true, safedepth, (itmain == 0) ? 0 : currenteval - 1, cfir, csec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                     auto endin = high_resolution_clock::now();
-                    cout << endl;
                     moveindex = result.first;
-                    debug("\033[32m", "D", "poseval f =", result.second);
-                    auto duration = duration_cast<milliseconds>(endin - startin);
-                    debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
                     currenteval = result.second;
+                    if (showstats)
+                        printf("\n");
+                    printf("\033[32m[D]\033[0m poseval f = %d\n", currenteval);
+                    printf("\033[31m[A]\033[0m Minimax fulldepth milliseconds: %lu\n", duration_cast<milliseconds>(endin - startin).count());
                     if (safedepth > 23)
                     {
+#if defined(__x86_64__)
+                        add_data(&cache, cfir | (csec << 7), (static_cast<uint16_t>(result.second) << 4) | moveindex);
+                        fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
+                        uint64_t t = size(&cache);
+#else
                         cache[cfir | (csec << 7)] = (static_cast<uint16_t>(result.second) << 4) | moveindex;
                         fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
                         uint64_t t = cache.size();
+#endif
                         dumpai.write(reinterpret_cast<const char *>(&t), sizeof(uint32_t));
                         dumpai.seekp(0, ios::end);
                         t = (static_cast<uint64_t>(result.second) << 56) | cfir | (csec << 7) | (static_cast<uint64_t>(moveindex) << 52);
@@ -6151,30 +6141,26 @@ int main()
                         dumpai.close();
                     }
                 }
-                debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) - currenteval, "moves");
-                debug("\033[32m", "D", "move: ", moveindex + 1);
-                cfir |= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
+                printf("\033[35m[A]\033[0m User is losing in %d moves\n", 41 - (itmain << 1) - currenteval);
+                printf("\033[32m[D]\033[0m move: %d\n", moveindex + 1);
+                cfir ^= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
                 csec ^= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
                 if (cw(~cfir, moveindex, left[moveindex]))
                 {
-                    cout << "Looks like pc won" << endl;
+                    printf("Looks like pc won\n");
                     display(cfir, csec);
                     break;
                 }
-                left[moveindex]--;
+                --left[moveindex];
                 display(cfir, csec);
                 int p2;
                 for (;;)
                 {
-                    cout << "Your move: ";
-                    cin >> p2;
+                    printf("Your move: ");
                     // p2 = (rand() % 7) + 1;
-                    if (cin.fail())
-                    {
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    }
-                    else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0)
+                    if (scanf("%d", &p2) != 1)
+                        clear_input_buffer();
+                    else if (p2 > 0 and p2 < 8 and left[p2 - 1])
                     {
                         csec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
                         break;
@@ -6182,84 +6168,87 @@ int main()
                 }
                 if (cw(cfir | csec, p2 - 1, left[p2 - 1]))
                 {
-                    cout << "Algorithm is trash..." << endl;
+                    printf("Algorithm is trash...\n");
                     display(cfir, csec);
                     break;
                 }
                 left[p2 - 1]--;
                 if (itmain == 20)
                 {
-                    cout << "DRAW" << endl;
+                    printf("DRAW\n");
                     break;
                 }
             }
         }
         else
         {
-            // cout << "you start first" << endl;
+            // printf("you start first\n");
             for (int itmain = 0;; ++itmain)
             {
                 display(cfir, csec);
                 int p2;
                 for (;;)
                 {
-                    cout << "Your move: ";
-                    cin >> p2;
+                    printf("Your move: ");
                     // p2 = (rand() % 7) + 1;
-                    if (cin.fail())
+                    if (scanf("%d", &p2) != 1)
+                        clear_input_buffer();
+                    else if (p2 > 0 and p2 < 8 and left[p2 - 1])
                     {
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    }
-                    else if (p2 > 0 and p2 < 8 and left[p2 - 1] > 0)
-                    {
-                        cfir |= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
+                        cfir ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
                         csec ^= (1LL << (41 - (left[p2 - 1]) * 7 + p2));
                         break;
                     }
                 }
                 if (cw(~cfir, p2 - 1, left[p2 - 1]))
                 {
-                    cout << "Algorithm is trash..." << endl;
+                    printf("Algorithm is trash...\n");
                     display(cfir, csec);
                     break;
                 }
                 left[p2 - 1]--;
+#if defined(__x86_64__)
+                __uint16_t res = binary_search(&cache, cfir | (csec << 7));
+                if (res != INVALID_RESULT)
+                {
+#else
                 auto it = cache.find(cfir | (csec << 7));
                 if (it != cache.end())
                 {
-                    uint32_t t = it->second;
-                    moveindex = (t & 7);
-                    currenteval = (t >> 4);
-                    debug("\033[32m", "D", "poseval f =", currenteval);
+                    __uint16_t res = it->second;
+#endif
+                    moveindex = (res & 7);
+                    currenteval = int8_t(res >> 4);
+                    printf("\033[32m[D]\033[0m poseval f = %d\n", currenteval);
                 }
                 else
                 {
-                    debug("\033[32m", "D", cfir);
-                    debug("\033[32m", "D", csec);
-                    debug("\033[32m", "D", itmain);
-                    debug("\033[32m", "D", left, 7);
+                    printf("\033[32m[D]\033[0m cfir = %lu\n", cfir);
+                    printf("\033[32m[D]\033[0m csec = %lu\n", csec);
+                    printf("\033[32m[D]\033[0m itmain = %d\n", itmain);
+                    printf("\033[32m[D]\033[0m left = %d %d %d %d %d %d %d\n", left[6], left[5], left[4], left[3], left[2], left[1], left[0]);
                     int safedepth = 41 - (itmain << 1);
-                    debug("\033[32m", "D", "safedepth =", safedepth);
-                    int t;
-                    if (itmain == 0)
-                        t = 3;
-                    else
-                        t = currenteval + 1;
+                    printf("\033[32m[D]\033[0m safedepth = %d\n", safedepth + 1);
                     auto startin = high_resolution_clock::now();
-                    pair<uint8_t, int8_t> result = minimaxentry(safedepth, false, t, -safedepth, cfir, csec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
+                    pair<int, int> result = minimaxentry(safedepth, false, (itmain == 0) ? 3 : currenteval + 1, -safedepth, cfir, csec, left[0], left[1], left[2], left[3], left[4], left[5], left[6]);
                     auto endin = high_resolution_clock::now();
-                    cout << endl;
                     moveindex = result.first;
-                    debug("\033[32m", "D", "poseval =", result.second);
-                    auto duration = duration_cast<milliseconds>(endin - startin);
-                    debug("\033[31m", "A", "Minimax fulldepth milliseconds:", duration.count());
                     currenteval = result.second;
+                    if (showstats)
+                        printf("\n");
+                    printf("\033[32m[D]\033[0m poseval f = %d\n", currenteval);
+                    printf("\033[31m[A]\033[0m Minimax fulldepth milliseconds: %lu\n", duration_cast<milliseconds>(endin - startin).count());
                     if (safedepth > 23)
                     {
+#if defined(__x86_64__)
+                        add_data(&cache, cfir | (csec << 7), (static_cast<uint16_t>(result.second) << 4) | moveindex);
+                        fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
+                        uint64_t t = size(&cache);
+#else
                         cache[cfir | (csec << 7)] = (static_cast<uint16_t>(result.second) << 4) | moveindex;
                         fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
                         uint64_t t = cache.size();
+#endif
                         dumpai.write(reinterpret_cast<const char *>(&t), sizeof(uint32_t));
                         dumpai.seekp(0, ios::end);
                         t = (static_cast<uint64_t>(result.second) << 56) | cfir | (csec << 7) | (static_cast<uint64_t>(moveindex) << 52);
@@ -6268,23 +6257,23 @@ int main()
                     }
                 }
                 if (currenteval > 0)
-                    debug("\033[35m", "A", "AI is losing in", 40 - (itmain << 1), "moves");
+                    printf("\033[35m[A]\033[0m AI is losing in %d moves\n", 40 - (itmain << 1));
                 else if (currenteval == 0)
-                    debug("\033[35m", "A", "AI is drawing in", 41 - (itmain << 1), "moves");
+                    printf("\033[35m[A]\033[0m AI is drawing in %d moves\n", 41 - (itmain << 1));
                 else
-                    debug("\033[35m", "A", "User is losing in", 41 - (itmain << 1) + currenteval, "moves");
-                debug("\033[32m", "D", "move: ", moveindex + 1);
+                    printf("\033[35m[A]\033[0m User is losing in %d moves\n", 41 - (itmain << 1) + currenteval);
+                printf("\033[32m[D]\033[0m move: %d\n", moveindex + 1);
                 csec ^= (1LL << (42 - (left[moveindex]) * 7 + moveindex));
                 if (cw(cfir | csec, moveindex, left[moveindex]))
                 {
-                    cout << "Looks like pc won" << endl;
+                    printf("Looks like pc won\n");
                     display(cfir, csec);
                     break;
                 }
-                left[moveindex]--;
+                --left[moveindex];
                 if (itmain == 20)
                 {
-                    cout << "DRAW" << endl;
+                    printf("DRAW\n");
                     break;
                 }
             }
