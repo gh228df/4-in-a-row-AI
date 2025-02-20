@@ -12,13 +12,15 @@ The initial board evaluation is 2, indicating that the first player can force wi
 
 # Features
 
-AI guarantees to play optimally by completely solving the game. Solving Connect 4 for the first time may take up to 500 seconds and around 23GB of system memory. 
+AI guarantees to play optimally by completely solving the game. Solving Connect 4 for the first time may take up to about 300 seconds using the SPEED preset while using 12GB of memory or about 450 seconds with MEMORY_SAVE preset which uses 4.2GB of system memory.
 
 Solving the game is not required because pre-calculated data for the first 4 moves for both players can be found in the AIn.bin file. Additionally, new moves will be cached in the AIn.bin file.
+
+4rbst is the base game engine, it only computes one best move, while 4rbst2 computes all of the best moves for a given position, and then selects a random one to play. It also runs about twice as slow as the base one.
 
 # AIn.bin encoding
 
 Cache Size: The first 32 bits indicate the size of the cache.<br>
 Cached Positions: Following the cache size, positions for both players are stored as 49-bit unsigned variables <br>
-Best Moves: In the same variable the best move is stored as a 3-bit unsigned integer shifted by 52 bits.<br>
+Best Moves: In the same variable the best move is stored as a 3-bit unsigned integer shifted by 52 bits or as a 7 bit number for the 4rbst2.<br>
 Evaluation: The remaining part of the variable contains board evaluation represented as 8-bit signed variable shifted by 56 bits.<br>
