@@ -1829,7 +1829,7 @@ __uint32_t size(gmap *node)
         capacity = 1 << capacity;
         __uint32_t res = 0;
         gmap *t = (gmap *)node->data + 1;
-        for (__uint32_t i = 0; i < capacity; ++i)
+        for (__uint32_t i = 0; i < capacity; ++i, ++t)
             if (t->data)
                 res += size(t);
         return res;
@@ -6126,7 +6126,7 @@ int main()
                     if (safedepth > 23)
                     {
 #if defined(__x86_64__)
-                        add_data(&cache, cfir | (csec << 7), (static_cast<uint16_t>(result.second) << 4) | moveindex);
+                        add_data(&cache, cfir | (csec << 7), ((int16_t)((int8_t)currenteval) << 4) | moveindex);
                         fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
                         uint64_t t = size(&cache);
 #else
@@ -6241,7 +6241,7 @@ int main()
                     if (safedepth > 23)
                     {
 #if defined(__x86_64__)
-                        add_data(&cache, cfir | (csec << 7), (static_cast<uint16_t>(result.second) << 4) | moveindex);
+                        add_data(&cache, cfir | (csec << 7), ((int16_t)((int8_t)currenteval) << 4) | moveindex);
                         fstream dumpai("AIn.bin", ios::in | ios::out | ios::binary);
                         uint64_t t = size(&cache);
 #else
